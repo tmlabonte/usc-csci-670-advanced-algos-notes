@@ -1,0 +1,707 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Dijkstra's Algorithm
+\end_layout
+
+\begin_layout Section
+Shortest Paths
+\end_layout
+
+\begin_layout Standard
+\noindent
+In a graph with no or uniform edge weights, use BFS to find the shortest
+ path between nodes in 
+\begin_inset Formula $\mathcal{O}(n+m)$
+\end_inset
+
+ time.
+ However, what if the edge weights differ? Or if they are not necessarily
+ numeric, but are distributions, or outputs of another algorithm? The problem
+ becomes more difficult.
+\end_layout
+
+\begin_layout Standard
+\noindent
+The problem we are trying to solve: Given a digraph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ with edge costs 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+ and source node 
+\begin_inset Formula $s$
+\end_inset
+
+, find the shortest path (with respect to 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+) to a target node 
+\begin_inset Formula $t$
+\end_inset
+
+ or to all other nodes in 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Dijkstra's Algorithm
+\end_layout
+
+\begin_layout Standard
+Dijkstra's Algorithm, named for Edsger Dijkstra, is an algorithm to find
+ the shortest path from 
+\begin_inset Formula $s$
+\end_inset
+
+ to all other nodes in a weighted, directed graph.
+ It separates 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ into three sections: the nodes we have finalized, the nodes we have discovered
+ but not finalized, and the nodes we have not discovered.
+ For each node 
+\begin_inset Formula $n$
+\end_inset
+
+, the algorithm stores its distance 
+\begin_inset Formula $d$
+\end_inset
+
+ from 
+\begin_inset Formula $s$
+\end_inset
+
+ as well as the parent of 
+\begin_inset Formula $n$
+\end_inset
+
+, used to recursively compute the path from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ Then, the algorithm discovers new nodes such that 
+\begin_inset Formula $\sum d$
+\end_inset
+
+ across the path is minimized.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $S=[s]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $d(s)=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+while 
+\begin_inset Formula $S\neq V$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Consider all edges 
+\begin_inset Formula $e=(u,v)$
+\end_inset
+
+ leaving 
+\begin_inset Formula $u$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* Add to 
+\begin_inset Formula $S$
+\end_inset
+
+ node 
+\begin_inset Formula $v$
+\end_inset
+
+ such that 
+\begin_inset Formula $d(u)+C_{u,v}$
+\end_inset
+
+ is minimized
+\end_layout
+
+\begin_layout Algorithm (num)
+* Set 
+\begin_inset Formula $d(v)=d(u)+C_{u,v}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* Set 
+\begin_inset Formula $p(v)=u$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endwhile
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Dijkstra's Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Now we'll prove correctness of Dijkstra's Algorithm, keeping in mind its
+ two major assumptions: that 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ is connected and all 
+\begin_inset Formula $c_{e}\geq0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+Dijkstra's Algorithm finds shortest paths from 
+\begin_inset Formula $s$
+\end_inset
+
+ to all nodes 
+\begin_inset Formula $v$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+\begin_inset Formula $d(v)$
+\end_inset
+
+ is the correct distance from 
+\begin_inset Formula $s\rightarrow v$
+\end_inset
+
+ and 
+\begin_inset Formula $p(v)$
+\end_inset
+
+ is the last hop on an 
+\begin_inset Formula $s\rightarrow v$
+\end_inset
+
+ path.
+\end_layout
+
+\begin_layout Proof
+Our loop invariant is that at any point during the execution of the algorithm,
+ Theorem 2 holds for all 
+\begin_inset Formula $V\in S$
+\end_inset
+
+.
+ We perform a proof by induction on the iterations.
+\end_layout
+
+\begin_layout Proof
+\noindent
+Basis step: When 
+\begin_inset Formula $S=\{s\}$
+\end_inset
+
+, Theorem 2 holds trivially.
+\end_layout
+
+\begin_layout Proof
+\noindent
+Inductive hypothesis: Theorem 2 holds for all iterations 
+\begin_inset Formula $0\leq n\leq k$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+\noindent
+Inductive step: Consider iteration 
+\begin_inset Formula $k+1$
+\end_inset
+
+.
+ We add some node 
+\begin_inset Formula $v$
+\end_inset
+
+ to 
+\begin_inset Formula $S$
+\end_inset
+
+, then set 
+\begin_inset Formula $d(v)=d(u)+C_{u,v}$
+\end_inset
+
+ and 
+\begin_inset Formula $p(v)=u$
+\end_inset
+
+.
+ Thus Theorem 2 holds for 
+\begin_inset Formula $v$
+\end_inset
+
+, and 
+\begin_inset Formula $S$
+\end_inset
+
+ remained constant otherwise, so we know that Theorem 2 holds for all 
+\begin_inset Formula $V\in S$
+\end_inset
+
+ as well.
+\end_layout
+
+\begin_layout Proof
+\noindent
+However, we still need to show that there is no path from 
+\begin_inset Formula $s\rightarrow v$
+\end_inset
+
+ shorter than 
+\begin_inset Formula $d(u)+C_{u,v}$
+\end_inset
+
+.
+ To do so, we assume for the sake of contradiction that there is a path
+ of total length less than 
+\begin_inset Formula $d(u)+C_{u,v}$
+\end_inset
+
+ and consider the first time it leaves 
+\begin_inset Formula $S$
+\end_inset
+
+ along an edge 
+\begin_inset Formula $(u',v')$
+\end_inset
+
+.
+ This edge may not necessarily come from 
+\begin_inset Formula $u$
+\end_inset
+
+ or go to 
+\begin_inset Formula $v$
+\end_inset
+
+, but it is along our hypothetical shortest path.
+ Then 
+\begin_inset Formula $d(u')+C_{u,v}=dist(s,u')+C_{u',v'}$
+\end_inset
+
+.
+ Because we assumed no negative edges, 
+\begin_inset Formula $dist(s,u')+C_{u',v'}\leq dist(s,v)<d(u)+C_{u,v}$
+\end_inset
+
+.
+ This inequality shows that the algorithm would choose 
+\begin_inset Formula $(u',v')$
+\end_inset
+
+ over 
+\begin_inset Formula $(u,v)$
+\end_inset
+
+ in the first place, which is a contradiction.
+ 
+\end_layout
+
+\begin_layout Section
+Implementation
+\end_layout
+
+\begin_layout Standard
+To implement Dijkstra's Algorithm, use 
+\begin_inset Formula $d$
+\end_inset
+
+ as a priority metric to implement a minheap containing the candidate set
+ (i.e., 
+\begin_inset Quotes eld
+\end_inset
+
+nodes discovered but not finalized
+\begin_inset Quotes erd
+\end_inset
+
+).
+ The minheap operations must include:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Operation
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Runtime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Times run
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+insert
+\begin_inset Formula $(h,v)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $n$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+findMin
+\begin_inset Formula $(h)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(1)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $n$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+removeMin
+\begin_inset Formula $(h)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $n$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+decrementPriority
+\begin_inset Formula $(h,v)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $m$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Thus we can see that Dijkstra's Algorithm runs in 
+\begin_inset Formula $\Theta(m\log n)$
+\end_inset
+
+ time for non-sparse graphs.
+ In order to optimize this runtime, we would like to reduce the runtime
+ of decrementPriority to 
+\begin_inset Formula $\Theta(1)$
+\end_inset
+
+ while increasing the runtime of findMin to 
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+.
+ By doing so, we decrease the overall runtime to 
+\begin_inset Formula $\Theta(m+n\log n)$
+\end_inset
+
+.
+ This can be implemented with a Fibonacci Heap, which will be discussed
+ next week.
+\end_layout
+
+\end_body
+\end_document

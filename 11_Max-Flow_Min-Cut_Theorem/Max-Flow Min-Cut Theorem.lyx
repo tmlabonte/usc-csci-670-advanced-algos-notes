@@ -1,0 +1,1084 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Max-Flow Min-Cut Theorem
+\end_layout
+
+\begin_layout Section
+Maximum Cardinality Bipartite Matching
+\end_layout
+
+\begin_layout Standard
+An easily-understood application of max-flow is solving a classic bipartite
+ matching problem.
+\end_layout
+
+\begin_layout Standard
+MAXIMUM CARDINALITY BIPARTITE MATCHING (MCBM): Given a bipartite graph 
+\begin_inset Formula $(X,Y,E)$
+\end_inset
+
+ where 
+\begin_inset Formula $E\subseteq X\times Y$
+\end_inset
+
+, find a subset 
+\begin_inset Formula $S\subseteq E$
+\end_inset
+
+ of edges of maximum size such that no node is incident on more than one
+ edge (i.e., it is a matching).
+\end_layout
+
+\begin_layout Theorem
+There exists a polynomial time algorithm to solve MCBM.
+\end_layout
+
+\begin_layout Proof
+We can reduce MCBM to max-flow, and since we assert there is a polynomial
+ time algorithm to solve max-flow, we can use that algorithm to solve MCBM.
+ We add a source node 
+\begin_inset Formula $s$
+\end_inset
+
+ connected to all nodes 
+\begin_inset Formula $x\in X$
+\end_inset
+
+ and a sink node 
+\begin_inset Formula $t$
+\end_inset
+
+ connected to all nodes 
+\begin_inset Formula $y\in Y$
+\end_inset
+
+.
+ Let all these generated edges have a capacity of one, and all old edges
+ a capacity of 
+\begin_inset Formula $\infty$
+\end_inset
+
+.
+ We also direct all the old edges from 
+\begin_inset Formula $X\rightarrow Y$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Proof
+This reduction runs in polynomial time.
+ Then, we can find an integer maximum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ flow and read off the optimal matching 
+\begin_inset Formula $S$
+\end_inset
+
+ by 
+\begin_inset Formula $S:=\{e\in E:f_{e}=1\}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Lemma
+\begin_inset Formula $S$
+\end_inset
+
+ is a maximum bipartite matching.
+\end_layout
+
+\begin_layout Proof
+A two-part proof; (1) 
+\begin_inset Formula $S$
+\end_inset
+
+ is a matching, (2) 
+\begin_inset Formula $S$
+\end_inset
+
+ is maximum.
+\end_layout
+
+\begin_layout Proof
+(1).
+ 
+\begin_inset Formula $S$
+\end_inset
+
+ is a matching.
+\end_layout
+
+\begin_layout Proof
+The incoming flow into every node 
+\begin_inset Formula $x\in X$
+\end_inset
+
+ is 
+\begin_inset Formula $\leq c_{x}=1$
+\end_inset
+
+, so the outgoing flow is 
+\begin_inset Formula $\leq1$
+\end_inset
+
+ by conservation.
+ The flow on all edges 
+\begin_inset Formula $e\in S$
+\end_inset
+
+ is one, so each 
+\begin_inset Formula $x$
+\end_inset
+
+ participates in at most one edge; similarly for all 
+\begin_inset Formula $y\in Y$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(2).
+ 
+\begin_inset Formula $S$
+\end_inset
+
+ is maximum.
+\end_layout
+
+\begin_layout Proof
+Let 
+\begin_inset Formula $S^{*}$
+\end_inset
+
+ be the maximum matching.
+ We define the flow 
+\begin_inset Formula $f$
+\end_inset
+
+ by setting, for each 
+\begin_inset Formula $e=(u,v)\in S^{*}$
+\end_inset
+
+, 
+\begin_inset Formula $f_{e}=1,f_{(s,u)}=1,f(v,t)=1$
+\end_inset
+
+.
+ This flow obeys conservation: because 
+\begin_inset Formula $S^{*}$
+\end_inset
+
+ is a matching, we set 
+\begin_inset Formula $f_{(u,v)}=1$
+\end_inset
+
+ for at most one 
+\begin_inset Formula $v$
+\end_inset
+
+ for any fixed 
+\begin_inset Formula $u$
+\end_inset
+
+, and for at most one 
+\begin_inset Formula $u$
+\end_inset
+
+ for any fixed 
+\begin_inset Formula $v$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\upsilon(f)=|S^{*}|$
+\end_inset
+
+, so the max-flow 
+\begin_inset Formula $f^{*}$
+\end_inset
+
+ has 
+\begin_inset Formula $\upsilon(f^{*})\geq\upsilon(f)=|S^{*}|$
+\end_inset
+
+.
+ The matching 
+\begin_inset Formula $S$
+\end_inset
+
+ we found has 
+\begin_inset Formula $\upsilon(f)\geq|S^{*}|$
+\end_inset
+
+, so it must be maximum.
+\end_layout
+
+\begin_layout Section
+Max-Flow Min-Cut Theorem
+\end_layout
+
+\begin_layout Theorem
+The cost of the minimum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ cut with respect to 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+ is equal to the maximum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ flow with capacities 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Notation
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $f^{in}(v)=\sum_{e\text{ into }v}f_{e}$
+\end_inset
+
+; 
+\begin_inset Formula $f^{out}(v)=\sum_{e\text{ out of }v}f_{e}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $c(S,\bar{S})=\sum_{e\in(S\times\bar{S})\cap E}c_{e}$
+\end_inset
+
+; 
+\begin_inset Formula $f(S,\bar{S})=\sum_{e\in(S,\bar{S})}f_{e}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $f^{out}(S)=f(S,\bar{S})$
+\end_inset
+
+; 
+\begin_inset Formula $f^{in}(S)=f(\bar{S},S)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Lemmae
+\end_layout
+
+\begin_layout Lemma
+For any 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ cut 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+, 
+\begin_inset Formula $\upsilon(f)=f^{out}(S)-f^{in}(S)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Show that the value of the flow in the graph is bottlenecked by the edges
+ across the cut.
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula $\upsilon(f)=\sum_{e\text{ out of }s}f_{e}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula $=\sum_{v\in S}f^{out}(v)-f^{in}(v)\text{ with the inner part equal to }0\text{ for all }v\notin S\text{ by conservation}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula $=\sum_{v\in S}(\sum_{e\text{ out of }v}f_{e}-\sum_{e\text{ into }v}f_{e})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula $=\sum_{e\text{ out of }S}f_{e}-\sum_{e\text{ into }S}f_{e}$
+\end_inset
+
+ – the 
+\begin_inset Formula $f_{e}$
+\end_inset
+
+ fully inside 
+\begin_inset Formula $S$
+\end_inset
+
+ cancel out, so we only care about edges crossing 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula $=f^{out}(S)-f^{in}(S)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Corollary
+If 
+\begin_inset Formula $(S,\bar{S)}$
+\end_inset
+
+ is any 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ cut, then 
+\begin_inset Formula $\upsilon(f)\leq c(S,\bar{S})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+By Lemma 4, 
+\begin_inset Formula $\upsilon(f)\leq f^{out}(S)=f(S,\bar{S})\leq c(S,\bar{S})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Corollary
+If 
+\begin_inset Formula $f^{*}$
+\end_inset
+
+is a maximum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ flow and 
+\begin_inset Formula $(S^{*},\bar{S^{*}})$
+\end_inset
+
+ a minimum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ cut, then 
+\begin_inset Formula $\upsilon(f^{*})\leq c(S^{*},\bar{S^{*}})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Corollary
+If 
+\begin_inset Formula $f$
+\end_inset
+
+ is any 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ flow and 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+ any 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ cut, and 
+\begin_inset Formula $\upsilon(f)=c(S,\bar{S})$
+\end_inset
+
+, then 
+\begin_inset Formula $f$
+\end_inset
+
+ is a maximum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ flow and 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+ is a minimum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ cut.
+\end_layout
+
+\begin_layout Subsection
+Residual Flow
+\end_layout
+
+\begin_layout Standard
+Given a graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ and a flow 
+\begin_inset Formula $f$
+\end_inset
+
+ on 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+, the residual flow graph 
+\begin_inset Formula $\mathcal{G}_{f}$
+\end_inset
+
+ has edges 
+\begin_inset Formula $(u,v)\in E$
+\end_inset
+
+ with 
+\begin_inset Formula $c'_{e}=c_{e}-f_{e}$
+\end_inset
+
+ (forward edges) and 
+\begin_inset Formula $(v,u)$
+\end_inset
+
+ with 
+\begin_inset Formula $c'_{(v,u)}=f_{(u,v)}$
+\end_inset
+
+ (backward edges).
+ 
+\begin_inset Formula $c'_{e}$
+\end_inset
+
+ are called 
+\series bold
+residual capacities
+\series default
+; for forward edges, the residual capacity is how much more flow can fit
+ on that edge, and for backward edges, the residual capacity is how much
+ flow you can 
+\begin_inset Quotes eld
+\end_inset
+
+undo
+\begin_inset Quotes erd
+\end_inset
+
+ from the current flow.
+ An 
+\series bold
+augmenting path 
+\series default
+
+\begin_inset Formula $P$
+\end_inset
+
+ is an 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ path such that each 
+\begin_inset Formula $e\in P$
+\end_inset
+
+ has 
+\begin_inset Formula $c'_{e}>0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Ford-Fulkerson Algorithm
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $f=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+while 
+\begin_inset Formula $\mathcal{G}_{f}$
+\end_inset
+
+ contains an augmenting path 
+\begin_inset Formula $P$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Select one such 
+\begin_inset Formula $P$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $\mathcal{E}=\min_{e\in P}c'_{e}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+for all 
+\begin_inset Formula $e\in P$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+if 
+\begin_inset Formula $e$
+\end_inset
+
+ is a forward edge
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $f'_{e}=f_{e}+\mathcal{E}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+elseif 
+\begin_inset Formula $e=(u,v)$
+\end_inset
+
+ is a backward edge
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $f'_{(v,u)}=f_{(v,u)}-\mathcal{E}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endif
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endwhile
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Ford-Fulkerson Max-Flow Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Proof of Correctness
+\end_layout
+
+\begin_layout Lemma
+\begin_inset Formula $f'$
+\end_inset
+
+is a flow.
+\end_layout
+
+\begin_layout Proof
+A 3-part proof; (1) 
+\begin_inset Formula $f'$
+\end_inset
+
+ is not negative, (2) 
+\begin_inset Formula $f'$
+\end_inset
+
+ obeys the capacity constraint, (3) 
+\begin_inset Formula $f'$
+\end_inset
+
+ obeys the conservation constraint.
+\end_layout
+
+\begin_layout Proof
+(1) 
+\begin_inset Formula $f'$
+\end_inset
+
+ is not negative.
+\end_layout
+
+\begin_layout Proof
+We only need to prove this for backward edges 
+\begin_inset Formula $e=(u,v)$
+\end_inset
+
+.
+ For those, 
+\begin_inset Formula $c'_{e}=f_{(v,u)}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathcal{E}\leq c'_{e}\leq f_{(v,u)}$
+\end_inset
+
+, so it updates to 
+\begin_inset Formula $f'_{(v,u)}=f_{(v,u)}-\mathcal{E}\geq0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(2) 
+\begin_inset Formula $f'$
+\end_inset
+
+ obeys the capacity constraint.
+\end_layout
+
+\begin_layout Proof
+We only need to prove this for forward edges 
+\begin_inset Formula $e$
+\end_inset
+
+.
+ For those, 
+\begin_inset Formula $c'_{e}=c_{e}-f_{e}$
+\end_inset
+
+, so 
+\begin_inset Formula $f'_{e}=f_{e}+\mathcal{E}\leq f_{e}+c'_{e}=c_{e}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(3) 
+\begin_inset Formula $f'$
+\end_inset
+
+ obeys the conservation constraint.
+\end_layout
+
+\begin_layout Proof
+Consider a node 
+\begin_inset Formula $u$
+\end_inset
+
+ on an augmenting path 
+\begin_inset Formula $P$
+\end_inset
+
+ with in-edge 
+\begin_inset Formula $e$
+\end_inset
+
+ and out-edge 
+\begin_inset Formula $e'$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(i).
+ 
+\begin_inset Formula $e,e'$
+\end_inset
+
+ both forward, then inflow and outflow increased by 
+\begin_inset Formula $\mathcal{E}$
+\end_inset
+
+, so conservation holds.
+\end_layout
+
+\begin_layout Proof
+(ii).
+ 
+\begin_inset Formula $e,e'$
+\end_inset
+
+ both backward, then inflow and outflow decreased by 
+\begin_inset Formula $\mathcal{E}$
+\end_inset
+
+, so conservation holds.
+\end_layout
+
+\begin_layout Proof
+(iii).
+ 
+\begin_inset Formula $e$
+\end_inset
+
+ forward and 
+\begin_inset Formula $e'$
+\end_inset
+
+ backward, then inflow on 
+\begin_inset Formula $e$
+\end_inset
+
+ increased by 
+\begin_inset Formula $\mathcal{E}$
+\end_inset
+
+ and outflow on 
+\begin_inset Formula $e'$
+\end_inset
+
+ decreased by 
+\begin_inset Formula $\mathcal{E}$
+\end_inset
+
+ which cancels out, so conservation holds.
+\end_layout
+
+\begin_layout Proof
+(iv).
+ 
+\begin_inset Formula $e$
+\end_inset
+
+ backward and 
+\begin_inset Formula $e'$
+\end_inset
+
+ forward, then outflow on 
+\begin_inset Formula $e$
+\end_inset
+
+ decreased by 
+\begin_inset Formula $\mathcal{E}$
+\end_inset
+
+ and inflow on 
+\begin_inset Formula $e'$
+\end_inset
+
+ increased by 
+\begin_inset Formula $\mathcal{E}$
+\end_inset
+
+ which cancels out, so conservation holds.
+\end_layout
+
+\begin_layout Lemma
+If all 
+\begin_inset Formula $c_{e}\in\mathbb{N}$
+\end_inset
+
+, then in each iteration all 
+\begin_inset Formula $f_{e}\in\mathbb{N}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+By induction, and 
+\begin_inset Formula $\mathcal{E}=\min_{e\in P}c'_{e}\in\mathbb{N}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Lemma
+The Ford-Fulkerson Algorithm terminates in at most 
+\begin_inset Formula $C^{*}$
+\end_inset
+
+ iterations where 
+\begin_inset Formula $C^{*}=\sum_{e}c_{e}$
+\end_inset
+
+ or 
+\begin_inset Formula $C^{*}=\sum_{e\text{ out of }S}c_{e}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula $\upsilon(f)$
+\end_inset
+
+ increases by at least one each iteration, and is bounded by 
+\begin_inset Formula $c(\{s\},V\setminus\{s\})$
+\end_inset
+
+.
+ Each iteration takes 
+\begin_inset Formula $\mathcal{O}(m+n)$
+\end_inset
+
+ via BFS to find 
+\begin_inset Formula $P$
+\end_inset
+
+, so the runtime is 
+\begin_inset Formula $\mathcal{O}(C^{*}(m+n))$
+\end_inset
+
+ which is pseudo-polynomial (next class, we will go over an improvement
+ to the algorithm which will reduce it to polynomial time).
+\end_layout
+
+\begin_layout Theorem
+The cost of the minimum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ cut with respect to 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+ is equal to the maximum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ flow with capacities 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+At termination, there is no more augmenting path in 
+\begin_inset Formula $\mathcal{G}_{f}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $S=\{v|\mathcal{G}_{f}\text{ contains an }(s,v)\text{ path with }c'_{e}>0\}$
+\end_inset
+
+.
+ By termination, we know 
+\begin_inset Formula $t\notin S$
+\end_inset
+
+, so 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+ is an 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ cut.
+ By Lemma 4, 
+\begin_inset Formula $\upsilon(f)=f^{out}(S)-f^{in}(S)$
+\end_inset
+
+.
+ Because all forward edges are saturated out of 
+\begin_inset Formula $S$
+\end_inset
+
+, 
+\begin_inset Formula $f^{out}(S)=c(S,\bar{S})$
+\end_inset
+
+.
+ Because there are no backward edges out of 
+\begin_inset Formula $S$
+\end_inset
+
+, 
+\begin_inset Formula $f^{in}(S)=0$
+\end_inset
+
+.
+ Thus, 
+\begin_inset Formula $\upsilon(f)=c(S,\bar{S})$
+\end_inset
+
+.
+ By Corollary 7, 
+\begin_inset Formula $f$
+\end_inset
+
+ is a max-flow and 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+ is a min-cut.
+\end_layout
+
+\end_body
+\end_document

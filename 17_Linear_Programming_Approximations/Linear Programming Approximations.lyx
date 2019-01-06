@@ -1,0 +1,809 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Linear Programming Approximations
+\end_layout
+
+\begin_layout Section
+Generalization of Maximum Coverage Approximation
+\end_layout
+
+\begin_layout Standard
+We will see that the same approximation we used last lecture to solve maximum
+ coverage leads to a 
+\begin_inset Formula $(1-\frac{1}{e})$
+\end_inset
+
+ approximation for any non-negative monotone submodular function.
+\end_layout
+
+\begin_layout Standard
+MAXIMUM COVERAGE: Given a universe 
+\begin_inset Formula $U$
+\end_inset
+
+ where each element has a value 
+\begin_inset Formula $v(u)$
+\end_inset
+
+, subsets 
+\begin_inset Formula $S_{1},\dots,S_{m}\subseteq U$
+\end_inset
+
+, and an integer 
+\begin_inset Formula $k$
+\end_inset
+
+, find a 
+\begin_inset Formula $T\subseteq\{1,\dots,m\}$
+\end_inset
+
+ with 
+\begin_inset Formula $|T|\leq k$
+\end_inset
+
+ maximizing 
+\begin_inset Formula $\sum_{u\in\bigcup_{j\in T}s_{j}}v(u)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Let function 
+\begin_inset Formula $f:2^{U}\rightarrow\mathbb{R}$
+\end_inset
+
+; in other words, 
+\begin_inset Formula $f:T\rightarrow\sum_{u\in\bigcup_{j\in T}s_{j}}v(u).$
+\end_inset
+
+ Assume 
+\begin_inset Formula $f(T)\geq0\text{ }\forall T$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Monotonicity:
+\series default
+ 
+\begin_inset Formula $f(S)\geq f(T)$
+\end_inset
+
+ when 
+\begin_inset Formula $S\supseteq T$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Submodularity (diminishing returns): 
+\series default
+If 
+\begin_inset Formula $S\supseteq T$
+\end_inset
+
+, then 
+\begin_inset Formula $f(T\cup\{x\})-f(T)\geq f(S\cup\{x\})-f(S)\text{ }\forall x$
+\end_inset
+
+.
+ More elegantly, 
+\begin_inset Formula $f(S\cap T)+f(S\cup T)\leq f(S)+f(T)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Recall key insight 2 from last lecture: by adding the best set 
+\begin_inset Formula $S_{j}$
+\end_inset
+
+ for 
+\begin_inset Formula $j\in T^{*}$
+\end_inset
+
+ to 
+\begin_inset Formula $T_{t}$
+\end_inset
+
+, we increase the value by at least 
+\begin_inset Formula $\frac{1}{k}(OPT-V_{t})$
+\end_inset
+
+ because 
+\begin_inset Formula $|T^{*}|\leq k$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Lemma
+If 
+\begin_inset Formula $f$
+\end_inset
+
+ is non-negative, submodular, and monotone, then this insight holds.
+\end_layout
+
+\begin_layout Proof
+Let 
+\begin_inset Formula $S=T^{*}\setminus T_{t}$
+\end_inset
+
+; 
+\begin_inset Formula $S=\{u_{1},\dots,u_{r}\}\text{ with }r\leq k$
+\end_inset
+
+.
+ Define 
+\begin_inset Formula $S_{j}:=\{u_{1},\dots,u_{j}\}$
+\end_inset
+
+ and recall 
+\begin_inset Formula $f(T)=\sum_{u\in\bigcup_{j\in T}s_{j}}v(u)$
+\end_inset
+
+.
+ We are interested in:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+f(T^{*}\cup T_{t})-f(T_{t})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=f(S\cup T_{t})-f(T_{t})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+We use a telescoping sum:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\sum_{j=0}^{r-1}f(S_{j+1}\cup T_{t})-f(S_{j}\cup T_{t})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\sum_{j=0}^{r-1}f(S_{j}\cup T_{t}\cup\{u_{j+1}\})-f(S_{j}\cup T_{t})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+Applying submodularity:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\leq\sum_{j=0}^{r-1}f(T_{t}\cup\{u_{j+1}\})-f(T_{t})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+We use this fact to prove the previous insight:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\max_{j=1\dots r}f(T_{t}\cup\{u_{j}\})-f(T_{t})\geq\frac{1}{r}\sum_{j=1}^{r}f(T_{t}\cup\{u_{j}\})-f(T_{t})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\geq\frac{1}{r}(f(T^{*}\cup T_{t})-f(T_{t}))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+And because 
+\begin_inset Formula $r\leq k$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\geq\frac{1}{k}(f(T^{*}\cup T_{t})-f(T_{t}))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+Let 
+\begin_inset Formula $f$
+\end_inset
+
+ be a non-negative, monotone, submodular function.
+ Then, the greedy algorithm which for 
+\begin_inset Formula $k$
+\end_inset
+
+ iterations always adds the element giving largest increase in 
+\begin_inset Formula $f$
+\end_inset
+
+ is a 
+\begin_inset Formula $1-\frac{1}{e}$
+\end_inset
+
+ approximation (Nemhauser, Halsey, Fisher).
+\end_layout
+
+\begin_layout Standard
+In the greedy algorithms unit, we proved that if 
+\begin_inset Formula $f$
+\end_inset
+
+ is 
+\series bold
+modular 
+\series default
+(i.e., linear), maximizing 
+\begin_inset Formula $f(S)$
+\end_inset
+
+ subject to 
+\begin_inset Formula $S$
+\end_inset
+
+ being an independent set in a given matroid is solved optimally by the
+ greedy algorithm.
+ The implications of Theorem 2 are that if 
+\begin_inset Formula $f$
+\end_inset
+
+ is non-negative, monotone, and submodular, the greedy algorithm is a 
+\begin_inset Formula $1-\frac{1}{e}$
+\end_inset
+
+ approximation on the 
+\begin_inset Formula $k$
+\end_inset
+
+-uniform matroid (where any set of 
+\begin_inset Formula $\leq k$
+\end_inset
+
+ elements is independent).
+\end_layout
+
+\begin_layout Theorem
+The greedy algorithm for a non-negative, monotone, submodular function on
+ an arbitrary matroid is a 
+\begin_inset Formula $\frac{1}{2}$
+\end_inset
+
+-approximation (Nemhauser).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+There is a 
+\begin_inset Quotes eld
+\end_inset
+
+continuous-greedy
+\begin_inset Quotes erd
+\end_inset
+
+ (think gradient descent) algorithm which achieves a 
+\begin_inset Formula $1-\frac{1}{e}$
+\end_inset
+
+ approximation for any non-negative, monotone, submodular function on any
+ matroid (Vondrak).
+\end_layout
+
+\begin_layout Section
+Intro to Linear Programming Approximations
+\end_layout
+
+\begin_layout Standard
+Many optimization problems can be encoded naturally as integer linear programs
+ (ILPs).
+ Solving ILPs is 
+\series bold
+NP
+\series default
+-hard because many problems are naturally encoded.
+ The generic technique for achieving bounds on OPT:
+\end_layout
+
+\begin_layout Enumerate
+Create the ILP encoding the problem.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Quotes eld
+\end_inset
+
+Relax
+\begin_inset Quotes erd
+\end_inset
+
+ the ILP to an LP by removing integrality constraints.
+\end_layout
+
+\begin_layout Enumerate
+Now the LP can be solved in polynomial time to give a fractional solution
+ 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Round 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ to an integer solution 
+\begin_inset Formula $\hat{x}$
+\end_inset
+
+ and ensure it is a valid solution (use 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ as 
+\bar under
+guidance
+\bar default
+ for computing 
+\begin_inset Formula $\hat{x}$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Enumerate
+Prove 
+\begin_inset Formula $\hat{x}$
+\end_inset
+
+ is not too much worse than 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Important bounds:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+OPT_{LP}\leq OPT_{ILP}\text{ for minimization}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+OPT_{LP}\geq OPT_{ILP}\text{ for maximization}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Corollaries:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\text{If }cost(\hat{x})\leq\alpha*cost(\vec{x})\text{, then \ensuremath{\hat{x}} is an \ensuremath{\alpha}-approximation for minimization.}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\text{If }cost(\hat{x})\geq\alpha*cost(\vec{x})\text{, then \ensuremath{\hat{x}} is an \ensuremath{\alpha}-approximation for maximization.}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\series bold
+integrality gap
+\series default
+ of an LP is, over all instances:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\min\frac{OPT_{ILP}}{OPT_{LP}}\text{ for minimization}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\max\frac{OPT_{ILP}}{OPT_{LP}}\text{ for maximization}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If analysis only uses LP bound, it can prove no better approximation guarantees
+ than the integrality gap.
+\end_layout
+
+\begin_layout Section
+Weighted Vertex Cover
+\end_layout
+
+\begin_layout Subsection
+Building an LP
+\end_layout
+
+\begin_layout Standard
+WEIGHTED VERTEX COVER: Given a graph 
+\begin_inset Formula $\mathcal{G}=(V,E)$
+\end_inset
+
+ with vertex costs 
+\begin_inset Formula $c_{v}$
+\end_inset
+
+, find a vertex cover 
+\begin_inset Formula $S$
+\end_inset
+
+ of minimum total cost 
+\begin_inset Formula $\sum_{u\in S}c_{v}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We write an ILP encoding the problem:
+\end_layout
+
+\begin_layout Standard
+Maximize
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{v}c_{v}x_{v}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+subject to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+x_{u}+x_{v}\geq1 & \forall e=(u,v)\\
+x_{v}\geq0 & \forall v\\
+x_{v}\in\{0,1\} & \forall v
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We relax the ILP to an LP by removing the 
+\begin_inset Formula $x_{v}\in\{0,1\}$
+\end_inset
+
+ constraint.
+ Solving this LP gives a fractional solution 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Rounding Algorithm
+\end_layout
+
+\begin_layout Standard
+We include in 
+\begin_inset Formula $S$
+\end_inset
+
+ all nodes 
+\begin_inset Formula $v$
+\end_inset
+
+ with 
+\begin_inset Formula $x_{v}\geq\frac{1}{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+(1).
+ This is a vertex cover: because of the first constraint, at least one endpoint
+ of 
+\begin_inset Formula $e$
+\end_inset
+
+ has 
+\begin_inset Formula $x_{v}\geq\frac{1}{2}\text{ }\forall e$
+\end_inset
+
+.
+ Such a 
+\begin_inset Formula $v$
+\end_inset
+
+ is in 
+\begin_inset Formula $S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+(2).
+ Cost analysis:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+cost(\hat{x})=\sum_{v\in S}c_{v}=\sum_{v:x_{v}\geq\frac{1}{2}}c_{v}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\leq\sum_{v:x_{v}\geq\frac{1}{2}}(2x_{v})c_{v}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\leq\sum_{v}(2x_{v})c_{v}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=2*cost(\vec{x})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So this is a 2-approximation.
+\end_layout
+
+\begin_layout Subsection
+Integrality Gap
+\end_layout
+
+\begin_layout Standard
+The worst case scenario is a complete graph with all 
+\begin_inset Formula $c_{v}=1$
+\end_inset
+
+.
+ Then, 
+\begin_inset Formula $LP-OPT\leq\frac{n}{2}$
+\end_inset
+
+ and 
+\begin_inset Formula $ILP-OPT=n-1$
+\end_inset
+
+.
+ This ratio is about 2, so we know that the rounding can't be better than
+ a 2-approximation.
+\end_layout
+
+\end_body
+\end_document

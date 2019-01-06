@@ -1,0 +1,879 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Minimum Spanning Trees
+\end_layout
+
+\begin_layout Section
+Minimum Spanning Trees (MSTs)
+\end_layout
+
+\begin_layout Standard
+Given an undirected, connected graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ with edge costs 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+, find a minimum cost subset 
+\begin_inset Formula $E'\subseteq E$
+\end_inset
+
+ such that 
+\begin_inset Formula $(V,E')$
+\end_inset
+
+ is connected.
+ In this example, 
+\begin_inset Formula $\text{cost}(E')=\sum_{e\in E'}c_{e}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\noindent
+Assume without loss of generality that 
+\begin_inset Formula $c_{e}\geq0$
+\end_inset
+
+, because the negative edges (if they exist) can be preprocessed out.
+ For simplicity, assume distinct edge weights.
+ With these conditions, the optimum solution to this problem is always a
+ spanning tree.
+\end_layout
+
+\begin_layout Section
+MST Algorithms
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* Sort edges by non-decreasing 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+for edge 
+\begin_inset Formula $e$
+\end_inset
+
+ in 
+\begin_inset Formula $E$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+if 
+\begin_inset Formula $e$
+\end_inset
+
+ does not create a cycle in 
+\begin_inset Formula $E'$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Add 
+\begin_inset Formula $e$
+\end_inset
+
+ to 
+\begin_inset Formula $E'$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+else 
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Discard 
+\begin_inset Formula $e$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endif
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Kruskal's Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* Let 
+\begin_inset Formula $r$
+\end_inset
+
+ be an arbitrary root node, then 
+\begin_inset Formula $S=[r]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+while 
+\begin_inset Formula $S\neq V$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Add the cheapest edge 
+\begin_inset Formula $(s,v)$
+\end_inset
+
+ crossing from 
+\begin_inset Formula $S\rightarrow\bar{S}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* Add 
+\begin_inset Formula $v$
+\end_inset
+
+ to 
+\begin_inset Formula $S$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endwhile
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Prim's Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Algorithm Analyses
+\end_layout
+
+\begin_layout Subsection
+Proofs of Correctness
+\end_layout
+
+\begin_layout Theorem
+Both Kruskal's Algorithm and Prim's Algorithm produce MSTs.
+\end_layout
+
+\begin_layout Proof
+This is a 3-part proof; we must ensure that each algorithm creates an optimal
+ solution that (1) is acyclic, (2) is connected, and (3) is minimum cost.
+\end_layout
+
+\begin_layout Proof
+(1).
+ No cycles:
+\end_layout
+
+\begin_layout Proof
+Kruskal's Algorithm: holds trivially.
+\end_layout
+
+\begin_layout Proof
+Prim's Algorithm: the algorithm never adds an edge between two members of
+ 
+\begin_inset Formula $S$
+\end_inset
+
+ or 
+\begin_inset Formula $\bar{S}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(2).
+ Connectedness:
+\end_layout
+
+\begin_layout Proof
+Kruskal's Algorithm: assume for the sake of contradiction that there are
+ at least two connected components at termination time (i.e., no edges cross
+ 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+).
+ However 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ is connected, so there must be some cheapest edge connecting 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+.
+ Thus, Kruskal's would added that edge, resulting in a contradiction.
+\end_layout
+
+\begin_layout Proof
+Prim's Algorithm: if the algorithm terminates with 
+\begin_inset Formula $S\neq V$
+\end_inset
+
+, then by definition there is no edge crossing 
+\begin_inset Formula $(S,\bar{S)}$
+\end_inset
+
+in 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+.
+ This means that 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ is disconnected, which is a contradiction to our initial condition.
+\end_layout
+
+\begin_layout Proof
+(3).
+ Minimum cost:
+\end_layout
+
+\begin_deeper
+\begin_layout Lemma
+For every cut 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+, the cheapest edge across that cut is in the MST.
+\end_layout
+
+\begin_layout Proof
+For the sake of contradiction, let 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+ be a cut.
+ Let 
+\begin_inset Formula $e$
+\end_inset
+
+ be the cheapest edge crossing 
+\begin_inset Formula $(S,\bar{S)}$
+\end_inset
+
+, but 
+\begin_inset Formula $e$
+\end_inset
+
+ is not in the MST.
+ Adding 
+\begin_inset Formula $e$
+\end_inset
+
+ to the MST creates a cycle which contains one or more edges 
+\begin_inset Formula $e'$
+\end_inset
+
+ also crossing 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+.
+ But because 
+\begin_inset Formula $e$
+\end_inset
+
+ is cheapest, 
+\begin_inset Formula $c_{e}<c_{e'}$
+\end_inset
+
+.
+ Thus, 
+\begin_inset Formula $e$
+\end_inset
+
+ would have been in the MST in the first place.
+\end_layout
+
+\begin_layout Corollary
+If 
+\begin_inset Formula $e$
+\end_inset
+
+ is the most expensive edge in a cycle 
+\begin_inset Formula $C$
+\end_inset
+
+, then 
+\begin_inset Formula $e$
+\end_inset
+
+ is not in the MST.
+\end_layout
+
+\begin_layout Standard
+This corollary suggests the 
+\series bold
+reverse-delete algorithm
+\series default
+, where one begins with all edges 
+\begin_inset Formula $E$
+\end_inset
+
+ and removes the most expensive edge in 
+\begin_inset Formula $C$
+\end_inset
+
+ until the graph is acyclic.
+\end_layout
+
+\begin_layout Claim*
+Every edge included by Kruskal's Algorithm or Prim's Algorithm is cheapest
+ for some cut.
+\end_layout
+
+\begin_layout Standard
+Kruskal's Algorithm: when some edge 
+\begin_inset Formula $e$
+\end_inset
+
+ is added to the MST, it merges two components 
+\begin_inset Formula $S_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{j}$
+\end_inset
+
+ by crossing 
+\begin_inset Formula $(S_{i},S_{j})$
+\end_inset
+
+.
+ Because no edge has yet been added across 
+\begin_inset Formula $(S_{i},S_{j})$
+\end_inset
+
+, 
+\begin_inset Formula $e$
+\end_inset
+
+ must be the cheapest edge across that cut.
+\end_layout
+
+\begin_layout Standard
+Prim's Algorithm: holds trivially.
+\end_layout
+
+\end_deeper
+\begin_layout Proof
+Because every edge included by the algorithms is cheapest for some cut,
+ and for every cut, the cheapest edge across that cut is in the MST, every
+ edge included by the algorithms is in the MST.
+\end_layout
+
+\begin_layout Subsection
+Runtime
+\end_layout
+
+\begin_layout Standard
+Kruskal's Algorithm:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\Theta(n^{2})$
+\end_inset
+
+ via running BFS or DFS 
+\begin_inset Formula $n$
+\end_inset
+
+ times to find the next cheapest edge
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathcal{O}(m\log m+n\log n)$
+\end_inset
+
+ via a basic union-find data structure
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\mathcal{O}(m\log m+n\log^{*}n)=\mathcal{O}(m\log m)$
+\end_inset
+
+ via union-find with path compression
+\end_layout
+
+\begin_layout Standard
+Prim's Algorithm:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\Theta(n^{2})$
+\end_inset
+
+ via naive implementation
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\Theta(m\log n)$
+\end_inset
+
+ via a minheap with priority metric 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\Theta(m+n\log n)$
+\end_inset
+
+ via a Fibonacci heap
+\end_layout
+
+\begin_layout Section
+Union-Find Data Structure
+\end_layout
+
+\begin_layout Standard
+A 
+\series bold
+union-find data structure
+\series default
+ returns the set (representing the connected component) that an element
+ 
+\begin_inset Formula $e$
+\end_inset
+
+ belongs to, and allows these sets to be combined (representing Kruskal's
+ Algorithm selecting an edge which connects two connected components).
+\end_layout
+
+\begin_layout Standard
+Union-find utilizes a forest structure where each 
+\begin_inset Formula $e$
+\end_inset
+
+ has a size counter and a parent pointer (which, if null, means that 
+\begin_inset Formula $e$
+\end_inset
+
+ is the root of its tree).
+ Initially, all size counters are equal to one and all parent pointers are
+ null.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top" width="55page%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Operation
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Runtime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+union
+\begin_inset Formula $(e,e')$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathcal{O}(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Find the roots of 
+\begin_inset Formula $e$
+\end_inset
+
+ and 
+\begin_inset Formula $e'$
+\end_inset
+
+; point the smaller root to the larger.
+ Update the size counters to the sum of all elements in the resultant tree.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+find
+\begin_inset Formula $(e)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathcal{O}(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Follow the parent of 
+\begin_inset Formula $e$
+\end_inset
+
+ to the root; return the root.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Key step in analysis: how deep is each tree? For each union, the size of
+ the set at least doubles, since the smaller root links to the larger.
+ The size of a particular set can double at most 
+\begin_inset Formula $\log n$
+\end_inset
+
+ times; thus the operations run in 
+\begin_inset Formula $\mathcal{O}(\log n)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+These operations can be further optimized by utilizing 
+\series bold
+path compression
+\series default
+.
+ When running find, after finding the root of 
+\begin_inset Formula $e$
+\end_inset
+
+, also point all elements on the path to the root directly to the root.
+ This speeds up all future find operations on those elements, resulting
+ in an amortized runtime of 
+\begin_inset Formula $\mathcal{O}(\alpha(n))\leq\mathcal{O}(\log^{*}n)$
+\end_inset
+
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Formula $\alpha(n)$
+\end_inset
+
+ is the inverse Ackermann function, 
+\begin_inset Formula $\log^{*}n$
+\end_inset
+
+ is the iterated logarithm.
+ Both are bounded by 5 for typical inputs.
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Open Questions
+\end_layout
+
+\begin_layout Standard
+Is there a deterministic MST algorithm which runs in 
+\begin_inset Formula $\mathcal{O}(m)$
+\end_inset
+
+? For randomized algorithms, Karger's Algorithm has expected runtime 
+\begin_inset Formula $\mathcal{O}(m)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+What about if the edges are already sorted? Kruskal's Algorithm is pretty
+ good at 
+\begin_inset Formula $\mathcal{O}(n\log^{*}n)$
+\end_inset
+
+ post-sort, but that isn't quite constant.
+\end_layout
+
+\begin_layout Section
+Amortized Analysis
+\end_layout
+
+\begin_layout Standard
+Amortized analysis is the analysis of algorithm runtime over multiple operations
+ that gives better bounds than assuming each operation takes worst-case
+ time.
+ It exploits the fact that oftentimes, expensive operations are mutually
+ exclusive or cannot occur consecutively.
+\end_layout
+
+\begin_layout Standard
+Kitchen sink analogy: let putting a dish in the sink be an 
+\begin_inset Formula $\mathcal{O}(1)$
+\end_inset
+
+ operation and washing the dishes be an 
+\begin_inset Formula $\mathcal{O}(n)$
+\end_inset
+
+ operation, where 
+\begin_inset Formula $n$
+\end_inset
+
+ is the number of dishes in the sink.
+ If I have 
+\begin_inset Formula $n$
+\end_inset
+
+ kitchen operations, it seems that the worst-case time is 
+\begin_inset Formula $\mathcal{O}(n^{2})$
+\end_inset
+
+ if all the operations were dishwashing, but this is actually impossible.
+ So we can take an amortization over 
+\begin_inset Formula $n$
+\end_inset
+
+ realistic kitchen operations:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{n-1\text{ operations of }\mathcal{O}(1)+1\text{ operation of }\mathcal{O}(n)}{n\text{ total kitchen operations}}=\mathcal{O}(n)\text{ amortized runtime}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

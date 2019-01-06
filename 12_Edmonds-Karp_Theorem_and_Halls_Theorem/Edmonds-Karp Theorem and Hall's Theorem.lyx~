@@ -1,0 +1,938 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Edmonds-Karp Theorem and Hall's Theorem
+\end_layout
+
+\begin_layout Section
+Edmonds-Karp Theorem
+\end_layout
+
+\begin_layout Subsection
+Dinic's Theorem
+\end_layout
+
+\begin_layout Theorem
+The widest-path Ford-Fulkerson implementation (always augmenting 
+\begin_inset Formula $P$
+\end_inset
+
+ with largest minimum residual capacity) runs in 
+\begin_inset Formula $\mathcal{O}(m\log C^{*})$
+\end_inset
+
+ flow augmentations.
+\end_layout
+
+\begin_layout Standard
+There are several ways to implement Dinic's Theorem: find the widest path
+ in 
+\begin_inset Formula $\mathcal{O}(m\log m)$
+\end_inset
+
+ using binary search on the bottleneck, plus BFS; modify Bellman-Ford for
+ 
+\begin_inset Formula $\mathcal{O}(mn)$
+\end_inset
+
+ runtime; or modify Dijkstra's Algorithm for 
+\begin_inset Formula $\mathcal{O}(m+n\log n)$
+\end_inset
+
+.
+ However, Dinic's Theorem is not as interesting or as powerful as Edmond's
+ Karp, so we'll study that one instead.
+\end_layout
+
+\begin_layout Subsection
+Edmonds-Karp Theorem
+\end_layout
+
+\begin_layout Lemma
+If 
+\begin_inset Formula $P,Q$
+\end_inset
+
+ are augmenting paths used in iterations 
+\begin_inset Formula $i,i'$
+\end_inset
+
+, 
+\begin_inset Formula $Q$
+\end_inset
+
+ pushes flow in the opposite direction of 
+\begin_inset Formula $P$
+\end_inset
+
+ on at least one edge, and for all times 
+\begin_inset Formula $j\in\{i+1,\dots i'-1\}$
+\end_inset
+
+ the path 
+\begin_inset Formula $P_{j}$
+\end_inset
+
+ does not push flow opposite to either 
+\begin_inset Formula $P$
+\end_inset
+
+ or 
+\begin_inset Formula $Q$
+\end_inset
+
+ on any edge, then 
+\begin_inset Formula $|Q|>|P|$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Without loss of generality, let 
+\begin_inset Formula $P=\{(1,2),(2,3),\dots,(k-1,k)\}$
+\end_inset
+
+.
+ Then, 
+\begin_inset Formula $Q$
+\end_inset
+
+ is some other path with backward edges (not necessarily in the same order
+ as 
+\begin_inset Formula $P$
+\end_inset
+
+, or on the same nodes).
+ So, 
+\begin_inset Formula $Q=\{Q_{0},(v_{1}+1,v_{1}),Q_{1},(v_{2}+1,v_{2}),\dots,(v_{r}+1,v_{r}),Q_{r}\}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Because no 
+\begin_inset Formula $P_{j}$
+\end_inset
+
+ pushed flow opposite to 
+\begin_inset Formula $Q$
+\end_inset
+
+, all 
+\begin_inset Formula $Q_{i}$
+\end_inset
+
+ were available when 
+\begin_inset Formula $P$
+\end_inset
+
+ was a shortest path.
+ Thus 
+\begin_inset Formula $|Q_{i}|\geq v_{i+1}+1-v_{i}$
+\end_inset
+
+ (
+\begin_inset Formula $Q_{i}$
+\end_inset
+
+ goes from 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+ to 
+\begin_inset Formula $v_{i+1}+1$
+\end_inset
+
+).
+ Total length of 
+\begin_inset Formula $Q$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+|Q|\geq r+\sum_{i=0}^{r}|Q_{i}|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\geq r+\sum_{i=0}^{r}(v_{i+1}+1-v_{i})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=2r+1+\sum_{i=0}^{r}(v_{i+1}-v_{i})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=2r+1+v_{r+1}-v_{0}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=2r+k
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+>k=|P|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+If we always choose a shortest 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ path found with BFS, Ford-Fulkerson terminates in 
+\begin_inset Formula $\mathcal{O}(mn)$
+\end_inset
+
+ iterations.
+ Notice this is strongly polynomial – there is no dependence on 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+ values.
+\end_layout
+
+\begin_layout Proof
+Key idea: the length of the shortest 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ path in 
+\begin_inset Formula $\mathcal{G}_{f}$
+\end_inset
+
+ is always (1) non-decreasing, and (2) strictly increases 
+\begin_inset Quotes eld
+\end_inset
+
+often enough
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(1).
+ In each step, the length of the path either stays the same or increases.
+\end_layout
+
+\begin_layout Proof
+(i).
+ If 
+\begin_inset Formula $P_{i},P_{i+1}$
+\end_inset
+
+ use no edge in opposite directions, then 
+\begin_inset Formula $P_{i+1}$
+\end_inset
+
+ was available in iteration 
+\begin_inset Formula $i$
+\end_inset
+
+, so 
+\begin_inset Formula $|P_{i}|\leq|P_{i+1}|$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(ii).
+ If 
+\begin_inset Formula $P_{i+1}$
+\end_inset
+
+ uses an edge in the opposite direction from 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+, then 
+\begin_inset Formula $|P_{i}|<|P_{i+1}|$
+\end_inset
+
+ by Lemma 2.
+\end_layout
+
+\begin_layout Proof
+(2).
+ If 
+\begin_inset Formula $P_{i},P_{j}$
+\end_inset
+
+ saturate 
+\begin_inset Formula $e$
+\end_inset
+
+ or set the flow to 0 on 
+\begin_inset Formula $e$
+\end_inset
+
+ (with 
+\begin_inset Formula $j>1$
+\end_inset
+
+), then 
+\begin_inset Formula $|P_{j}|>|P_{i}|$
+\end_inset
+
+.
+ Thus, there exists some 
+\begin_inset Formula $i'\in\{i+1,\dots,j-1\}$
+\end_inset
+
+ such that 
+\begin_inset Formula $P_{i'}$
+\end_inset
+
+ pushes flow on some 
+\begin_inset Formula $e$
+\end_inset
+
+ opposite to 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $i\leq k\leq l\leq i'$
+\end_inset
+
+ be such that 
+\begin_inset Formula $P_{k}$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{l}$
+\end_inset
+
+ push flow in opposite directions on at least some edge and 
+\begin_inset Formula $|l-k|$
+\end_inset
+
+ is minimized.
+ (We know 
+\begin_inset Formula $k$
+\end_inset
+
+ and 
+\begin_inset Formula $l$
+\end_inset
+
+ must exist because 
+\begin_inset Formula $i,i'$
+\end_inset
+
+ are candidates).
+ By Lemma 2, the distance from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $t$
+\end_inset
+
+ strictly increases from 
+\begin_inset Formula $k$
+\end_inset
+
+ to 
+\begin_inset Formula $l$
+\end_inset
+
+, and by (1) it never decreases.
+ Then, we have a strict increase from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Proof
+Runtime: After every 
+\begin_inset Formula $2m+1$
+\end_inset
+
+ rounds, some 
+\begin_inset Formula $e$
+\end_inset
+
+ got saturated twice or set to 0 twice by the pigeonhole principle.
+ Thus, the distance from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $t$
+\end_inset
+
+ increases at least once every 
+\begin_inset Formula $2m$
+\end_inset
+
+ iteration, and can increase at most 
+\begin_inset Formula $n$
+\end_inset
+
+ times.
+ So, there will be 
+\begin_inset Formula $\mathcal{O}(mn)$
+\end_inset
+
+ flow augmentations.
+\end_layout
+
+\begin_layout Section
+Hall's Theorem
+\end_layout
+
+\begin_layout Standard
+Consider a bipartite graph 
+\begin_inset Formula $\mathcal{G}(X,Y,E)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Definition
+\begin_inset Formula $\Gamma(A):=$
+\end_inset
+
+ the neighbors of 
+\begin_inset Formula $A$
+\end_inset
+
+ (i.e., the set of all nodes incident to any node in 
+\begin_inset Formula $A$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Lemma
+If there is a set 
+\begin_inset Formula $A\subseteq X$
+\end_inset
+
+ or 
+\begin_inset Formula $A\subseteq Y$
+\end_inset
+
+ with 
+\begin_inset Formula $|\Gamma(A)|<|A|$
+\end_inset
+
+,
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ has no perfect matching.
+\end_layout
+
+\begin_layout Proof
+Trivial.
+\end_layout
+
+\begin_layout Theorem
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ has a perfect matching if and only if there is no 
+\begin_inset Formula $A\subseteq X$
+\end_inset
+
+ or 
+\begin_inset Formula $A\subseteq Y$
+\end_inset
+
+ with 
+\begin_inset Formula $|\Gamma(A)|<|A|$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Notice that this statement (Hall's Theorem) is the converse of Lemma 5,
+ so we don't get it for free.
+\end_layout
+
+\begin_layout Proof
+We get the 
+\begin_inset Quotes eld
+\end_inset
+
+only if
+\begin_inset Quotes erd
+\end_inset
+
+ part of the theorem from Lemma 5, but we still have to prove the 
+\begin_inset Quotes eld
+\end_inset
+
+if
+\begin_inset Quotes erd
+\end_inset
+
+ case: If 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ has no perfect matching, then there is a set 
+\begin_inset Formula $A\subseteq X\text{ or }A\subseteq Y$
+\end_inset
+
+ with 
+\begin_inset Formula $|\Gamma(A)|<|A|$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Let 
+\begin_inset Formula $n=|X|=|Y|$
+\end_inset
+
+.
+ Because 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ has no perfect matching, the max-flow in the flow-graph 
+\begin_inset Formula $\mathcal{G}'$
+\end_inset
+
+ is 
+\begin_inset Formula $\upsilon(f^{*})\leq n-1$
+\end_inset
+
+.
+ By the Max-Flow Min-Cut Theorem, there is a vertex set 
+\begin_inset Formula $S\in\mathcal{G}'$
+\end_inset
+
+ with 
+\begin_inset Formula $c(S,\bar{S})\leq n-1$
+\end_inset
+
+.
+ Furthermore, there can be no edge 
+\begin_inset Formula $e=(x,y)\in\mathcal{G}$
+\end_inset
+
+ with 
+\begin_inset Formula $X\in S$
+\end_inset
+
+, 
+\begin_inset Formula $Y\in\bar{S}$
+\end_inset
+
+ because 
+\begin_inset Formula $c_{e}=\infty$
+\end_inset
+
+ in 
+\begin_inset Formula $\mathcal{G}'$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Define 
+\begin_inset Formula $A=S\cap X$
+\end_inset
+
+.
+ Then:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+n-1\geq c(S,\bar{S})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=|X\setminus S|+|Y\cap S|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=n-|A|+|\Gamma(A)|\text{ because \ensuremath{A} cannot have neighbors outside \ensuremath{S}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\implies|\Gamma(A)|\leq|A|-1<|A|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Edge-Disjoint Paths
+\end_layout
+
+\begin_layout Standard
+Given a graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ and source/sink 
+\begin_inset Formula $s,t\in V$
+\end_inset
+
+, find as many edge-disjoint 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ paths as possible.
+ Reduction to MFMC: Give each edge 
+\begin_inset Formula $e$
+\end_inset
+
+ 
+\begin_inset Formula $c_{e}=1$
+\end_inset
+
+, then find the maximum integer 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ flow.
+ From there, decompose the max-flow 
+\begin_inset Formula $f^{*}$
+\end_inset
+
+ into disjoint paths.
+\end_layout
+
+\begin_layout Lemma
+Let 
+\begin_inset Formula $f$
+\end_inset
+
+ be any acyclic 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ flow; then there are 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ paths 
+\begin_inset Formula $P_{1},P_{2},\dots,P_{k}$
+\end_inset
+
+ with 
+\begin_inset Formula $k\leq m$
+\end_inset
+
+ and 
+\begin_inset Formula $a_{1},a_{2},\dots,a_{k}$
+\end_inset
+
+ such that for all edges 
+\begin_inset Formula $e$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Lemma
+\begin_inset Formula 
+\[
+\sum_{i:e\in P_{i}}a_{i}=f_{e}\text{ and if }f\in\mathbb{N},\text{ all }a_{i}\in\mathbb{N}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Lemma
+The 
+\begin_inset Formula $(P_{i},a_{i})$
+\end_inset
+
+ can be computed in polynomial time.
+\end_layout
+
+\begin_layout Proof
+By induction on the number of edges with 
+\begin_inset Formula $f_{e}>0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+If that number is zero, the 
+\begin_inset Formula $f=0$
+\end_inset
+
+.
+ Otherwise, we start from 
+\begin_inset Formula $s$
+\end_inset
+
+ and follow and outgoing edge 
+\begin_inset Formula $e$
+\end_inset
+
+ with 
+\begin_inset Formula $f_{e}>0$
+\end_inset
+
+.
+ Whenever we reach a node 
+\begin_inset Formula $v$
+\end_inset
+
+, it has positive incoming flow, so by conservation, it has positive outgoing
+ flow.
+ Thus, we follow an outgoing edge with 
+\begin_inset Formula $f_{e}>0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Because 
+\begin_inset Formula $f$
+\end_inset
+
+ is acyclic, no node repeats, so in at most 
+\begin_inset Formula $n$
+\end_inset
+
+ steps, we reach 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ This defines an 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ path 
+\begin_inset Formula $P$
+\end_inset
+
+ with 
+\begin_inset Formula $f_{e}>0\text{ }\forall e\in P$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Define 
+\begin_inset Formula $\mathcal{E}:=\min_{e\in P}f_{e}$
+\end_inset
+
+.
+ We add the pair 
+\begin_inset Formula $(P,\mathcal{E})$
+\end_inset
+
+ to the decomposition and set 
+\begin_inset Formula $f_{e}'=f_{e}-\mathcal{E}\text{ }\forall e\in P$
+\end_inset
+
+.
+ 
+\begin_inset Formula $f'$
+\end_inset
+
+ is still a flow by the augmentation lemma, and has one fewer edge with
+ positive flow.
+ Thus, we apply the inductive hypothesis to 
+\begin_inset Formula $f'$
+\end_inset
+
+, and add 
+\begin_inset Formula $(P',\mathcal{E}')$
+\end_inset
+
+ to the decomposition.
+ If all 
+\begin_inset Formula $f_{e}\in\mathbb{N}$
+\end_inset
+
+, then all 
+\begin_inset Formula $\mathcal{E}\in\mathbb{N}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_body
+\end_document

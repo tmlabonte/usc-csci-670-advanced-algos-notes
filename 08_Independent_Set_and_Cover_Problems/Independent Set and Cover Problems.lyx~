@@ -1,0 +1,831 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Independent Set and Cover Problems
+\end_layout
+
+\begin_layout Section
+Independent Set
+\end_layout
+
+\begin_layout Standard
+INDEPENDENT SET (IS): Given an undirected graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ and an integer 
+\begin_inset Formula $k$
+\end_inset
+
+, does 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ contain an independent set of size 
+\begin_inset Formula $\geq k$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+IS is 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Proof
+A two-part proof: (1) IS 
+\begin_inset Formula $\in$
+\end_inset
+
+
+\series bold
+ NP
+\series default
+, (2) IS is 
+\series bold
+NP
+\series default
+-hard.
+\end_layout
+
+\begin_layout Proof
+(1).
+ IS 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\end_layout
+
+\begin_layout Proof
+Certificate: A proposed set 
+\begin_inset Formula $S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Certifier: A polytime algorithm which tests that 
+\begin_inset Formula $S$
+\end_inset
+
+ is independent and 
+\begin_inset Formula $|S|\leq k$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(2).
+ IS is 
+\series bold
+NP
+\series default
+-hard
+\end_layout
+
+\begin_layout Proof
+We reduce from a known 
+\series bold
+NP
+\series default
+-hard problem (3SAT) to IS.
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+3SAT 
+\begin_inset Formula $\leq p$
+\end_inset
+
+ IS.
+\end_layout
+
+\begin_layout Proof
+The input to the reduction is a 3SAT formula 
+\begin_inset Formula $F$
+\end_inset
+
+, and the output should be a graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ and integer 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ It must run in polytime, and satisfy:
+\end_layout
+
+\begin_layout Proof
+(1).
+ If 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ has an IS of size 
+\begin_inset Formula $\geq k$
+\end_inset
+
+, then 
+\begin_inset Formula $F$
+\end_inset
+
+ is satisfiable.
+\end_layout
+
+\begin_layout Proof
+(2).
+ If 
+\begin_inset Formula $F$
+\end_inset
+
+ is satisfiable, then 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ has an IS of size 
+\begin_inset Formula $\geq k$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+A useful definition of 3SAT here is that for each clause 
+\begin_inset Formula $C_{j}$
+\end_inset
+
+, we pick a true literal 
+\begin_inset Formula $l_{j,i}$
+\end_inset
+
+ such that our selection never includes both 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\bar{x_{i}}$
+\end_inset
+
+.
+ Our choice in 3SAT is which designated literals to pick, which will map
+ to our choice in IS of which vertices to include.
+ For each 
+\begin_inset Formula $C_{j}$
+\end_inset
+
+ and 
+\begin_inset Formula $l_{j,i}$
+\end_inset
+
+, we have one node 
+\begin_inset Formula $v_{j,i}$
+\end_inset
+
+ in 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+.
+ Then, we set 
+\begin_inset Formula $k=m$
+\end_inset
+
+ (number of vertices to number of clauses).
+ We add edges between the 
+\begin_inset Formula $v_{j,i}$
+\end_inset
+
+ in a fixed 
+\begin_inset Formula $j$
+\end_inset
+
+ across all 
+\begin_inset Formula $i$
+\end_inset
+
+ (which forces picking only one node in a clause).
+ This reduction is obviously polytime, so now we prove correctness.
+\end_layout
+
+\begin_layout Proof
+(1).
+ Assume 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ has an IS 
+\begin_inset Formula $S$
+\end_inset
+
+ of size 
+\begin_inset Formula $\geq m$
+\end_inset
+
+.
+ For each 
+\begin_inset Formula $v_{j,i}\in S$
+\end_inset
+
+, make 
+\begin_inset Formula $l_{j,i}$
+\end_inset
+
+ true, and vice versa.
+ Because of the variable edges, we never try to make 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\bar{x_{i}}$
+\end_inset
+
+ true.
+ This strategy must satisfy the clauses because 
+\begin_inset Formula $|S|\geq m$
+\end_inset
+
+, and it has at most one node per 
+\begin_inset Formula $C_{j}$
+\end_inset
+
+, so it must have at least one literal per clause.
+ Thus, 
+\begin_inset Formula $F$
+\end_inset
+
+ is satisfied.
+\end_layout
+
+\begin_layout Proof
+(2).
+ If 
+\begin_inset Formula $F$
+\end_inset
+
+ is satisfiable, then let 
+\begin_inset Formula $\hat{i}(j)$
+\end_inset
+
+ be a true literal in 
+\begin_inset Formula $C_{j}$
+\end_inset
+
+ under a fixed satisfying assignment.
+ Let 
+\begin_inset Formula $S=\{v_{j},\hat{i}(j)\}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $|S|=m$
+\end_inset
+
+ and 
+\begin_inset Formula $S$
+\end_inset
+
+ is independent because it does not violate the clause edges (we included
+ only one node per clause) or variable edges (only one of 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\bar{x_{i}}$
+\end_inset
+
+ can be selected in the assignment).
+\end_layout
+
+\end_deeper
+\begin_layout Proof
+Since we proved that IS is both in 
+\series bold
+NP
+\series default
+ and 
+\series bold
+NP
+\series default
+-hard, IS must be 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Section
+Vertex Cover
+\end_layout
+
+\begin_layout Standard
+Let a vertex cover be a set 
+\begin_inset Formula $S\subseteq V$
+\end_inset
+
+ such that for all edges 
+\begin_inset Formula $e$
+\end_inset
+
+, at least one endpoint of 
+\begin_inset Formula $e$
+\end_inset
+
+ is in 
+\begin_inset Formula $S$
+\end_inset
+
+.
+ VERTEX COVER (VC): Given a graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ and integer 
+\begin_inset Formula $k$
+\end_inset
+
+, is there a vertex cover of size 
+\begin_inset Formula $\leq k$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Theorem
+VC is 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Proof
+A two-part proof: (1) VC 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+, (2) VC is 
+\series bold
+NP
+\series default
+-hard.
+\end_layout
+
+\begin_layout Proof
+(1).
+ VC 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\end_layout
+
+\begin_layout Proof
+Certificate: A set 
+\begin_inset Formula $S$
+\end_inset
+
+ that supposedly covers all edges.
+\end_layout
+
+\begin_layout Proof
+Certifier: A polytime algorithm which compares 
+\begin_inset Formula $|S|\leq k$
+\end_inset
+
+ and ensures 
+\begin_inset Formula $S$
+\end_inset
+
+ covers all edges.
+\end_layout
+
+\begin_layout Proof
+(2).
+ VC is 
+\series bold
+NP
+\series default
+-hard
+\end_layout
+
+\begin_layout Proof
+We reduce from a known 
+\series bold
+NP
+\series default
+-hard problem (IS) to VC.
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+IS 
+\begin_inset Formula $\leq p$
+\end_inset
+
+ VC
+\end_layout
+
+\begin_layout Proof
+The input to the reduction is a graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ and integer 
+\begin_inset Formula $k$
+\end_inset
+
+; the output is a graph 
+\begin_inset Formula $\mathcal{G}'$
+\end_inset
+
+ and integer 
+\begin_inset Formula $k'$
+\end_inset
+
+.
+ We notice that IS and VC are complements – that is, 
+\begin_inset Formula $S$
+\end_inset
+
+ is an independent set if and only if 
+\begin_inset Formula $\bar{S}$
+\end_inset
+
+ is a vertex cover.
+ Thus, 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ has an independent set of size 
+\begin_inset Formula $\geq k$
+\end_inset
+
+ if and only if 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ has a vertex cover of size 
+\begin_inset Formula $\leq n-k$
+\end_inset
+
+.
+ Then, we can just set 
+\begin_inset Formula $\mathcal{G}'=\mathcal{G}$
+\end_inset
+
+ and 
+\begin_inset Formula $k'=n-k$
+\end_inset
+
+, which obviously runs in polytime.
+\end_layout
+
+\end_deeper
+\begin_layout Proof
+Since we proved that VC is both in 
+\series bold
+NP
+\series default
+ and 
+\series bold
+NP
+\series default
+-hard, VC must be 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Section
+Set Cover
+\end_layout
+
+\begin_layout Standard
+SET COVER (SC): Given elements 
+\begin_inset Formula $E$
+\end_inset
+
+, subsets 
+\begin_inset Formula $S_{1},S_{2},\dots,S_{m}\subseteq E$
+\end_inset
+
+, and an integer 
+\begin_inset Formula $k$
+\end_inset
+
+, is there a set 
+\begin_inset Formula $T\subseteq\{1\dots m\}$
+\end_inset
+
+ with 
+\begin_inset Formula $|T|\leq k$
+\end_inset
+
+ and 
+\begin_inset Formula $\bigcup_{i\in T}S_{i}=E$
+\end_inset
+
+? This problem is equivalent to figuring out the minimum number of routers
+ one would need to cover every office in a building, etc.
+\end_layout
+
+\begin_layout Theorem
+SC is 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Proof
+A two-part proof: (1) SC 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+, (2) SC is 
+\series bold
+NP
+\series default
+-hard.
+\end_layout
+
+\begin_layout Proof
+(1).
+ VC 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\end_layout
+
+\begin_layout Proof
+Certificate: 
+\begin_inset Formula $T$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Certifier: A polytime algorithm which compares 
+\begin_inset Formula $|T|\leq k$
+\end_inset
+
+ and checks if 
+\begin_inset Formula $\bigcup_{i\in T}S_{i}=E$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(2).
+ VC is 
+\series bold
+NP
+\series default
+-hard
+\end_layout
+
+\begin_layout Proof
+We reduce from a known 
+\series bold
+NP
+\series default
+-hard problem (VC) to SC.
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+VC 
+\begin_inset Formula $\leq p$
+\end_inset
+
+ SC
+\end_layout
+
+\begin_layout Proof
+The input to the reduction is a graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ and integer 
+\begin_inset Formula $k$
+\end_inset
+
+; the outputs are elements 
+\begin_inset Formula $E$
+\end_inset
+
+, sets 
+\begin_inset Formula $S_{1},\dots S_{m}\subseteq E$
+\end_inset
+
+, and an integer 
+\begin_inset Formula $k'$
+\end_inset
+
+.
+ We have one set 
+\begin_inset Formula $S_{v}$
+\end_inset
+
+ for each 
+\begin_inset Formula $v\in V$
+\end_inset
+
+ containing all edges incident on (and thus covered by) 
+\begin_inset Formula $v\in\mathcal{G}$
+\end_inset
+
+.
+ Usually we would prove this more formally, but we were running out of time,
+ so we determined that 
+\begin_inset Formula $E$
+\end_inset
+
+ is equivalent to the set of edges in 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+, while 
+\begin_inset Formula $k'=k$
+\end_inset
+
+.
+ This algorithm is obviously polytime, and it is correct because 
+\begin_inset Formula $\bigcup_{v\in T}\text{ edges covered by }v=\bigcup_{v\in T}S_{v}$
+\end_inset
+
+, so vertex covers in 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ and set covers are essentially the same.
+\end_layout
+
+\end_deeper
+\begin_layout Proof
+Since we proved that SC is both in 
+\series bold
+NP
+\series default
+ and 
+\series bold
+NP
+\series default
+-hard, SC must be 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Proof
+An important realization is that we reduce from a specific problem to a
+ more general one; 3SAT is actually an extremely specific problem, while
+ SC is more general.
+ While we usually move in that direction, all 
+\series bold
+NP
+\series default
+-complete problems are equally hard, so we can reduce from SC to 3SAT via
+ using CERT to simulate them.
+\end_layout
+
+\begin_layout Section
+Some famous NP-complete problems
+\end_layout
+
+\begin_layout Standard
+Logic: SAT, 3SAT, X3SAT, NAE3SAT, ...
+\end_layout
+
+\begin_layout Standard
+Graphs: IS, VC, DOMINATING SET, GRAPH COLORING, ...
+\end_layout
+
+\begin_layout Standard
+Sets: SC, SET PACKING, ...
+\end_layout
+
+\begin_layout Standard
+Other: PARTITION, SUBSET SUM, KNAPSACK, STEINER TREE, HAMILTONIAN CYCLE,
+ TRAVELING SALESMANs
+\end_layout
+
+\end_body
+\end_document

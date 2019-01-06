@@ -1,0 +1,613 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Subset Sum and Intro to Network Flow
+\end_layout
+
+\begin_layout Section
+Subset Sum
+\end_layout
+
+\begin_layout Subsection
+Hamiltonian Cycle
+\end_layout
+
+\begin_layout Standard
+HAMILTONIAN CYCLE (HC): Given a graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+, is there a tour that visits each vertex 
+\bar under
+exactly
+\bar default
+ once? (Not to be confused with Eulerian cycles, which contain each edge
+ exactly once).
+\end_layout
+
+\begin_layout Theorem
+HC is 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Proof
+A two-part proof: (1) HC 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+, (2) HC is 
+\series bold
+NP
+\series default
+-hard.
+\end_layout
+
+\begin_layout Proof
+(1).
+ HC 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\end_layout
+
+\begin_layout Proof
+Certificate: A proposed tour.
+\end_layout
+
+\begin_layout Proof
+Certifier: A polytime algorithm which checks existence of all edges and
+ that the tour contains every vertex exactly once.
+\end_layout
+
+\begin_layout Proof
+(2).
+ HC is 
+\series bold
+NP
+\series default
+-hard
+\end_layout
+
+\begin_layout Proof
+We reduce from a known 
+\series bold
+NP
+\series default
+-hard problem (3SAT) to HC.
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+3SAT 
+\begin_inset Formula $\leq p$
+\end_inset
+
+ HC
+\end_layout
+
+\begin_layout Proof
+The input to the reduction is a formula 
+\begin_inset Formula $F$
+\end_inset
+
+; the output is a digraph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+.
+ We must encode the truth assignment of variables into the choice of the
+ order for visiting each node in 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+For each 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+, we build a 
+\begin_inset Quotes eld
+\end_inset
+
+variable gadget
+\begin_inset Quotes erd
+\end_inset
+
+, a long bidirected path.
+ We add a start node 
+\begin_inset Formula $s$
+\end_inset
+
+, and connect it to the left and right endpoints of the 
+\begin_inset Formula $x_{1}$
+\end_inset
+
+ gadget.
+ Then, we connect the left and right endpoints of each 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ gadget to the left and right endpoints of the 
+\begin_inset Formula $x_{i+1}$
+\end_inset
+
+ gadget, and the left and right endpoints of the 
+\begin_inset Formula $x_{m}$
+\end_inset
+
+ gadget back up to 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ Thus, a true or false decision is encoded with a left or right traversal
+ respectively.
+\end_layout
+
+\begin_layout Proof
+For each clause 
+\begin_inset Formula $C_{j}\in F$
+\end_inset
+
+, we have a new node (a 
+\begin_inset Quotes eld
+\end_inset
+
+clause gadget
+\begin_inset Quotes erd
+\end_inset
+
+) 
+\begin_inset Formula $u_{j}$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $C_{j}=l_{j,1}\lor l_{j,2}\lor l_{j,3}$
+\end_inset
+
+, then we have one incoming and one outgoing edge per 
+\begin_inset Formula $l_{j,i}$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $l_{j,i}=x_{k}$
+\end_inset
+
+, then the edges are 
+\begin_inset Formula $(v_{k,2j},u_{j}),(u_{j},v_{k,2j+1})$
+\end_inset
+
+.
+ Otherwise if 
+\begin_inset Formula $l_{j,i}=\bar{x_{k}}$
+\end_inset
+
+, the edges are 
+\begin_inset Formula $(u_{j},v_{k,2j}),(v_{k,2j+1},u_{j})$
+\end_inset
+
+.
+ Since there are 
+\begin_inset Formula $m$
+\end_inset
+
+ clauses, we can tell that each variable gadget must have length 
+\begin_inset Formula $2m+2$
+\end_inset
+
+ (2 nodes for each clause gadget, and a terminal node on either end).
+\end_layout
+
+\begin_layout Proof
+This algorithm runs in polytime 
+\begin_inset Formula $\Theta(mn)$
+\end_inset
+
+ and satisfies:
+\end_layout
+
+\begin_layout Proof
+(1).
+ If 
+\begin_inset Formula $F$
+\end_inset
+
+ is satisfiable, then 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ has an HC.
+\end_layout
+
+\begin_layout Proof
+For each 
+\begin_inset Formula $i$
+\end_inset
+
+, if 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ is true, we traverse the corresponding variable gadget left to right; otherwise
+, we traverse it right to left.
+ For each 
+\begin_inset Formula $C_{j}$
+\end_inset
+
+, let 
+\begin_inset Formula $l_{j,i}$
+\end_inset
+
+ be a true literal.
+ Then the HC will take the corresponding detour to the clause gadget, thus
+ visiting every vertex exactly once.
+\end_layout
+
+\begin_layout Proof
+(2).
+ If 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ has an HC, then 
+\begin_inset Formula $F$
+\end_inset
+
+ is satisfiable.
+\end_layout
+
+\begin_layout Proof
+Observation: If the HC follows an edge from 
+\begin_inset Formula $(v_{i,2j},u_{j})$
+\end_inset
+
+, it 
+\bar under
+must
+\bar default
+ immediately continue with 
+\begin_inset Formula $(u_{j},v_{i,2j+1})$
+\end_inset
+
+ instead of moving to a different variable gadget; otherwise, 
+\begin_inset Formula $v_{i,2j+1}$
+\end_inset
+
+ cannot ever be visited again (and thus the HC does not exist).
+ So, the HC must traverse each variable gadget completely, taking detours
+ to each 
+\begin_inset Formula $u_{j}$
+\end_inset
+
+.
+ Then, we define 
+\begin_inset Formula $x_{i}:=$
+\end_inset
+
+ true if its corresponding variable gadget was traversed left to right,
+ and false otherwise.
+ Because we were able to take detours to all 
+\begin_inset Formula $u_{j}$
+\end_inset
+
+, all 
+\begin_inset Formula $C_{j}$
+\end_inset
+
+ are satisfied, so 
+\begin_inset Formula $F$
+\end_inset
+
+ must be satisfied.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Proof
+Since we proved that HC is both in 
+\series bold
+NP
+\series default
+ and 
+\series bold
+NP
+\series default
+-hard, HC must be 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Section
+Partition
+\end_layout
+
+\begin_layout Subsection
+Partition
+\end_layout
+
+\begin_layout Standard
+TRAVELING SALESMAN PROBLEM (TSP): Given a graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ with edge costs and an integer 
+\begin_inset Formula $k$
+\end_inset
+
+, is there a tour of total cost 
+\begin_inset Formula $\leq k$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Theorem
+TSP is 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Proof
+A two-part proof: (1) TSP 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+, (2) TSP is 
+\series bold
+NP
+\series default
+-hard.
+\end_layout
+
+\begin_layout Proof
+(1).
+ TSP 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\end_layout
+
+\begin_layout Proof
+Showing this is simple except in the case of Euclidean TSP (ETSP, where
+ we are given 
+\begin_inset Formula $(x,y)$
+\end_inset
+
+ coordinates instead of edge weights).
+ This is because those edge weights may be irrational, and most algorithms
+ with irrational numbers are in 
+\series bold
+PSPACE
+\series default
+.
+ It is an open question whether ETSP 
+\begin_inset Formula $\in$
+\end_inset
+
+
+\series bold
+ NP
+\series default
+.
+\end_layout
+
+\begin_layout Proof
+(2).
+ TSP is 
+\series bold
+NP
+\series default
+-hard
+\end_layout
+
+\begin_layout Proof
+We reduce from a known 
+\series bold
+NP
+\series default
+-hard problem (HC) to TSP.
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+HC 
+\begin_inset Formula $\leq p$
+\end_inset
+
+ TSP
+\end_layout
+
+\begin_layout Proof
+The input to the reduction is a digraph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ without costs, and the output is a digraph 
+\begin_inset Formula $\mathcal{G}'$
+\end_inset
+
+ with edge costs and an integer 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ We set 
+\begin_inset Formula $k=n$
+\end_inset
+
+ (to guarantee a tour) and set distances 
+\begin_inset Formula $d_{i,j}$
+\end_inset
+
+ such that:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+d_{i,j}=\begin{cases}
+1 & (i,j)\in\mathcal{G}\\
+\infty & (i,j)\notin\mathcal{G}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+Then, 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ has an HC if and only if it has a tour with cost 
+\begin_inset Formula $\leq k=n$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Proof
+Since we proved that TSP is both in 
+\series bold
+NP
+\series default
+ and 
+\series bold
+NP
+\series default
+-hard, TSP must be 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Subsection
+An Incorrect Reduction to Graph Partition
+\end_layout
+
+\begin_layout Section
+Network Flow
+\end_layout
+
+\end_body
+\end_document

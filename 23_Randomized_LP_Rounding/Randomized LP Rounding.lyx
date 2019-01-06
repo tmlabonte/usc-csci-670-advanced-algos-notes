@@ -1,0 +1,801 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Randomized LP Rounding
+\end_layout
+
+\begin_layout Section
+Multiway Path Congestion
+\end_layout
+
+\begin_layout Standard
+This lecture, we'll practice with a problem which applies all the knowledge
+ we've gained so far, from LP relaxation and rounding to randomized algorithms
+ and Chernoff bounds.
+\end_layout
+
+\begin_layout Standard
+MULTIWAY PATH CONGESTION: Given 
+\begin_inset Formula $k$
+\end_inset
+
+ pairs 
+\begin_inset Formula $(s_{i},t_{i})$
+\end_inset
+
+ in a graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+, find an 
+\begin_inset Formula $(s_{i},t_{i})$
+\end_inset
+
+ path for each 
+\begin_inset Formula $i$
+\end_inset
+
+ minimizing the maximum edge congestion (defined as the 
+\begin_inset Formula $\max_{e}$
+\end_inset
+
+ number of paths using 
+\begin_inset Formula $e$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+For directed graphs, even 
+\begin_inset Formula $k=2$
+\end_inset
+
+ is 
+\series bold
+NP
+\series default
+-hard by a reduction from edge-disjoint paths.
+ For undirected graphs, any constant 
+\begin_inset Formula $k$
+\end_inset
+
+ is solvable in polytime (exponential or worse in 
+\begin_inset Formula $k$
+\end_inset
+
+); it is 
+\series bold
+NP
+\series default
+-hard if 
+\begin_inset Formula $k$
+\end_inset
+
+ is part of the input.
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $L$
+\end_inset
+
+ represent the maximum load/congestion across all paths, and define indicator
+ variables:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X_{i,P}=\begin{cases}
+1 & \text{if \ensuremath{i} uses path \ensuremath{P}}\\
+0 & \text{o.w.}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now, we can represent the problem as an ILP:
+\end_layout
+
+\begin_layout Standard
+Minimize
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Subject to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+\sum_{P}X_{i,P}=1 & \forall i\\
+\sum_{i}\sum_{p\ni e}X_{i,P}\leq L & \forall e\\
+X_{i,P}\geq0 & \forall i,P\\
+X_{i,P}\in\{0,1\} & \forall i,P
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To relax the ILP, we remove the integrality constraint.
+ However, since there are exponentially many paths in 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+, our ILP has exponentially many variables, which means we cannot solve
+ this LP in polynomial time.
+ Unless...
+\end_layout
+
+\begin_layout Proposition
+The LP has polynomially many nonzero variables.
+\end_layout
+
+\begin_layout Proof
+Notice that we can interpret 
+\begin_inset Formula $X_{i,P}$
+\end_inset
+
+ as the amount of flow sent from 
+\begin_inset Formula $s_{i}$
+\end_inset
+
+ to 
+\begin_inset Formula $t_{i}$
+\end_inset
+
+ via 
+\begin_inset Formula $P$
+\end_inset
+
+.
+ Then, we have to send one unit of flow for each 
+\begin_inset Formula $(s_{i},t_{i})$
+\end_inset
+
+ pair.
+ By binary search over 
+\begin_inset Formula $L$
+\end_inset
+
+, we only need to check if 
+\begin_inset Formula $L$
+\end_inset
+
+ is feasible as a capacity for all edges, which is exactly MULTI-COMMODITY
+ FLOW.
+ By solving this problem, we obtain a valid 
+\begin_inset Formula $(s_{i},t_{i})$
+\end_inset
+
+ flow 
+\begin_inset Formula $f_{i}$
+\end_inset
+
+ for each 
+\begin_inset Formula $i$
+\end_inset
+
+, and the smallest possible 
+\begin_inset Formula $L$
+\end_inset
+
+ for a fractional flow.
+ Using a path decomposition of 
+\begin_inset Formula $f_{i}$
+\end_inset
+
+, we get fractional variables 
+\begin_inset Formula $X_{i,P}$
+\end_inset
+
+ solving the original 
+\begin_inset Formula $LP$
+\end_inset
+
+, with at most 
+\begin_inset Formula $m$
+\end_inset
+
+ positive 
+\begin_inset Formula $X_{i,P}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Now that we have established a polytime fractional solution, we need a rounding
+ algorithm.
+ Notice that the 
+\begin_inset Formula $X_{i,P}$
+\end_inset
+
+ for a fixed 
+\begin_inset Formula $i$
+\end_inset
+
+ sum to 1, so we interpret them as probabilities.
+ Our rounding algorithm is to select the path 
+\begin_inset Formula $P$
+\end_inset
+
+ for the pair 
+\begin_inset Formula $(s_{i},t_{i})$
+\end_inset
+
+ with probability 
+\begin_inset Formula $X_{i,P}$
+\end_inset
+
+ (we select exactly one 
+\begin_inset Formula $P$
+\end_inset
+
+ per 
+\begin_inset Formula $i$
+\end_inset
+
+).
+ Do this 
+\bar under
+independently
+\bar default
+ for each 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ This clearly gives us a feasible solution, but we would like to analyze
+ 
+\begin_inset Formula $L$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $L_{e}$
+\end_inset
+
+ be the random variable representing the load on edge 
+\begin_inset Formula $e$
+\end_inset
+
+ (i.e., the number of paths using 
+\begin_inset Formula $e$
+\end_inset
+
+).
+ Then:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[L_{e}]=\mathbb{E}[\text{number of paths using \ensuremath{e}}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i}\Pr[P_{i}\ni e]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i}\sum_{P\ni e}X_{i,P}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\leq L\text{ by the LP constraint}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We want a high-probability bound on 
+\begin_inset Formula $\max_{e}L_{e}$
+\end_inset
+
+.
+ So, we have to use tail bounds to show that:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Pr[L_{e}>(1+\delta)L]\leq\frac{1}{m^{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then, we can take a union bound over 
+\begin_inset Formula $m$
+\end_inset
+
+ edges to show that we have a bounded 
+\begin_inset Formula $\max_{e}L_{e}$
+\end_inset
+
+ with probability 
+\begin_inset Formula $\geq1-\frac{1}{m}$
+\end_inset
+
+.
+ To reverse-engineer the smallest possible 
+\begin_inset Formula $\delta$
+\end_inset
+
+, we can apply Chernoff bounds (which is legal because 
+\begin_inset Formula $L_{e}$
+\end_inset
+
+ is the sum of independent indicator variables).
+ Because 
+\begin_inset Formula $\mathbb{E}[L_{e}]\leq L$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Pr[L_{e}\geq(1+\delta)L]<\frac{\exp(\delta)}{(1+\delta)^{(1+\delta)}}^{L}\leq\frac{1}{m^{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that the LP has an integrality gap of 1 when it distributes everything
+ fractionally.
+ So, we strengthen the LP by adding the constraint of 
+\begin_inset Formula $L\geq1$
+\end_inset
+
+.
+ That constraint simplifies our bound to:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\exp(\delta)}{(1+\delta)^{(1+\delta)}}\leq\frac{1}{m^{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It is enough to set 
+\begin_inset Formula $\delta=\Theta(\frac{\log m}{\log\log m})$
+\end_inset
+
+.
+ Our output is a 
+\begin_inset Formula $\Theta(\frac{\log m}{\log\log m})$
+\end_inset
+
+-approximation with probability 
+\begin_inset Formula $\geq1-\frac{1}{m}$
+\end_inset
+
+, and if 
+\begin_inset Formula $L$
+\end_inset
+
+ is large, the bound gets even better.
+\end_layout
+
+\begin_layout Section
+Packet Routing
+\end_layout
+
+\begin_layout Standard
+PACKET ROUTING: Given 
+\begin_inset Formula $N$
+\end_inset
+
+ pairs 
+\begin_inset Formula $(s_{i},t_{i})$
+\end_inset
+
+ with designated paths 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+.
+ One packet each must be routed along 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+.
+ Each edge can transmit at most one packet per timestep; the others wait
+ in a buffer.
+ We want to minimize the latest packet arrival.
+\end_layout
+
+\begin_layout Standard
+Some apparent lower bounds are the maximum length of any path (
+\begin_inset Formula $:=d$
+\end_inset
+
+) and the maximum congestion of any edge (
+\begin_inset Formula $:=c$
+\end_inset
+
+).
+ An upper bound on any reasonable algorithm is 
+\begin_inset Formula $\mathcal{O}(cd)$
+\end_inset
+
+.
+ There exists an algorithm which achieves 
+\begin_inset Formula $\mathcal{O}(c+d)$
+\end_inset
+
+, but here we will prove an 
+\begin_inset Formula $\mathcal{O}(c+d\log(Nm))$
+\end_inset
+
+-approximation with high probability.
+\end_layout
+
+\begin_layout Standard
+To avoid frequent or repeated packet collisions, each packet selects 
+\bar under
+independently
+\bar default
+ and uniformly a start time 
+\begin_inset Formula $s_{i}\in\{1\dots r\}$
+\end_inset
+
+ (we will figure out 
+\begin_inset Formula $r$
+\end_inset
+
+ soon).
+ The packet waits for 
+\begin_inset Formula $s_{i}$
+\end_inset
+
+ steps, then tries to follow one edge in each step.
+\end_layout
+
+\begin_layout Standard
+With randomly selected start times, there will still be some collisions,
+ though much fewer.
+ To handle them, we replace each step with a 
+\series bold
+meta-step
+\series default
+ of length 
+\begin_inset Formula $k$
+\end_inset
+
+ real steps.
+ In each meta-step, each packet traverses one edge; this works so long as
+ 
+\begin_inset Formula $\leq k$
+\end_inset
+
+ packets want to traverse any edge 
+\begin_inset Formula $e$
+\end_inset
+
+ in any one meta-step 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ We represent this quantity with a random variable 
+\begin_inset Formula $X_{e,t}$
+\end_inset
+
+ and define indicator variables:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X_{e,t_{i}}=\begin{cases}
+1 & \text{if \ensuremath{i} wants to use \ensuremath{e} in meta-step \ensuremath{t}}\\
+0 & \text{o.w.}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Such that:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X_{e,t}=\sum_{i}X_{e,t_{i}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can now calculate the expectation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X_{e,t}]=\sum_{i}\Pr[\text{\ensuremath{i} wants to use \ensuremath{e} in meta-step \ensuremath{t}}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\leq\sum_{i:e\in P_{i}}\frac{1}{r}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\leq\frac{c}{r}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now, we want to find 
+\begin_inset Formula $k$
+\end_inset
+
+ such that 
+\begin_inset Formula $\Pr[X_{e,t}>k]$
+\end_inset
+
+ is 
+\begin_inset Quotes eld
+\end_inset
+
+small
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Then, we will take a union bound over 
+\begin_inset Formula $m$
+\end_inset
+
+ edges and all 
+\begin_inset Formula $\leq d+r$
+\end_inset
+
+ meta-steps, to obtain a failure rate of 
+\begin_inset Formula $\leq m^{-1}$
+\end_inset
+
+.
+ So, 
+\begin_inset Quotes eld
+\end_inset
+
+small
+\begin_inset Quotes erd
+\end_inset
+
+ in this case is 
+\begin_inset Formula $(m^{2}(d+r))^{-1}$
+\end_inset
+
+.
+ We have:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+k=(1+\delta)\mathbb{E}[X_{e,t}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+With a fixed 
+\begin_inset Formula $e,t$
+\end_inset
+
+, 
+\begin_inset Formula $X_{e,t_{i}}$
+\end_inset
+
+ are independent across 
+\begin_inset Formula $i$
+\end_inset
+
+ because the 
+\begin_inset Formula $s_{i}$
+\end_inset
+
+ are chosen independently.
+ So, we can apply Chernoff bounds:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Pr[X_{e,t}>k]<\frac{\exp(\delta)}{(1+\delta)^{(1+\delta)}}^{\frac{c}{r}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This analysis will be continued in the next lecture.
+\end_layout
+
+\end_body
+\end_document

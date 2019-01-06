@@ -1,0 +1,966 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Max-Flow Applications
+\end_layout
+
+\begin_layout Section
+Edge-Disjoint Paths
+\end_layout
+
+\begin_layout Standard
+Last time, we proved that we can decompose a flow 
+\begin_inset Formula $f$
+\end_inset
+
+ into edge disjoint paths if 
+\begin_inset Formula $f$
+\end_inset
+
+ is acyclic; now, we will prove that we can always find an acyclic 
+\begin_inset Formula $f$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Lemma
+If 
+\begin_inset Formula $f$
+\end_inset
+
+ is any 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ flow, then in polytime, we can find an acyclic flow 
+\begin_inset Formula $f'$
+\end_inset
+
+ with 
+\begin_inset Formula $\upsilon(f')=\upsilon(f)$
+\end_inset
+
+ and 
+\begin_inset Formula $f_{e}'\leq f_{e}\text{ }\forall e$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $f$
+\end_inset
+
+ is integral, we can make 
+\begin_inset Formula $f'$
+\end_inset
+
+ integral.
+\end_layout
+
+\begin_layout Proof
+While 
+\begin_inset Formula $\{e|f_{e}>0\}$
+\end_inset
+
+ has a cycle, we use BFS, DFS, or topological sort to find a cycle 
+\begin_inset Formula $C$
+\end_inset
+
+.
+ Then, let 
+\begin_inset Formula $\mathcal{E}:=\min_{e\in C}f_{e}$
+\end_inset
+
+.
+ Set 
+\begin_inset Formula $f_{e}':=f_{e}-\mathcal{E}\text{ }\forall e\in C$
+\end_inset
+
+.
+ Then, 
+\begin_inset Formula $f'$
+\end_inset
+
+ is still a flow because it satisfies conservation and capacity.
+ Furthermore, 
+\begin_inset Formula $\upsilon(f')=\upsilon(f)$
+\end_inset
+
+ because 
+\begin_inset Formula $s$
+\end_inset
+
+ is never in a cycle by definition, so we never decrease 
+\begin_inset Formula $f^{out}(s)$
+\end_inset
+
+, which is the definition of 
+\begin_inset Formula $\upsilon(f)$
+\end_inset
+
+.
+ This algorithm finishes in 
+\begin_inset Formula $\leq m$
+\end_inset
+
+ iterations.
+\end_layout
+
+\begin_layout Proof
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* Give each edge 
+\begin_inset Formula $e\in E$
+\end_inset
+
+ capacity 
+\begin_inset Formula $c_{e}=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Algorithm (num)
+* Find an integral max 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ flow 
+\begin_inset Formula $f$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Algorithm (num)
+* Find a path decomposition of 
+\begin_inset Formula $f$
+\end_inset
+
+.
+ Each path carries one unit of flow, so the edges must be disjoint because
+ no edge has 
+\begin_inset Formula $c_{e}>1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Algorithm (num)
+* Return the paths.
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Edge-Disjoint Paths Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Corollary
+Manger's Theorem (Edges): The maximum number of edge-disjoint paths is the
+ minimum number of edges whose removal disconnects 
+\begin_inset Formula $s$
+\end_inset
+
+ from 
+\begin_inset Formula $t$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Corollary
+Manger's Theorem (Vertices): The maximum number of vertex-disjoint paths
+ is the minimum number of vertices whose removal disconnects 
+\begin_inset Formula $s$
+\end_inset
+
+ from 
+\begin_inset Formula $t$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Bi-Segmentation
+\end_layout
+
+\begin_layout Standard
+We can use min-cut to segment graphs into two segments 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $B$
+\end_inset
+
+; more is 
+\series bold
+NP
+\series default
+-hard with this technique (but 
+\begin_inset Formula $k$
+\end_inset
+
+-nearest neighbors can do it!).
+\end_layout
+
+\begin_layout Standard
+Givens: A graph 
+\begin_inset Formula $\mathcal{G}=(V,E)$
+\end_inset
+
+.
+ For each 
+\begin_inset Formula $v\in V$
+\end_inset
+
+, scores 
+\begin_inset Formula $a_{v,}b_{v}\geq0$
+\end_inset
+
+ that describe the probability that 
+\begin_inset Formula $v$
+\end_inset
+
+ belongs to 
+\begin_inset Formula $A$
+\end_inset
+
+ or 
+\begin_inset Formula $B$
+\end_inset
+
+ (e.g., based on a text analysis, image analysis, or similar).
+ For each 
+\begin_inset Formula $e=(u,v)\in E$
+\end_inset
+
+ (e.g., representing copurchases, adjacent pixels, or friends), a separation
+ penalty 
+\begin_inset Formula $p_{e}$
+\end_inset
+
+ if 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+ are assigned to different segments.
+ 
+\end_layout
+
+\begin_layout Standard
+Goal: Assign each 
+\begin_inset Formula $v\in V$
+\end_inset
+
+ to exactly one of 
+\begin_inset Formula $\{A,B\}$
+\end_inset
+
+ while maximizing:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Q(A,B):=\sum_{v\in A}a_{v}+\sum_{v\in B}b_{v}-\sum_{u\in A,v\in B,e=(u,v)}p(u,v)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Reduction to min-cut: We rewrite 
+\begin_inset Formula $Q(A,B)$
+\end_inset
+
+ as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Q(A,B):=\sum_{v\in V}a_{v}+\sum_{v\in V}b_{v}-(\sum_{v\in B}a_{v}+\sum_{v\in A}b_{v}+\sum_{u\in A,v\in B,e=(u,v)}p(u,v))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Q(A,B):=C-Q'(A,B)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We notice that maximizing 
+\begin_inset Formula $Q$
+\end_inset
+
+ is equivalent to minimizing 
+\begin_inset Formula $Q'$
+\end_inset
+
+.
+ We add a new source 
+\begin_inset Formula $s$
+\end_inset
+
+ with edges to all 
+\begin_inset Formula $v$
+\end_inset
+
+ with capacity 
+\begin_inset Formula $a_{v}$
+\end_inset
+
+ and a new sink 
+\begin_inset Formula $t$
+\end_inset
+
+ with edges from all 
+\begin_inset Formula $v$
+\end_inset
+
+ with capacity 
+\begin_inset Formula $b_{v}$
+\end_inset
+
+.
+ Call this new graph 
+\begin_inset Formula $\mathcal{G}'$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Q'(A,B)=c(A\cup\{s\},B\cup\{t\})\text{ in }\mathcal{G}'
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* Build 
+\begin_inset Formula $\mathcal{G}'$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Algorithm (num)
+* Find the minimum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ cut 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Algorithm (num)
+* Return 
+\begin_inset Formula $(S\setminus\{s\},\bar{S}\setminus\{t\})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Bi-Segmentation Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Project Selection
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $n$
+\end_inset
+
+ projects with values 
+\begin_inset Formula $p_{i}\in\mathbb{R}$
+\end_inset
+
+ (i.e., can be negative) and dependencies 
+\begin_inset Formula $(i,j)$
+\end_inset
+
+ which mean that in order to complete 
+\begin_inset Formula $i$
+\end_inset
+
+, we must first complete 
+\begin_inset Formula $j$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Goal: Select a feasible set 
+\begin_inset Formula $S$
+\end_inset
+
+ of projects maximizing 
+\begin_inset Formula $\sum_{i\in S}p_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Let the projects be nodes in a graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ and the dependencies 
+\begin_inset Formula $(i,j)$
+\end_inset
+
+ correspond to edges with capacity 
+\begin_inset Formula $c_{e}=\infty$
+\end_inset
+
+ (i.e., they can't be cut).
+ Then, observe:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i\in S}p_{i}=\sum_{i}p_{i}-\sum_{i\in\bar{S}}p_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=C-\sum_{i\in\bar{S}}p_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus, we seek to minimize 
+\begin_inset Formula $\sum_{i\in\bar{S}p_{i}}$
+\end_inset
+
+.
+ Initially, we might do this with an edge of capacity 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+ from 
+\begin_inset Formula $s$
+\end_inset
+
+ to each node 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ However, this cannot handle negative capacities.
+ Instead, we utilize 
+\begin_inset Formula $t$
+\end_inset
+
+ and say that if 
+\begin_inset Formula $p_{i}\geq0$
+\end_inset
+
+, create an edge from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $i$
+\end_inset
+
+ of capacity 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+; otherwise, create an edge from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $t$
+\end_inset
+
+ of capacity 
+\begin_inset Formula $-p_{i}\geq0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Consider the minimum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ cut 
+\begin_inset Formula $(A,\bar{A})$
+\end_inset
+
+ in 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+.
+ We know this does not cut any dependency edges because of their infinite
+ capacity, so one either completes a dependency sequence or does not start
+ it.
+ Thus, 
+\begin_inset Formula $A\setminus\{s\}$
+\end_inset
+
+ is a feasible set.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+c(A,\bar{A})=\sum_{i\in A,p_{i}<0}(-p_{i})+\sum_{i\in\bar{A},p_{i}\geq0}p_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i\in A,p_{i}<0}(-p_{i})+\sum_{i\in\bar{A}}p_{i}-\sum_{i\in\bar{A},p_{i}<0}p_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i,p_{i}<0}(-p_{i})+\sum_{i\in\bar{A}}p_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=C+\sum_{i\in\bar{A}}p_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus, the minimum cut in 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ minimizes 
+\begin_inset Formula $\sum_{i\in\bar{A}}p_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Sports Elimination
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $n$
+\end_inset
+
+ sports teams, current numbers of wins 
+\begin_inset Formula $w_{i}$
+\end_inset
+
+, and the number of remaining games 
+\begin_inset Formula $r_{i,j}\geq0$
+\end_inset
+
+ between teams 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+, is there a possible outcome of all remaining games such that the USC Trojans
+ 
+\begin_inset Quotes eld
+\end_inset
+
+win
+\begin_inset Quotes erd
+\end_inset
+
+ (i.e., 
+\begin_inset Formula $w_{USC}\geq w_{i}\text{ }\forall i\text{ with }r_{i,j}=0\text{ }\forall i,j$
+\end_inset
+
+)? We can assume without loss of generality that 
+\begin_inset Formula $r_{USC,j}=0\text{ }\forall j$
+\end_inset
+
+ because USC should without loss of generality win all of their remaining
+ games.
+\end_layout
+
+\begin_layout Standard
+For USC to win, each team 
+\begin_inset Formula $i$
+\end_inset
+
+ can win at most 
+\begin_inset Formula $x_{i}=w_{USC}-w_{i}$
+\end_inset
+
+ of their remaining games.
+ For each pair 
+\begin_inset Formula $(i,j)$
+\end_inset
+
+, 
+\begin_inset Formula $r_{i,j}$
+\end_inset
+
+ games will be played, producing one winner each (no ties).
+\end_layout
+
+\begin_layout Standard
+We generalize MBCM: Create a bipartite graph 
+\begin_inset Formula $\mathcal{G}=(A,B)$
+\end_inset
+
+ with one node 
+\begin_inset Formula $u_{i,j}$
+\end_inset
+
+ representing all games between 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+ in 
+\begin_inset Formula $A$
+\end_inset
+
+ and one node 
+\begin_inset Formula $v$
+\end_inset
+
+ for each team in 
+\begin_inset Formula $B$
+\end_inset
+
+.
+ Let there be edges 
+\begin_inset Formula $\{(u_{i,j},v_{i}),(u_{i,j},v_{j})\}$
+\end_inset
+
+ with capacity 
+\begin_inset Formula $c_{e}=\infty$
+\end_inset
+
+.
+ Then, we create a source node 
+\begin_inset Formula $s$
+\end_inset
+
+ with edges 
+\begin_inset Formula $(s,u_{i,j})$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{e}=r_{i,j}$
+\end_inset
+
+.
+ Finally, we create a sink node 
+\begin_inset Formula $t$
+\end_inset
+
+ with edges 
+\begin_inset Formula $(v_{i},t)$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{e}=x_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+This problem is almost exactly like MBCM, but the edges out of 
+\begin_inset Formula $s$
+\end_inset
+
+ and into 
+\begin_inset Formula $t$
+\end_inset
+
+ do not necessarily have capacity one.
+ The solution still works the same way, though.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* Build 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Algorithm (num)
+* Find an integral max-flow 
+\begin_inset Formula $f$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Algorithm (num)
+if 
+\begin_inset Formula $\upsilon(f)=\sum_{i,j}r_{i,j}$
+\end_inset
+
+ (i.e., all games assigned a winner without violating residual win capacity)
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* The USC Trojans can win.
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+else
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* The USC Trojans cannot possibly win.
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endif
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Sports Elimination Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

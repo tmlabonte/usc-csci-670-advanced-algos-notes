@@ -1,0 +1,1260 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Multiplicative Weights Algorithm
+\end_layout
+
+\begin_layout Section
+Motivation
+\end_layout
+
+\begin_layout Standard
+Multiplicative weights is an algorithm in online learning which combines
+ everything we've learned so far.
+ Beyond online learning, it can be viewed much more broadly for classification,
+ LP solving, gameplay, convex programming, and more.
+ It's sort of a proto-gradient descent algorithm and is a basic form of
+ machine learning.
+\end_layout
+
+\begin_layout Standard
+The most basic setup is that we have a binary decision to make in each timestep
+ (buy or sell, etc.).
+ After the algorithm commits to a decision, nature decides the outcome.
+ The algorithm's goal is to minimize the number of mistakes, or maximize
+ the number of correct decisions.
+\end_layout
+
+\begin_layout Standard
+In a pure online algorithms setting (competitive analysis), there is no
+ hope for this algorithm because the offline OPT would get everything right,
+ and the online gets everything wrong.
+ So, we define a new measure of success.
+ We'll compare our algorithm to 
+\begin_inset Formula $n$
+\end_inset
+
+ 
+\begin_inset Quotes eld
+\end_inset
+
+experts
+\begin_inset Quotes erd
+\end_inset
+
+ (note that they are not necessarily domain experts, just benchmarks designed
+ by an adversary).
+ During each timestep 
+\begin_inset Formula $t$
+\end_inset
+
+, each expert 
+\begin_inset Formula $i$
+\end_inset
+
+ makes a recommendation to the algorithm.
+ At the end of the process, the algorithm is evaluated by how well it did
+ compared to the best expert in hindsight.
+\end_layout
+
+\begin_layout Section
+Weighted Majority Algorithm
+\end_layout
+
+\begin_layout Standard
+A basic method to solve this problem is to make a decision based on a majority
+ of experts, weighted in regards to how many mistakes they've made so far.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* Fix a parameter 
+\begin_inset Formula $\eta\leq\frac{1}{2}$
+\end_inset
+
+ (usually 0.01)
+\end_layout
+
+\begin_layout Algorithm (num)
+* Initialize all 
+\begin_inset Formula $w_{i}^{(1)}=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+for each timestep 
+\begin_inset Formula $t$
+\end_inset
+
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Choose an action based on the weighted majority of experts with weights
+ 
+\begin_inset Formula $w_{i}^{(t)}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Algorithm (num)
+for every correct expert:
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Set 
+\begin_inset Formula $w_{i}^{(t+1)}=w_{i}^{(t)}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\begin_layout Algorithm (num)
+for every incorrect expert:
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Set 
+\begin_inset Formula $w_{i}^{(t+1)}=(1-\eta)w_{i}^{(t)}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Weighted Majority Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $M^{(T)}$
+\end_inset
+
+ be the number of mistakes that weighted majority makes up to time 
+\begin_inset Formula $T$
+\end_inset
+
+, and 
+\begin_inset Formula $m_{i}^{(T)}$
+\end_inset
+
+ be the number of mistakes that expert 
+\begin_inset Formula $i$
+\end_inset
+
+ makes up to time 
+\begin_inset Formula $T$
+\end_inset
+
+.
+ And, let the total weight 
+\begin_inset Formula $\Phi^{(t)}:=\sum_{i}w_{i}^{(t)}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+\begin_inset Formula $M^{(T)}\leq\frac{2}{1-\eta}m_{i}^{(T)}+\frac{2}{\eta}\ln(n)$
+\end_inset
+
+, with the tightest bound achieved by letting 
+\begin_inset Formula $i$
+\end_inset
+
+ be the best expert.
+\end_layout
+
+\begin_layout Proof
+Whenever the algorithm makes a mistake, 
+\begin_inset Formula $\leq\frac{1}{2}$
+\end_inset
+
+ of the expert weight gets multiplied by 
+\begin_inset Formula $(1-\eta)$
+\end_inset
+
+.
+ Thus:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\Phi^{(t+1)}\leq\frac{1}{2}\Phi^{(t)}+\frac{1}{2}\Phi^{(t)}(1-\eta)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\Phi^{(t)}(1-\frac{\eta}{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula $\Phi^{(1)}=n$
+\end_inset
+
+, so by induction:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\Phi^{(t)}\leq n(1-\frac{\eta}{2})^{M^{(t)}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+In other words, the overall weight in the system drops exponentially in
+ the number of our algorithm's mistakes.
+ For any expert 
+\begin_inset Formula $i$
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+w_{i}^{(T)}=(1-\eta)^{m_{i}^{(t)}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+Because 
+\begin_inset Formula $w_{i}^{(T)}\leq\Phi^{(T)}$
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+(1-\eta)^{m_{i}^{(T)}}\leq n(1-\frac{\eta}{2})^{M^{(T)}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+(\frac{2}{2-\eta})^{M^{(T)}}\leq n(1-\frac{\eta}{2})^{m_{i}^{(T)}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+M^{(T)}\leq m_{i}^{(T)}\frac{\log(1+\frac{\eta}{1+\eta})}{\log(1+\frac{\eta}{2-\eta})}+\frac{\log(n)}{\log(1+\frac{\eta}{2+\eta})}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+A useful trick here is that, by the Taylor expansion, 
+\begin_inset Formula $x-\frac{x^{2}}{2}\leq\ln(1+x)\leq x$
+\end_inset
+
+.
+ So:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\ln(1+\frac{\eta}{2-\eta})\geq\frac{\eta}{2-\eta}-\frac{1}{2}(\frac{\eta}{2-\eta})^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\frac{4\eta-3\eta^{2}}{2(2-\eta)^{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\geq\frac{\eta(4-4\eta+\eta^{2})}{2(2-\eta)^{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\frac{\eta}{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+And:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\ln(1+\frac{\eta}{1-\eta})\leq\frac{\eta}{1-\eta}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+So the messy 
+\begin_inset Formula $M^{(T)}$
+\end_inset
+
+ equation above becomes:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+M^{(T)}\leq\frac{\frac{\eta}{1-\eta}}{\frac{\eta}{2}}m_{i}^{(T)}+\frac{2}{\eta}\ln(n)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\frac{2}{1-\eta}m_{i}^{(T)}+\frac{2}{\eta}\ln(n)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Multiplicative Weights Algorithm
+\end_layout
+
+\begin_layout Standard
+Weighted majority is pretty good, but the binary decision restricts the
+ scenarios we can apply it to.
+ In a more general case, imagine that there are a wide variety of options
+ each expert can select, and each have an associated reward/penalty.
+ For example, instead of choosing to buy or sell some stock, the expert
+ has to recommend a stock to invest in.
+ 
+\end_layout
+
+\begin_layout Standard
+Formally, in each round 
+\begin_inset Formula $t$
+\end_inset
+
+, we will pick one expert to copy.
+ Then, each expert 
+\begin_inset Formula $i$
+\end_inset
+
+ receives a penalty 
+\begin_inset Formula $m_{i}^{(t)}\in[-1,1]$
+\end_inset
+
+.
+ We receive the penalty of the expert we copied.
+ Then, we learn all penalties of all experts for the round, and repeat.
+ This is similar to Multi-Armed Bandit, but in that scenario we learn only
+ the payoff of the expert we copied, so there is a complex balance between
+ exploration and exploitation.
+\end_layout
+
+\begin_layout Standard
+Our key new insight is that instead of choosing deterministically, which
+ is easy for an adversary to exploit, we can randomize between experts.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* Fix a parameter 
+\begin_inset Formula $\eta\leq\frac{1}{2}$
+\end_inset
+
+ (usually 0.01)
+\end_layout
+
+\begin_layout Algorithm (num)
+* Initialize all 
+\begin_inset Formula $w_{i}^{(1)}=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+for each timestep 
+\begin_inset Formula $t$
+\end_inset
+
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Let 
+\begin_inset Formula $\Phi(t)=\sum_{i}w_{i}^{(t)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* Choose an expert 
+\begin_inset Formula $i$
+\end_inset
+
+ with probability 
+\begin_inset Formula $p_{i}^{(t)}=\frac{w_{i}^{(t)}}{\Phi^{(t)}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+for each expert 
+\begin_inset Formula $i$
+\end_inset
+
+:
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Set 
+\begin_inset Formula $w_{i}^{(t+1)}=w_{i}^{(t)}*(1-\eta)m_{i}^{(t)}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Multiplicative Weights Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $M^{(T)}$
+\end_inset
+
+ represent the total penalty of multiplicative weights up to time 
+\begin_inset Formula $T$
+\end_inset
+
+, and 
+\begin_inset Formula $m_{i}^{(T)}$
+\end_inset
+
+ be the total penalty of expert 
+\begin_inset Formula $i$
+\end_inset
+
+ up to time 
+\begin_inset Formula $T$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+\begin_inset Formula $M^{(T)}\leq m_{i}^{(T)}+\frac{\eta}{1-\eta}|m_{i}^{(T)}|+\frac{1}{\eta}\ln(n)$
+\end_inset
+
+, with the tightest bound achieved by letting 
+\begin_inset Formula $i$
+\end_inset
+
+ be the best expert.
+\end_layout
+
+\begin_layout Proof
+Similarly to weighted majority, we want to compare the sum of all weights
+ to the sum of a single expert.
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\Phi^{(t+1)}=\sum_{i}w_{i}^{(t+1)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\sum_{i}(w_{i}^{(t)}*(1-\eta)m_{i}^{(t)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\Phi^{(t)}-\eta\sum_{i}(\frac{w_{i}^{(t)}}{\Phi^{(t)}}\Phi^{(t)}m_{i}^{(t)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\Phi^{(t)}(1-\eta\sum_{i}(p_{i}^{(t)}m_{i}^{(t)}))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\Phi^{(t)}(1-\eta\vec{p}^{(t)}\cdot\vec{m}^{(t)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+Because 
+\begin_inset Formula $(1+x)\leq e^{x}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\leq\Phi^{(t)}\exp(-\eta\vec{p}^{(t)}\cdot\vec{m}^{(t)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+By unrolling,
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\Phi^{(t+1)}\leq\Phi^{(1)}*\prod_{t\leq T}\exp(-\eta\vec{p}^{(t)}\cdot\vec{m}^{(t)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=n\exp(-\eta M^{(T)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+For any expert 
+\begin_inset Formula $i$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+w_{i}^{(t+1)}=\prod_{t\leq T}(1-\eta m_{i}^{(t)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\prod_{t\leq T,m_{i}^{(t)}\geq0}(1-\eta m_{i}^{(t)})*\prod_{t\leq T,m_{i}^{(t)}<0}(1-\eta m_{i}^{(t)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+Because 
+\begin_inset Formula $m_{i}^{(t)}\in[-1,1]$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\geq\prod_{t\leq T,m_{i}^{(t)}\geq0}(1-\eta)^{m_{i}^{(t)}}*\prod_{t\leq T,m_{i}^{(t)}<0}(1+\eta)^{-m_{i}^{(t)}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=(1-\eta)^{\sum_{t\leq T,m_{i}^{(t)}\geq0}m_{i}^{(t)}}*(1+\eta)^{-\sum_{t\leq T,m_{i}^{(t)}<0}m_{i}^{(t)}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+As before, 
+\begin_inset Formula $\Phi^{(t+1)}\geq w_{i}^{(t+1)}\text{ }\forall i$
+\end_inset
+
+, so:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+n\exp(-\eta M^{(T)})\geq(1-\eta)^{\sum_{t\leq T,m_{i}^{(t)}\geq0}m_{i}^{(t)}}*(1+\eta)^{-\sum_{t\leq T,m_{i}^{(t)}<0}m_{i}^{(t)}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+M^{(T)}\leq\frac{1}{\eta}(\ln(n)+\ln(\frac{1}{1-\eta})\sum_{t\leq T,m_{i}^{(t)}\geq0}m_{i}^{(t)}+\ln(1+\eta)\sum_{t\leq T,m_{i}^{(t)}<0}m_{i}^{(t)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+By Taylor expansion bounds, 
+\begin_inset Formula $x-\frac{x^{2}}{2}\leq\ln(1+x)\leq x$
+\end_inset
+
+, so:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+M^{(T)}\leq\frac{1}{\eta}(\ln(n)+\frac{\eta}{1-\eta}\sum_{t\leq T,m_{i}^{(t)}\geq0}m_{i}^{(t)}+(\eta-\frac{\eta^{2}}{2})\sum_{t\leq T,m_{i}^{(t)}<0}m_{i}^{(t)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\frac{1}{1-\eta}\sum_{t\leq T,m_{i}^{(t)}\geq0}m_{i}^{(t)}+(1-\frac{\eta}{2})\sum_{t\leq T,m_{i}^{(t)}<0}m_{i}^{(t)}+\frac{1}{\eta}\ln(n)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\sum_{t\leq T}m_{i}^{(t)}+(1-\frac{\eta}{2})+\frac{\eta}{1-\eta}\sum_{t\leq T,m_{i}^{(t)}\geq0}m_{i}^{(t)}+\frac{\eta}{2}\sum_{t\leq T,m_{i}^{(t)}<0}|m_{i}^{(t)}|+\frac{1}{\eta}\ln(n)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\leq m_{i}^{(T)}+\frac{\eta}{1-\eta}|m_{i}^{(T)}|+\frac{1}{\eta}\ln(n)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Corollary
+For the goal of maximizing rewards, multiplicative weights guarantees that
+ our reward up to time 
+\begin_inset Formula $T$
+\end_inset
+
+ is 
+\begin_inset Formula $R^{(T)}\leq m_{i}^{(T)}+\frac{\eta}{1-\eta}|m_{i}^{(T)}|+\frac{1}{\eta}\ln(n)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Flip all the signs in the previous proof.
+\end_layout
+
+\begin_layout Corollary
+If 
+\begin_inset Formula $\vec{p}$
+\end_inset
+
+ is any distribution over experts, the cost is at most 
+\begin_inset Formula $\sum_{t}(\vec{m}^{(t)}+\eta|\vec{m}^{(t)}|)\cdot\vec{p}+\frac{1}{\eta}\ln(n)$
+\end_inset
+
+.
+ Conceptually, this means that if you're doing as well as all the experts,
+ you're also doing as well as any mixture.
+\end_layout
+
+\begin_layout Proof
+Add the inequalities for all 
+\begin_inset Formula $i$
+\end_inset
+
+ scaled by 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Multiplicative weights for classification
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $m$
+\end_inset
+
+ points in an 
+\begin_inset Formula $n$
+\end_inset
+
+-dimensional space, where point 
+\begin_inset Formula $\vec{a_{j}}$
+\end_inset
+
+ has label 
+\begin_inset Formula $l_{j}\in\{-1,1\}$
+\end_inset
+
+.
+ We want to learn non-negative weights 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ on dimensions 
+\begin_inset Formula $i$
+\end_inset
+
+ such that on all points 
+\begin_inset Formula $j$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\text{sgn}(\vec{a_{j}}\cdot\vec{x})=l_{j}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+All positive examples have 
+\begin_inset Formula $\vec{a_{j}}\cdot\vec{x}>0$
+\end_inset
+
+, while all negative examples have 
+\begin_inset Formula $\vec{a_{j}}\cdot\vec{x}<0$
+\end_inset
+
+.
+ By dividing each 
+\begin_inset Formula $\vec{a_{j}}$
+\end_inset
+
+ by 
+\begin_inset Formula $l_{j}$
+\end_inset
+
+, we standardize our goal to be 
+\begin_inset Formula $\vec{a_{j}}\cdot\vec{x}>0\text{ \ensuremath{\forall j}}$
+\end_inset
+
+.
+ From there, we scale all 
+\begin_inset Formula $a_{j,i}$
+\end_inset
+
+ by 
+\begin_inset Formula $\max_{j,i}|a_{j,i}|$
+\end_inset
+
+, so without loss of generality, all 
+\begin_inset Formula $a_{j,i}\in[-1,1]$
+\end_inset
+
+.
+ Finally, we scale 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ by 
+\begin_inset Formula $\sum_{i}x_{i}$
+\end_inset
+
+, so without loss of generality 
+\begin_inset Formula $\sum_{i}x_{i}=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Through these preprocessing steps, our new goal becomes:
+\end_layout
+
+\begin_layout Standard
+Find 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ satisfying:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+\vec{a_{j}}\cdot\vec{x}>0 & \forall j\\
+\sum_{i}x_{i}=1\\
+x_{i}\geq0 & \forall i
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Which is an LP! Like support vector machines from machine learning, we assume
+ a margin 
+\begin_inset Formula $\mathcal{E}\leq\frac{1}{2}$
+\end_inset
+
+ for classification because LPs cannot handle strict inequalities.
+ This means that there is a vector 
+\begin_inset Formula $\vec{x}^{*}$
+\end_inset
+
+ such that 
+\begin_inset Formula $\vec{a_{j}}\cdot\vec{x}^{*}\geq\mathcal{E}\text{ }\forall j$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We want to solve this LP with multiplicative weights.
+ Our approach is that each variable 
+\begin_inset Formula $i$
+\end_inset
+
+ is an expert, and 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ is our weight on expert 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ Then, we run multiplicative weights for reward maximization with 
+\begin_inset Formula $\eta=\frac{\mathcal{E}}{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+If we find 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ satisfying the LP, we are done.
+ Until then, in each round 
+\begin_inset Formula $t$
+\end_inset
+
+, there must be some 
+\begin_inset Formula $j^{(t)}$
+\end_inset
+
+ with 
+\begin_inset Formula $\vec{a_{j}}\cdot\vec{x}^{(t)}\leq0$
+\end_inset
+
+.
+ For each 
+\begin_inset Formula $t$
+\end_inset
+
+, we'll make the expert payoff vector 
+\begin_inset Formula $a_{j^{(t)}}:=m^{(t)}$
+\end_inset
+
+.
+ Then, our reward in each round 
+\begin_inset Formula $\leq0$
+\end_inset
+
+ and 
+\begin_inset Formula $x^{*}$
+\end_inset
+
+gets at least 
+\begin_inset Formula $\mathcal{E}$
+\end_inset
+
+.
+ We can now apply Corollary 4:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+0\geq R^{(T)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\geq\sum_{t}(\vec{a_{j}}^{(t)}\cdot\vec{x}^{*})-\frac{\eta}{1-\eta}\sum_{t}(|\vec{a_{j}}^{(t)}|\cdot\vec{x}^{*})-\frac{1}{\eta}\ln(n)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\geq\mathcal{E}T-\frac{\frac{\mathcal{E}}{2}}{1-\frac{\mathcal{E}}{2}}T-\frac{2}{\mathcal{E}}\ln(n)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Because 
+\begin_inset Formula $\mathcal{E}\leq\frac{1}{2}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\geq\frac{\mathcal{E}}{3}T-\frac{2}{\mathcal{E}}\ln(n)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+T\leq\frac{6}{\mathcal{E}^{2}}\ln(n)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So we are guaranteed to find our classification vector in no more than 
+\begin_inset Formula $\frac{6}{\mathcal{E}^{2}}\ln(n)$
+\end_inset
+
+ iterations of multiplicative weights.
+\end_layout
+
+\end_body
+\end_document

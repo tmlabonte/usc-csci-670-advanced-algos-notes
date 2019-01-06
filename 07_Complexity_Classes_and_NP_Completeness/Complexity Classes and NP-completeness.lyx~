@@ -1,0 +1,912 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Complexity Classes and NP-completeness
+\end_layout
+
+\begin_layout Section
+Complexity Classes
+\end_layout
+
+\begin_layout Subsection
+Polynomial Time
+\end_layout
+
+\begin_layout Standard
+The class 
+\series bold
+P 
+\series default
+contains all problems which can be solved in polynomial time.
+ Formally, 
+\series bold
+P
+\series default
+ contains all problems 
+\begin_inset Formula $X$
+\end_inset
+
+ such that there exists some algorithm 
+\begin_inset Formula $A_{X}$
+\end_inset
+
+ which always finishes in 
+\begin_inset Formula $P_{A_{X}}(n)$
+\end_inset
+
+ steps (where 
+\begin_inset Formula $P_{A_{X}}$
+\end_inset
+
+ is a polynomial) on inputs of size 
+\begin_inset Formula $n$
+\end_inset
+
+, and correctly solves 
+\begin_inset Formula $X$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Nondeterministic Polynomial Time
+\end_layout
+
+\begin_layout Standard
+An 
+\series bold
+efficient certifier 
+\begin_inset Formula $B$
+\end_inset
+
+ 
+\series default
+is a program with a proposed solution 
+\begin_inset Formula $s$
+\end_inset
+
+ and certificate 
+\begin_inset Formula $t$
+\end_inset
+
+ such that 
+\begin_inset Formula $B$
+\end_inset
+
+ runs in polynomial time 
+\begin_inset Formula $T_{B}(|s|,|t|)$
+\end_inset
+
+.
+ It is a certifier for a problem 
+\begin_inset Formula $X$
+\end_inset
+
+ if the following holds:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $s\notin X\implies B(s,t)$
+\end_inset
+
+ answers 
+\begin_inset Quotes eld
+\end_inset
+
+No
+\begin_inset Quotes erd
+\end_inset
+
+ for all 
+\begin_inset Formula $t$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $s\in X\implies$
+\end_inset
+
+ there exists a polynomial length 
+\begin_inset Formula $t$
+\end_inset
+
+ such that 
+\begin_inset Formula $B(s,t)$
+\end_inset
+
+ answers 
+\begin_inset Quotes eld
+\end_inset
+
+Yes
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The class 
+\series bold
+NP 
+\series default
+contains all problems with efficient certifiers.
+ It is simple to show that 
+\series bold
+P 
+\begin_inset Formula $\leq$
+\end_inset
+
+ NP 
+\series default
+because a polytime solution algorithm with a null certificate is an efficient
+ verifier.
+\end_layout
+
+\begin_layout Standard
+It is an open question (perhaps the greatest open question in all of computer
+ science) if 
+\series bold
+P 
+\begin_inset Formula $=$
+\end_inset
+
+ NP
+\series default
+.
+ In other words, if it is easy to verify a solution, is it also easy to
+ find a solution?
+\series bold
+ NP 
+\series default
+is one of the most important complexity classes because most problems computer
+ scientists care about are in 
+\series bold
+NP
+\series default
+.
+ That's why we focus on it, and why finding out if 
+\series bold
+P 
+\begin_inset Formula $=$
+\end_inset
+
+ NP 
+\series default
+is so important.
+\end_layout
+
+\begin_layout Standard
+Being in 
+\series bold
+NP
+\series default
+ allows exhaustive search over candidate certificates, then running the
+ certifier on each, to guarantee a runtime upper bound of 
+\begin_inset Formula $\mathcal{O}(2^{P(n)}T_{B}(n))$
+\end_inset
+
+ and polynomial space.
+ Thus, it can be shown that 
+\series bold
+NP 
+\begin_inset Formula $\subseteq$
+\end_inset
+
+ PSPACE 
+\begin_inset Formula $\subseteq$
+\end_inset
+
+ EXPTIME.
+\end_layout
+
+\begin_layout Subsection
+Co-nondeterministic Polynomial Time
+\end_layout
+
+\begin_layout Standard
+The class 
+\series bold
+co-NP 
+\series default
+contains all problems which efficient 
+\begin_inset Quotes eld
+\end_inset
+
+No
+\begin_inset Quotes erd
+\end_inset
+
+ certifiers (there exists a polynomial time algorithm which can verify 
+\emph on
+no
+\emph default
+ counterexamples given the appropriate certificate 
+\begin_inset Formula $t$
+\end_inset
+
+).
+ In other words, 
+\series bold
+co-NP
+\series default
+ contains all problems 
+\begin_inset Formula $X$
+\end_inset
+
+ such that 
+\begin_inset Formula $\bar{X}\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+.
+ It is an open question if 
+\series bold
+NP 
+\begin_inset Formula $=$
+\end_inset
+
+ co-NP
+\series default
+.
+\end_layout
+
+\begin_layout Subsection
+Karp Reductions
+\end_layout
+
+\begin_layout Standard
+We are motivated to study the hardest problems in 
+\series bold
+NP
+\series default
+, but the definition of 
+\begin_inset Quotes eld
+\end_inset
+
+hard
+\begin_inset Quotes erd
+\end_inset
+
+ can be rather elusive.
+ In computational complexity, we say that a problem 
+\begin_inset Formula $X$
+\end_inset
+
+ is harder than 
+\begin_inset Formula $Y$
+\end_inset
+
+ if 
+\begin_inset Formula $Y\leq pX$
+\end_inset
+
+.
+ That is, 
+\begin_inset Formula $X$
+\end_inset
+
+ is harder if 
+\begin_inset Formula $X$
+\end_inset
+
+ can be reduced to 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+A Karp reduction 
+\begin_inset Formula $A$
+\end_inset
+
+ from 
+\begin_inset Formula $X$
+\end_inset
+
+ to 
+\begin_inset Formula $Y$
+\end_inset
+
+ is a polytime algorithm such that:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $x\in X\iff A(x)\in Y$
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+Yes
+\begin_inset Quotes erd
+\end_inset
+
+ maps to 
+\begin_inset Quotes eld
+\end_inset
+
+Yes
+\begin_inset Quotes erd
+\end_inset
+
+: completeness)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $x\notin X\iff A(x)\notin Y$
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+No
+\begin_inset Quotes erd
+\end_inset
+
+ maps to 
+\begin_inset Quotes eld
+\end_inset
+
+No
+\begin_inset Quotes erd
+\end_inset
+
+: soundness)
+\end_layout
+
+\begin_layout Standard
+Karp reductions are the main tool in proving whether a problem is a member
+ of a certain complexity class.
+\end_layout
+
+\begin_layout Section
+NP-hardness and NP-completeness
+\end_layout
+
+\begin_layout Subsection
+Definitions
+\end_layout
+
+\begin_layout Standard
+A problem 
+\begin_inset Formula $X$
+\end_inset
+
+ is 
+\series bold
+NP
+\series default
+-hard if 
+\begin_inset Formula $Y\leq pX\text{ }\forall Y\in$
+\end_inset
+
+
+\series bold
+ NP
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+A problem 
+\begin_inset Formula $X$
+\end_inset
+
+ is 
+\series bold
+NP
+\series default
+-complete if 
+\begin_inset Formula $X$
+\end_inset
+
+ is 
+\series bold
+NP
+\series default
+-hard and 
+\begin_inset Formula $X\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+.
+\end_layout
+
+\begin_layout Subsection
+The Cook-Levin Theorem
+\end_layout
+
+\begin_layout Standard
+Cook and Levin proved in the early 1970s that 3SAT is 
+\series bold
+NP
+\series default
+-complete – the first problem to be confirmed as such.
+ 3SAT stands for three-boolean satisfiability, and asks for a solution to
+ the formula 
+\begin_inset Formula $F=\bigwedge_{j=1}^{m}C_{j}$
+\end_inset
+
+, where each 
+\begin_inset Formula $C_{j}=l_{j_{1}}\lor l_{j_{2}}\lor l_{j_{3}}$
+\end_inset
+
+, and each 
+\begin_inset Formula $l_{j_{i}}$
+\end_inset
+
+is a boolean variable.
+ This theorem had several implications: 
+\series bold
+NP
+\series default
+-complete problems exist, and 3SAT is generic enough that it can easily
+ reduce to other important problems.
+\end_layout
+
+\begin_layout Subsection
+Proving NP-completeness
+\end_layout
+
+\begin_layout Claim
+Karp reduction is transitive (i.e, 
+\begin_inset Formula $Z\leq pX\leq pY\implies Z\leq pY$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Proof
+We have polytime algorithms 
+\begin_inset Formula $A_{Z}$
+\end_inset
+
+ reducing 
+\begin_inset Formula $Z$
+\end_inset
+
+ to 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $A_{X}$
+\end_inset
+
+ reducing 
+\begin_inset Formula $X$
+\end_inset
+
+ to 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+ To obtain a polytime algorithm 
+\begin_inset Formula $A$
+\end_inset
+
+ reducing 
+\begin_inset Formula $Z$
+\end_inset
+
+ to 
+\begin_inset Formula $Y$
+\end_inset
+
+, we simply run 
+\begin_inset Formula $A_{X}$
+\end_inset
+
+ on the output of 
+\begin_inset Formula $A_{Z}$
+\end_inset
+
+, since two subsequent polytime algorithms (where the output of the first
+ has polynomial size) still runs in polytime.
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+z\in Z\iff A_{Z}(z)\in X\iff A_{X}(A_{Z}(z))\in Y\iff A(z)\in Y
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proposition
+If 
+\begin_inset Formula $X$
+\end_inset
+
+ is 
+\series bold
+NP
+\series default
+-hard, 
+\begin_inset Formula $Y\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+, 
+\begin_inset Formula $X\leq pY$
+\end_inset
+
+, then 
+\begin_inset Formula $Y$
+\end_inset
+
+ is 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Proof
+We know 
+\begin_inset Formula $Z\leq pX\text{ }\forall Z\in$
+\end_inset
+
+ 
+\series bold
+NP 
+\series default
+and 
+\begin_inset Formula $X\leq pY$
+\end_inset
+
+, so by Claim 1, 
+\begin_inset Formula $Z\leq pY\text{ }\forall Z\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+.
+ Since 
+\series bold
+
+\begin_inset Formula $Y\in$
+\end_inset
+
+ NP
+\series default
+, this is the definition of 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Subsection
+CERT is NP-complete
+\end_layout
+
+\begin_layout Standard
+It's rather difficult to prove the Cook-Levin Theorem (which is why they
+ won a Turing award for it), but we can provide an example on a simpler,
+ yet less useful problem.
+\end_layout
+
+\begin_layout Standard
+Let CERTIFICATION (CERT) is the following problem: Given a certifier algorithm
+ 
+\begin_inset Formula $B$
+\end_inset
+
+ with time bound 
+\series bold
+
+\begin_inset Formula $T_{B}$
+\end_inset
+
+
+\series default
+, certificate length 
+\begin_inset Formula $P_{B}$
+\end_inset
+
+, and input 
+\begin_inset Formula $s$
+\end_inset
+
+, is there a certificate 
+\begin_inset Formula $t$
+\end_inset
+
+ with 
+\begin_inset Formula $|t|\leq P_{B}(|s|)$
+\end_inset
+
+ such that 
+\begin_inset Formula $B(s,t)$
+\end_inset
+
+ answers 
+\begin_inset Quotes eld
+\end_inset
+
+Yes
+\begin_inset Quotes erd
+\end_inset
+
+ after at most 
+\begin_inset Formula $T_{B}(|s|,|t|)$
+\end_inset
+
+ steps?
+\end_layout
+
+\begin_layout Theorem
+CERT is 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Proof
+A two-part proof: first that CERT 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+, then that CERT is 
+\series bold
+NP
+\series default
+-hard.
+\end_layout
+
+\begin_layout Proof
+(1).
+ CERT 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+:
+\end_layout
+
+\begin_layout Proof
+Given an input 
+\begin_inset Formula $(B,T_{B},P_{B},s)$
+\end_inset
+
+ and proposed certificate 
+\begin_inset Formula $t$
+\end_inset
+
+, we check if 
+\begin_inset Formula $|t|\leq P_{B}(|s|)$
+\end_inset
+
+, then simulate 
+\begin_inset Formula $B(s,t)$
+\end_inset
+
+ for 
+\begin_inset Formula $T_{B}(|s|,|t|)$
+\end_inset
+
+ steps.
+ If both succeed, we answer 
+\begin_inset Quotes eld
+\end_inset
+
+Yes
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(2).
+ CERT is 
+\series bold
+NP
+\series default
+-hard:
+\end_layout
+
+\begin_deeper
+\begin_layout Proposition
+\begin_inset Formula $X\leq p$
+\end_inset
+
+ CERT 
+\series bold
+
+\begin_inset Formula $\forall X\in$
+\end_inset
+
+NP
+\end_layout
+
+\begin_layout Proof
+Because 
+\begin_inset Formula $X\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+, it has an efficient certifier 
+\begin_inset Formula $B_{X}$
+\end_inset
+
+ with certificate length 
+\begin_inset Formula $P_{B_{X}}$
+\end_inset
+
+ and runtime 
+\begin_inset Formula $T_{B_{X}}$
+\end_inset
+
+.
+ Given an input string 
+\begin_inset Formula $s$
+\end_inset
+
+, our reduction outputs 
+\begin_inset Formula $B_{X},T_{B_{X}},P_{B_{X}}$
+\end_inset
+
+, and 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ Then:
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+s\in X\iff\exists t:|t|\leq P_{B_{X}}(s)\text{ and }B(s,t)\text{ answers "Yes" in }T_{B_{X}}(|s|,|t|)\text{ steps}\iff(B_{X},T_{B_{X}},P_{B_{X}},s)\in\text{ CERT}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Proof
+Proposition 4 is the definition of 
+\series bold
+NP
+\series default
+-hardness, so CERT is proven 
+\series bold
+NP
+\series default
+-hard.
+ Since it satisfies both conditions, CERT is 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\end_body
+\end_document

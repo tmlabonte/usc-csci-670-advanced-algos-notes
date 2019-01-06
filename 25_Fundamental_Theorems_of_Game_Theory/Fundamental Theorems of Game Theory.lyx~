@@ -1,0 +1,463 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Fundamental Theorems of Game Theory
+\end_layout
+
+\begin_layout Section
+Loomis' Theorem
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\bar under
+Observation:
+\series default
+\bar default
+ In rock-paper-scissors, if the first player commits to 
+\begin_inset Formula $\langle\frac{1}{3},\frac{1}{3},\frac{1}{3}\rangle$
+\end_inset
+
+, then the second player has many optimal strategies, including all three
+ pure strategies.
+ Note that this is not an equilibrium because the first player committed;
+ if the second player chooses a pure strategy, the first player has incentive
+ to change their strategy.
+\end_layout
+
+\begin_layout Standard
+Given mixed strategies 
+\begin_inset Formula $\vec{p}$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{q}$
+\end_inset
+
+ at equilibrium, let the row player's payoff be 
+\begin_inset Formula $\vec{p}^{\intercal}A\vec{q}$
+\end_inset
+
+ and the column player's payoff be 
+\begin_inset Formula $\vec{p}^{\intercal}B\vec{q}$
+\end_inset
+
+.
+ A zero-sum game is the special case when 
+\begin_inset Formula $B=-A$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $i,j$
+\end_inset
+
+ are such that 
+\begin_inset Formula $p_{i}>0$
+\end_inset
+
+ and 
+\begin_inset Formula $p_{j}>0$
+\end_inset
+
+, is the 
+\begin_inset Formula $i^{th}$
+\end_inset
+
+ entry 
+\begin_inset Formula $(A\vec{q})_{i}$
+\end_inset
+
+ equal to the 
+\begin_inset Formula $j^{th}$
+\end_inset
+
+ entry 
+\begin_inset Formula $(A\vec{q})_{j}$
+\end_inset
+
+? In other words, is the expected payoff of playing each played strategy
+ equal to the rest?
+\end_layout
+
+\begin_layout Standard
+This is true! If 
+\begin_inset Formula $(A\vec{q})_{i}$
+\end_inset
+
+ were strictly greater than 
+\begin_inset Formula $(A\vec{q})_{j}$
+\end_inset
+
+, the player could increase their expected payoff by increasing 
+\begin_inset Formula $\vec{p}_{i}$
+\end_inset
+
+ and decreasing 
+\begin_inset Formula $\vec{p}_{j}$
+\end_inset
+
+, which is contradictory to the assumption of equilibrium.
+\end_layout
+
+\begin_layout Standard
+As a result, the second player to commit does not need to randomize if the
+ first player randomized, because all her strategies have the same expected
+ payoff according to what the first player selected.
+ Formally, we have:
+\end_layout
+
+\begin_layout Theorem
+Loomis' Theorem.
+\begin_inset Formula 
+\[
+\max_{\vec{p}}\min_{\vec{q}}\vec{p}^{\intercal}B\vec{q}=\max_{\vec{p}}\min_{i}(\vec{p}^{\intercal}B)_{i}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\min_{\vec{q}}\max_{\vec{p}}\vec{p}^{\intercal}A\vec{q}=\max_{\vec{p}}\min_{j}(\vec{p}^{\intercal}A)_{j}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+von Neumann's Minimax Theorem (1928)
+\end_layout
+
+\begin_layout Standard
+Returning to zero-sum games, we'd like to know how to find a mixed equilibrium.
+ By Loomis' Theorem, a mixed equilibrium is the same as an optimal first-mover
+ strategy.
+ We're looking for a vector optimizing some constraints, so let's try linear
+ programming.
+ Let 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+ be the probability of playing 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $L$
+\end_inset
+
+ be the worst-case payoff of the mixed strategy for the first player (equal
+ to the best-case payoff for the second player).
+ The LP which finds the best first-mover strategy is:
+\end_layout
+
+\begin_layout Standard
+Maximize 
+\begin_inset Formula $L$
+\end_inset
+
+ subject to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+L\leq\sum_{i}p_{i}a_{ij} & \forall j\\
+\sum_{i}p_{i}=1\\
+p_{i}\geq0 & \forall i
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We then take the dual by associating dual variables 
+\begin_inset Formula $\beta_{j}$
+\end_inset
+
+ and 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ with the first and second constraints respectively.
+\end_layout
+
+\begin_layout Standard
+Maximize 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ subject to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+\lambda\le\beta_{j}(-a_{ij}) & \forall i\\
+\sum_{j}\beta_{j}=1\\
+\beta_{j}\geq0 & \forall j
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is exactly the Primal, just with opposite 
+\begin_inset Formula $a_{ij}$
+\end_inset
+
+ values! So, we have proven by LP duality that, if both players randomize,
+ going first or second makes no difference.
+ Formally, we have:
+\end_layout
+
+\begin_layout Theorem
+von Neumann's Minimax Theorem.
+\end_layout
+
+\begin_layout Theorem
+\begin_inset Formula 
+\[
+\max_{\vec{p}}\min_{i}(\vec{p}^{\intercal}A)_{i}=\min_{\vec{q}}\max_{j}(Aq)_{j}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+\begin_inset Formula 
+\[
+\max_{\vec{p}}\min_{\vec{q}}\vec{p}^{\intercal}Aq=\min_{\vec{q}}\max_{\vec{p}}\vec{p}^{\intercal}Aq
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Yao's Minimax Principle (1977)
+\end_layout
+
+\begin_layout Standard
+Can we apply von Neumann's Minimax Theorem to algorithm analysis? Given
+ some problem and input instances of size 
+\begin_inset Formula $n$
+\end_inset
+
+, let 
+\begin_inset Formula $\mathcal{A}$
+\end_inset
+
+ be the set of all deterministic algorithms for that problem and input (possibly
+ further constrained; see note).
+ Let 
+\begin_inset Formula $\mathcal{I}$
+\end_inset
+
+ be the set of all size 
+\begin_inset Formula $n$
+\end_inset
+
+ inputs for the problem.
+ Define 
+\begin_inset Formula $C(A,I)$
+\end_inset
+
+ as the cost of algorithm 
+\begin_inset Formula $A\in\mathcal{A}$
+\end_inset
+
+ on input 
+\begin_inset Formula $I\in\mathcal{I}$
+\end_inset
+
+ (runtime, memory, approximation, etc.).
+\end_layout
+
+\begin_layout Standard
+The distribution 
+\begin_inset Formula $\vec{p}$
+\end_inset
+
+ over 
+\begin_inset Formula $\mathcal{A}$
+\end_inset
+
+ is just a simple randomized algorithm by the Principle of Deferred Decisions:
+ random decisions can be made earlier or later as long as the temporality
+ of the decision does not affect algorithm behavior.
+ We make all random decisions before the algorithm begins and use the results
+ while running.
+ The results of the random decisions together constitute a deterministic
+ algorithm.
+ By von Neumann, if 
+\begin_inset Formula $A^{*}$
+\end_inset
+
+ is the best randomized algorithm and 
+\begin_inset Formula $\vec{q}$
+\end_inset
+
+ is the worst-case input distribution, then the expected cost under the
+ worst possible input is equivalent to the expected cost under the best
+ possible algorithm.
+ Formally, we have:
+\end_layout
+
+\begin_layout Proposition
+Yao's Minimax Principle.
+\begin_inset Formula 
+\[
+\max_{I\in\mathcal{I}}\mathbb{E}_{A\sim A^{*}}[C(A,I)]=\min_{A\in\mathcal{A}}\mathbb{E}_{I\sim\vec{q}}[C(A,I)]
+\]
+
+\end_inset
+
+If 
+\begin_inset Formula $\vec{q}$
+\end_inset
+
+ is not the worst-case distribution, then:
+\begin_inset Formula 
+\[
+\max_{I\in\mathcal{I}}\mathbb{E}_{A\sim A^{*}}[C(A,I)]\geq\min_{A\in\mathcal{A}}\mathbb{E}_{I\sim\vec{q}}[C(A,I)]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\bar under
+Note:
+\bar default
+ We need to ensure that 
+\begin_inset Formula $\mathcal{A}$
+\end_inset
+
+ is finite; for example, it doesn't work if the number of random decisions
+ you make is itself a random decision, because there may be infinitely many
+ possible deterministic algorithms.
+ So, we have sometimes have to restrict 
+\begin_inset Formula $\mathcal{A}$
+\end_inset
+
+ to be the set of all deterministic algorithms for that problem and input
+ with a runtime less than some function of 
+\begin_inset Formula $n$
+\end_inset
+
+.
+\end_layout
+
+\end_body
+\end_document

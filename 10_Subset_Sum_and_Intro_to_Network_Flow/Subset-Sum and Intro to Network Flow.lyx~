@@ -1,0 +1,965 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Subset-Sum and Intro to Network Flow
+\end_layout
+
+\begin_layout Section
+Subset-Sum
+\end_layout
+
+\begin_layout Standard
+SUBSET-SUM (SS): Given 
+\begin_inset Formula $a_{1},a_{2},\dots,a_{n}\in\mathbb{N}$
+\end_inset
+
+ and a target integer 
+\begin_inset Formula $b$
+\end_inset
+
+, is there a set 
+\begin_inset Formula $S\subseteq\{1,2,\dots n\}$
+\end_inset
+
+ with 
+\begin_inset Formula $\sum_{i\in S}a_{i}=b$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Theorem
+SS is 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Proof
+A two-part proof: (1) SS 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+, (2) SS is 
+\series bold
+NP
+\series default
+-hard.
+\end_layout
+
+\begin_layout Proof
+(1).
+ SS 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\end_layout
+
+\begin_layout Proof
+Certificate: A proposed set 
+\begin_inset Formula $S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Certifier: A polytime algorithm that checks 
+\begin_inset Formula $\sum_{i\in S}a_{i}=b$
+\end_inset
+
+ and that 
+\begin_inset Formula $S\subseteq\{1,2,\dots n\}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(2).
+ SS is 
+\series bold
+NP
+\series default
+-hard
+\end_layout
+
+\begin_layout Proof
+We reduce from a known 
+\series bold
+NP
+\series default
+-hard problem (X3C) to SS.
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+X3C 
+\begin_inset Formula $\leq p$
+\end_inset
+
+ SS.
+\end_layout
+
+\begin_layout Proof
+The input to the reduction is the set 
+\begin_inset Formula $X$
+\end_inset
+
+ with 
+\begin_inset Formula $|X|=3m$
+\end_inset
+
+ and 
+\begin_inset Formula $T_{1},T_{2},\dots,T_{n}\subseteq X$
+\end_inset
+
+ with 
+\begin_inset Formula $|T_{i}|=3$
+\end_inset
+
+.
+ The output is the natural numbers 
+\begin_inset Formula $a_{1},a_{2},\dots,a_{k}$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Observe that the sets 
+\begin_inset Formula $T_{j}$
+\end_inset
+
+ are representable as bitstrings.
+ We put 
+\begin_inset Formula $X$
+\end_inset
+
+ in an arbitrary order 
+\begin_inset Formula $X=\{X_{1},X_{2},\dots,X_{3m}\}$
+\end_inset
+
+; then 
+\begin_inset Formula $T_{j}$
+\end_inset
+
+ is a 
+\begin_inset Formula $3m$
+\end_inset
+
+-bit number, where there are three ones in the positions of 
+\begin_inset Formula $X_{i}$
+\end_inset
+
+ which are contained in 
+\begin_inset Formula $T_{j}$
+\end_inset
+
+ and zeroes everywhere else.
+\end_layout
+
+\begin_layout Proof
+Let 
+\begin_inset Formula $a_{j}$
+\end_inset
+
+ be the number corresponding to the bitstring representation of 
+\begin_inset Formula $T_{j}$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $T_{i}\cap T_{j}=\emptyset$
+\end_inset
+
+, then 
+\begin_inset Formula $a_{i}+a_{j}$
+\end_inset
+
+ has six ones exactly in the positions 
+\begin_inset Formula $T_{i}\cup T_{j}$
+\end_inset
+
+.
+ However, when 
+\begin_inset Formula $T_{i}\cap T_{j}\neq\emptyset$
+\end_inset
+
+, there is carryover between the bits, which invalidates our mapping from
+ sets to numbers.
+ So, we read the bitstrings with a large enough base such that carryover
+ can never happen (i.e., base 
+\begin_inset Formula $n+1$
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Proof
+Thus, we set 
+\begin_inset Formula $a_{j}$
+\end_inset
+
+ to the bitstring describing 
+\begin_inset Formula $T_{j}$
+\end_inset
+
+ read in base 
+\begin_inset Formula $n+1$
+\end_inset
+
+, 
+\begin_inset Formula $b=11\dots1_{n+1}=\sum_{i=0}^{3m-1}(n+1)^{i}=\frac{1}{n}(n+1)^{3m}-1$
+\end_inset
+
+, and 
+\begin_inset Formula $k=n$
+\end_inset
+
+.
+ This reduction produces exponentially large numbers in 
+\begin_inset Formula $b$
+\end_inset
+
+, but only polynomially many bits, so it runs in polynomial time.
+ It satisfies:
+\end_layout
+
+\begin_layout Proof
+(1).
+ If X3C has a solution 
+\begin_inset Formula $S$
+\end_inset
+
+, then 
+\begin_inset Formula $SS$
+\end_inset
+
+ also has a solution.
+\end_layout
+
+\begin_layout Proof
+(2).
+ If SS has a solution 
+\begin_inset Formula $S$
+\end_inset
+
+ with 
+\begin_inset Formula $\sum_{j\in S}a_{j}=11\dots1_{n+1}$
+\end_inset
+
+, then X3C also has a solution.
+\end_layout
+
+\end_deeper
+\begin_layout Proof
+Since we proved that SS is both in 
+\series bold
+NP
+\series default
+ and 
+\series bold
+NP
+\series default
+-hard, SS must be 
+\series bold
+NP
+\series default
+-complete.
+ In an earlier lecture, we saw SS 
+\begin_inset Formula $\leq p$
+\end_inset
+
+ KNAPSACK, so we also know that KNAPSACK is 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Section
+Partition
+\end_layout
+
+\begin_layout Subsection
+Partition
+\end_layout
+
+\begin_layout Standard
+PARTITION (PR): Given 
+\begin_inset Formula $a_{1},a_{2},\dots,a_{n}\in\mathbb{N}$
+\end_inset
+
+, is there a set 
+\begin_inset Formula $S\subseteq\{1,2,\dots n\}$
+\end_inset
+
+ with 
+\begin_inset Formula $\sum_{i\in S}a_{i}=\frac{1}{2}\sum_{j}a_{j}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Theorem
+PR is 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Proof
+A two-part proof: (1) PR 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+, (2) PR is 
+\series bold
+NP
+\series default
+-hard.
+\end_layout
+
+\begin_layout Proof
+(1).
+ PR 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\end_layout
+
+\begin_layout Proof
+Certificate: A proposed set 
+\begin_inset Formula $S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Certifier: A polytime algorithm which checks that all elements exist and
+ 
+\begin_inset Formula $\sum_{i\in S}a_{i}=\frac{1}{2}\sum_{j}a_{j}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(2).
+ PR is 
+\series bold
+NP
+\series default
+-hard
+\end_layout
+
+\begin_layout Proof
+We reduce from a known 
+\series bold
+NP
+\series default
+-hard problem (SS) to PR.
+\end_layout
+
+\begin_deeper
+\begin_layout Theorem
+SS 
+\begin_inset Formula $\leq p$
+\end_inset
+
+ PR
+\end_layout
+
+\begin_layout Proof
+The input to the reduction is 
+\begin_inset Formula $a_{1},a_{2},\dots,a_{n}\in\mathbb{N}$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+.
+ The output is 
+\begin_inset Formula $a'_{1},a'_{2},\dots,a'_{m}$
+\end_inset
+
+.
+ Without loss of generality, we say that 
+\begin_inset Formula $b\leq\frac{1}{2}\sum_{i}a_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Let 
+\begin_inset Formula $m=n+2$
+\end_inset
+
+ and 
+\begin_inset Formula $a'_{i}=a_{i}$
+\end_inset
+
+ for all 
+\begin_inset Formula $i\leq n$
+\end_inset
+
+.
+ With the remaining two 
+\begin_inset Formula $a'_{i}$
+\end_inset
+
+ elements, we will construct two large elements such that they cannot be
+ placed in the same set, and they balance the sets to equivalent sizes.
+ Let 
+\begin_inset Formula $W=\sum_{i}a_{i}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $a'_{n+1}=2W+b$
+\end_inset
+
+, and 
+\begin_inset Formula $a'_{n+2}=3W-b$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+This reduction is polytime and satisfies:
+\end_layout
+
+\begin_layout Proof
+(1).
+ If there exists an 
+\begin_inset Formula $S$
+\end_inset
+
+ such that 
+\begin_inset Formula $\sum_{i\in S}a_{i}=b$
+\end_inset
+
+, then there exists a set 
+\begin_inset Formula $S'$
+\end_inset
+
+ such that 
+\begin_inset Formula $\sum_{i\in S}a'_{i}=\frac{1}{2}\sum_{j}a'_{j}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Add 
+\begin_inset Formula $a'_{n+2}$
+\end_inset
+
+ to 
+\begin_inset Formula $S$
+\end_inset
+
+.
+ Then, 
+\begin_inset Formula $\sum_{i\in S}a'_{i}+a'_{n+2}=b+3W-b=3W=\frac{1}{2}\sum_{j}a_{j}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+(2).
+ If there exists a set 
+\begin_inset Formula $S'$
+\end_inset
+
+ such that 
+\begin_inset Formula $\sum_{i\in S}a'_{i}=\frac{1}{2}\sum_{j}a'_{j}$
+\end_inset
+
+, then there exists an 
+\begin_inset Formula $S$
+\end_inset
+
+ such that 
+\begin_inset Formula $\sum_{i\in S}a_{i}=b$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+We know that 
+\begin_inset Formula $S'$
+\end_inset
+
+ and 
+\begin_inset Formula $\bar{S'}$
+\end_inset
+
+ contain exactly one of 
+\begin_inset Formula $a'_{n+1}$
+\end_inset
+
+ and 
+\begin_inset Formula $a'_{n+2}$
+\end_inset
+
+.
+ Say that 
+\begin_inset Formula $a'_{n+2}\in S'$
+\end_inset
+
+; then 
+\begin_inset Formula $\sum_{i\in S,i\neq n+2}a'_{i}=3W-(3W-b)=b$
+\end_inset
+
+, so 
+\begin_inset Formula $S'$
+\end_inset
+
+ without 
+\begin_inset Formula $a'_{n+2}$
+\end_inset
+
+ solves SS.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Proof
+Since we proved that PR is both in 
+\series bold
+NP
+\series default
+ and 
+\series bold
+NP
+\series default
+-hard, PR must be 
+\series bold
+NP
+\series default
+-complete.
+\end_layout
+
+\begin_layout Subsection
+An Incorrect Reduction to Graph Partition
+\end_layout
+
+\begin_layout Standard
+GRAPH PARTITION (GPR): Given a graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+, is it possible to divide 
+\begin_inset Formula $V$
+\end_inset
+
+ into 
+\begin_inset Formula $S,\bar{S}$
+\end_inset
+
+ such that 
+\begin_inset Formula $|S|=\frac{n}{2}$
+\end_inset
+
+ and there are no edges between 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+Incorrect method to show that PR 
+\begin_inset Formula $\leq p$
+\end_inset
+
+ GPR: Given 
+\begin_inset Formula $a_{1},a_{2},\dots,a_{m}$
+\end_inset
+
+, then for each 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+, construct a clique of 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ nodes.
+ Then, there will always be such an equal, and because every component is
+ a clique, there will be no edges in the cut.
+ While the logic here is correct, the algorithm is not polytime.
+ Instead, it is pseudo-polynomial, because building the 
+\begin_inset Formula $m$
+\end_inset
+
+ cliques is equivalent to writing every 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ in unary.
+\end_layout
+
+\begin_layout Section
+Network Flow
+\end_layout
+
+\begin_layout Standard
+Given a network 
+\begin_inset Formula $\mathcal{G}=(V,E)$
+\end_inset
+
+ of links (pipes, streets, etc).
+ Each link has a capacity 
+\begin_inset Formula $c_{e}\geq0$
+\end_inset
+
+ of how much flow it can transport per unit time at steady state.
+ Find the maximum amount that can be transported from a source 
+\begin_inset Formula $s$
+\end_inset
+
+ to a sink 
+\begin_inset Formula $t$
+\end_inset
+
+ in steady state per unit time.
+ For convenience of definiton, we assume no incoming edges to 
+\begin_inset Formula $s$
+\end_inset
+
+, or outgoing edges from 
+\begin_inset Formula $t$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+A 
+\series bold
+flow
+\series default
+ 
+\begin_inset Formula $F$
+\end_inset
+
+ assigns an amount of flow 
+\begin_inset Formula $f_{e}$
+\end_inset
+
+ to each edge 
+\begin_inset Formula $e$
+\end_inset
+
+.
+ The requirements of a flow are:
+\end_layout
+
+\begin_layout Standard
+(1).
+ Non-negative: 
+\begin_inset Formula $f_{e}\geq0\text{ }\forall e$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+(2).
+ Capacity constraint: 
+\begin_inset Formula $f_{e}\leq c_{e}\text{ }\forall e$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+(3).
+ Conservation constraint: 
+\begin_inset Formula $\forall v\neq s,t:\sum_{e\text{ into }v}f_{e}=\sum_{e\text{ out of }v}f_{e}$
+\end_inset
+
+.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+What goes in must come out.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\series bold
+flow value
+\series default
+ 
+\begin_inset Formula $\upsilon(F)=\sum_{e\text{ out of }s}f_{e}$
+\end_inset
+
+.
+ Equivalently, 
+\begin_inset Formula $\upsilon(F)=\sum_{e\text{ into }t}f_{e}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+MAX-FLOW: Given 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+, cost vector 
+\begin_inset Formula $\vec{c}$
+\end_inset
+
+, and 
+\begin_inset Formula $s,t\in V$
+\end_inset
+
+, find 
+\begin_inset Formula $F^{*}$
+\end_inset
+
+ from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $t$
+\end_inset
+
+ maximizing 
+\begin_inset Formula $\upsilon(F)$
+\end_inset
+
+.
+ Note: 
+\begin_inset Formula $F^{*}$
+\end_inset
+
+ exists by a compactness and continuity argument.
+\end_layout
+
+\begin_layout Theorem
+There exists a polynomial time algorithm to find 
+\begin_inset Formula $F^{*}$
+\end_inset
+
+; further, if all 
+\begin_inset Formula $c_{e}\in\mathbb{N}$
+\end_inset
+
+, then all 
+\begin_inset Formula $f_{e}\in\mathbb{N}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+MIN-CUT: Given 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+, cost vector 
+\begin_inset Formula $\vec{c}$
+\end_inset
+
+, and 
+\begin_inset Formula $s,t\in V$
+\end_inset
+
+, find a cut 
+\begin_inset Formula $(S,\bar{S})$
+\end_inset
+
+ of 
+\begin_inset Formula $V$
+\end_inset
+
+ with 
+\begin_inset Formula $s\in S$
+\end_inset
+
+, 
+\begin_inset Formula $t\in\bar{S}$
+\end_inset
+
+ that minimizes 
+\begin_inset Formula $C(S,\bar{S})=\sum_{e=(u,v)\text{ across }(S,\bar{S})}c_{e}$
+\end_inset
+
+.
+ In other words, we are looking for the biggest bottleneck across a cut.
+\end_layout
+
+\begin_layout Theorem
+A minimum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ cut with respect to 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+ can be found in polynomial time.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+The cost of the minimum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ cut with respect to 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+ is equal to the maximum 
+\begin_inset Formula $(s,t)$
+\end_inset
+
+ flow with capacities 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Min cut is technically an upper bound to max flow, but next class we will
+ prove that they elegantly equalize.
+\end_layout
+
+\end_body
+\end_document

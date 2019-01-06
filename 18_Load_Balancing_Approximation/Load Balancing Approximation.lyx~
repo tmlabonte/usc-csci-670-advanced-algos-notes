@@ -1,0 +1,755 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Load Balancing Approximation
+\end_layout
+
+\begin_layout Section
+Load Balancing with a Greedy Algorithm
+\end_layout
+
+\begin_layout Subsection
+The Load Balancing Problem
+\end_layout
+
+\begin_layout Standard
+LOAD BALANCING: Given jobs 
+\begin_inset Formula $j=1,\dots,m$
+\end_inset
+
+ with processing time 
+\begin_inset Formula $t_{j}$
+\end_inset
+
+ and 
+\begin_inset Formula $n$
+\end_inset
+
+ machines.
+ We want to partition 
+\begin_inset Formula $\{1,\dots,m\}$
+\end_inset
+
+ into 
+\begin_inset Formula $S_{1},\dots,S_{n}$
+\end_inset
+
+ to minimize 
+\begin_inset Formula $\max_{i}\sum_{j\in S_{i}}t_{j}$
+\end_inset
+
+ (i.e., the largest load on any machine).
+ This problem is 
+\series bold
+NP
+\series default
+-hard even for 
+\begin_inset Formula $n=2$
+\end_inset
+
+ by a reduction from PARTITION.
+\end_layout
+
+\begin_layout Standard
+Lower bounds on OPT:
+\end_layout
+
+\begin_layout Standard
+(1).
+ 
+\begin_inset Formula $\frac{1}{n}\sum_{j}t_{j}$
+\end_inset
+
+ (if the loads are split perfectly evenly)
+\end_layout
+
+\begin_layout Standard
+(2).
+ 
+\begin_inset Formula $\max_{j}t_{j}$
+\end_inset
+
+ (because somebody has to do the largest job)
+\end_layout
+
+\begin_layout Subsection
+Greedy Algorithm
+\end_layout
+
+\begin_layout Standard
+In some order 
+\begin_inset Formula $j=\{1,\dots,m\}$
+\end_inset
+
+, give the tasks to the currently least loaded machine.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* Start with 
+\begin_inset Formula $S_{i}=\emptyset\text{ }\forall i$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+for 
+\begin_inset Formula $j=\{1,\dots,m\}$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Let 
+\begin_inset Formula $i^{*}$
+\end_inset
+
+ be the machine with the smallest 
+\begin_inset Formula $\sum_{j\in S_{i}}t_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* Set 
+\begin_inset Formula $S_{i^{*}}=S_{i^{*}}\cup\{j\}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Greedy Load Balancing Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $i$
+\end_inset
+
+ be the machine most loaded at termination.
+ At some point, a last job 
+\begin_inset Formula $j^{*}$
+\end_inset
+
+ was added to 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ At that point, 
+\begin_inset Formula $i$
+\end_inset
+
+ was the least loaded among all machines.
+ Since then, only more jobs could have been added to 
+\begin_inset Formula $i'\neq i$
+\end_inset
+
+.
+ Thus, at termination:
+\end_layout
+
+\begin_layout Standard
+(3).
+ 
+\begin_inset Formula $\sum_{j\in S_{i'}}t_{j}\geq(\sum_{j\in S_{i}}t_{j})-t_{j^{*}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Approximation Bounds
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{j\in S_{i}}\leq t_{j^{*}}+\sum_{j\in S_{i},j\neq j^{*}}t_{j}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\leq^{(2)}OPT+\sum_{j\in S_{i},j\neq j^{*}}t_{j}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\leq^{(3)}OPT+\frac{1}{n}\sum_{j\neq j^{*}}t_{j}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\leq^{(1)}OPT+OPT
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=2OPT
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus the greedy algorithm is a 2-approximation.
+ By processing jobs in order of non-decreasing 
+\begin_inset Formula $t_{j}$
+\end_inset
+
+, we can improve the bound to a 
+\begin_inset Formula $\frac{3}{2}$
+\end_inset
+
+-approximation.
+\end_layout
+
+\begin_layout Section
+Load Balancing with an ILP
+\end_layout
+
+\begin_layout Subsection
+Designing an ILP 
+\end_layout
+
+\begin_layout Standard
+We are also given a bipartite graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ on jobs 
+\begin_inset Formula $\times$
+\end_inset
+
+ machines, and machine 
+\begin_inset Formula $i$
+\end_inset
+
+ can do job 
+\begin_inset Formula $j$
+\end_inset
+
+ only if there is an edge between them.
+ In the ILP, if there exists an edge 
+\begin_inset Formula $e=(i,j)\in\mathcal{G}$
+\end_inset
+
+, we have a variable 
+\begin_inset Formula $x_{ij}=t_{j}$
+\end_inset
+
+ if the job 
+\begin_inset Formula $j$
+\end_inset
+
+ is on machine 
+\begin_inset Formula $i$
+\end_inset
+
+, and is 0 otherwise.
+ We also have 
+\begin_inset Formula $L$
+\end_inset
+
+ representing the maximum load on any machine.
+ Our ILP is:
+\end_layout
+
+\begin_layout Standard
+Minimize
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Subject to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+\sum_{i}x_{ij}=t_{j} & \forall j\\
+L\geq\sum_{j}x_{ij} & \forall i\\
+x_{ij}\geq0 & \forall i,j\\
+x_{ij}\in\{0,t_{j}\} & \forall i,j
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Notice that the integrality gap here is 
+\begin_inset Formula $n$
+\end_inset
+
+ when there is one job that can run on each of 
+\begin_inset Formula $n$
+\end_inset
+
+ machines.
+ So, we 
+\series bold
+strengthen
+\series default
+ the LP by adding an extra constraint 
+\begin_inset Formula $L\geq t_{j}\text{ }\forall j$
+\end_inset
+
+, which is (2) from earlier.
+ By strengthening an LP, we add a constraint which doesn't change the ILP,
+ but restricts the LP, so the integrality gap decreases.
+ Our LP is:
+\end_layout
+
+\begin_layout Standard
+Minimize
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Subject to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+\sum_{i}x_{ij}=t_{j} & \forall j\\
+L\geq\sum_{j}x_{ij} & \forall i\\
+L\geq t_{j} & \forall j\\
+x_{ij}\geq0 & \forall i,j
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Rounding the LP 
+\end_layout
+
+\begin_layout Standard
+Our goal is to round 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+.
+ Recall that the variable values 
+\begin_inset Formula $x_{ij}$
+\end_inset
+
+ define a bipartite graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ on jobs 
+\begin_inset Formula $\times$
+\end_inset
+
+ machines with 
+\begin_inset Formula $e=(i,j)$
+\end_inset
+
+ present iff 
+\begin_inset Formula $x_{ij}>0$
+\end_inset
+
+.
+ We cannot just round small values down and large values up, because the
+ LP solution might assign small fractions of a job 
+\begin_inset Formula $j$
+\end_inset
+
+ to each machine, leading to no large 
+\begin_inset Formula $x_{ij}$
+\end_inset
+
+ values (similar to the integrality gap example earlier).
+ We'll show that by removing the cycles from this bipartite graph, we can
+ easily find our approximate assignment.
+\end_layout
+
+\begin_layout Lemma
+Given a solution 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+, we can compute in polynomial time an 
+\begin_inset Formula $\hat{x}$
+\end_inset
+
+ with an acyclic bipartite graph and is an equally good solution to the
+ LP.
+\end_layout
+
+\begin_layout Proof
+While 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ has a cycle, let 
+\begin_inset Formula $C=\{e_{1},\dots,e_{2k}\}$
+\end_inset
+
+ be such a cycle (with even length because 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ is bipartite).
+ Say 
+\begin_inset Formula $e_{l}=(i_{l},j_{l})$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathcal{E}=\min_{l=1,\dots,2k}x_{i_{l}j_{l}}$
+\end_inset
+
+.
+ For all 
+\begin_inset Formula $2l-1$
+\end_inset
+
+, we increase 
+\begin_inset Formula $x_{i_{2l-1}j_{2l-1}}$
+\end_inset
+
+ by 
+\begin_inset Formula $\mathcal{E}$
+\end_inset
+
+, and for all 
+\begin_inset Formula $2l$
+\end_inset
+
+, we decrease 
+\begin_inset Formula $x_{i_{2l}j_{2l}}$
+\end_inset
+
+ by 
+\begin_inset Formula $\mathcal{E}$
+\end_inset
+
+.
+ In other words, we alterjnate increasing and decreasing around the cycle,
+ which removes the edge with 
+\begin_inset Formula $x_{ij}=\mathcal{E}$
+\end_inset
+
+.
+ This leaves all LP constraints unchanged, so the new solution is feasible
+ and uses one less edge.
+ We repeat until there are no cycles left in 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Now, the bipartite graph for 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ is a forest.
+ We root each tree at an arbitrary node (diagram in Kleinberg & Tardos page
+ 641).
+ From here, we can assign the leaf jobs to their parent machine, and each
+ internal job to an arbitrary child machine (this is better than assigning
+ them to parents, because then each machine gets at most one extra job).
+\end_layout
+
+\begin_layout Subsection
+Bounding the LP Solution
+\end_layout
+
+\begin_layout Standard
+Consider one machine 
+\begin_inset Formula $i$
+\end_inset
+
+ which causes the maximum load for our solution.
+ We assigned to 
+\begin_inset Formula $i$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Enumerate
+All 
+\begin_inset Formula $t_{j}$
+\end_inset
+
+ for leaf children 
+\begin_inset Formula $j$
+\end_inset
+
+ of 
+\begin_inset Formula $i$
+\end_inset
+
+ (total cost 
+\begin_inset Formula $\leq L$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Enumerate
+Possibly 
+\begin_inset Formula $t_{j^{*}}$
+\end_inset
+
+ for the parent 
+\begin_inset Formula $j^{*}$
+\end_inset
+
+ of 
+\begin_inset Formula $i$
+\end_inset
+
+ (total cost 
+\begin_inset Formula $\leq L$
+\end_inset
+
+ by the extra constraint we added to the LP)
+\end_layout
+
+\begin_layout Standard
+The LP solution assigned to 
+\begin_inset Formula $i$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Enumerate
+All 
+\begin_inset Formula $t_{j}$
+\end_inset
+
+ for leaf children 
+\begin_inset Formula $j$
+\end_inset
+
+ of 
+\begin_inset Formula $i$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Next to nothing for 
+\begin_inset Formula $t_{j^{*}}$
+\end_inset
+
+ for the parent 
+\begin_inset Formula $j^{*}$
+\end_inset
+
+ of 
+\begin_inset Formula $i$
+\end_inset
+
+ (can't be 0 because it was assigned, but can be really close)
+\end_layout
+
+\begin_layout Standard
+Thus, the total cost for our solution of 
+\begin_inset Formula $i$
+\end_inset
+
+ is at most 
+\begin_inset Formula $2L\leq2OPT$
+\end_inset
+
+, so we have a 2-approximation.
+\end_layout
+
+\begin_layout Subsection
+Solving Load Balancing with Network Flow
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $L$
+\end_inset
+
+, deciding if it is possible to balance the load is a flow problem with
+ fractional outcome.
+ Then, we can binary search for the value of the minimum 
+\begin_inset Formula $L$
+\end_inset
+
+.
+ This is a more efficient way to solve the LP – we technically don't need
+ to LP to solve load balancing, but it inspired our initial algorithm.
+\end_layout
+
+\end_body
+\end_document

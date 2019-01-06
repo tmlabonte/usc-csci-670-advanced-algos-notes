@@ -1,0 +1,794 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Quicksort and Tail Bounds
+\end_layout
+
+\begin_layout Section
+Randomized Quicksort
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* Given a set 
+\begin_inset Formula $S$
+\end_inset
+
+, choose a pivot 
+\begin_inset Formula $p$
+\end_inset
+
+ uniformly at random (or with median finding technique from last lecture)
+\end_layout
+
+\begin_layout Algorithm (num)
+* In linear time, compute 
+\begin_inset Formula $S^{-}=\{x\in S|x\leq p\}$
+\end_inset
+
+ and 
+\begin_inset Formula $S^{+}=\{x\in S|x>p\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* Quicksort(
+\begin_inset Formula $S^{-},S^{+}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Algorithm (num)
+* Return [sorted 
+\begin_inset Formula $S^{-}$
+\end_inset
+
+, 
+\begin_inset Formula $p$
+\end_inset
+
+, sorted 
+\begin_inset Formula $S^{+}$
+\end_inset
+
+]
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Randomized Quicksort
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Notice that, up to constant factors, the runtime of Quicksort is equal to
+ the number of comparisons made (which is also true for deterministic versions).
+ Let 
+\begin_inset Formula $T$
+\end_inset
+
+ be the random variable representing the number of element pairs compared.
+ We also note that when elements 
+\begin_inset Formula $i,j$
+\end_inset
+
+ are compared, one of them must have been 
+\begin_inset Formula $p$
+\end_inset
+
+, so they cannot be compared again.
+ Define indicator random variables:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X_{ij}=\begin{cases}
+1 & \text{if }i,j\text{ compared}\\
+0 & \text{o.w.}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+T=\sum_{i,j}X_{ij}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[T]=\sum_{i.j}\mathbb{E}[X_{ij}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i,j}\Pr[i,j\text{ compared}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Consider elements 
+\begin_inset Formula $i,j$
+\end_inset
+
+ in the final sorted order.
+ Without loss of generality, set 
+\begin_inset Formula $i<j$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $i$
+\end_inset
+
+ or 
+\begin_inset Formula $j$
+\end_inset
+
+ is selected as the pivot before any element between them, then 
+\begin_inset Formula $X_{ij}=1$
+\end_inset
+
+; otherwise they will be placed in different sets and 
+\begin_inset Formula $X_{ij}=0$
+\end_inset
+
+.
+ Now, consider the first time a pivot in 
+\begin_inset Formula $\{i,i+1,\dots,j-1,j\}$
+\end_inset
+
+ is selected.
+ At that point, 
+\begin_inset Formula $\Pr[i\text{ or }j\text{ is pivot}|\text{such a pivot is selected}]=\frac{2}{j+1-i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[T]=\sum_{i,j}\frac{2}{j+1-i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i=1}^{n}\sum_{k=1}^{n-i}\frac{2}{k-1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\leq2\sum_{i=1}^{n}\sum_{k=1}^{n}\frac{1}{k}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=2nH(n)\text{ where \ensuremath{H(n)} is the \ensuremath{n^{th}} harmonic number}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\approx2n\log n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So the expected runtime is 
+\begin_inset Formula $\Theta(n\log n)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Tail Bounds
+\end_layout
+
+\begin_layout Subsection
+Intro to Tail Bounds
+\end_layout
+
+\begin_layout Standard
+Oftentimes, we are interested in high probability guarantees (i.e., that for
+ some event 
+\begin_inset Formula $\mathcal{E}$
+\end_inset
+
+, 
+\begin_inset Formula $\Pr[\mathcal{E}]\geq1-p^{-1}$
+\end_inset
+
+ with 
+\begin_inset Formula $p$
+\end_inset
+
+ polynomial in 
+\begin_inset Formula $n$
+\end_inset
+
+).
+ This is especially useful for bounding expectation of maxima and minima
+ (something pretty useful as a computer scientist).
+ 
+\series bold
+Tail bounds
+\series default
+ are bounds which show that 
+\begin_inset Formula $\Pr[X<\alpha]$
+\end_inset
+
+ is 
+\begin_inset Quotes eld
+\end_inset
+
+small
+\begin_inset Quotes erd
+\end_inset
+
+.
+ For our purposes, we want bounds which guarantee that 
+\begin_inset Formula $\Pr[X\text{ is far from }\mathbb{E}[X]]$
+\end_inset
+
+ is 
+\begin_inset Quotes eld
+\end_inset
+
+small
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The general approach for tail bounds is to show that each 
+\begin_inset Formula $X_{i}\leq\alpha$
+\end_inset
+
+ with probability 
+\begin_inset Formula $\geq1-m^{-2}$
+\end_inset
+
+ or some other probability close to 1, where 
+\begin_inset Formula $m$
+\end_inset
+
+ is the number of variables.
+ Then, by the union bound:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Pr[\text{one or more }X_{i}>\alpha]\leq\sum_{i}\Pr[X_{i}>\alpha]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i}\frac{1}{m^{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\frac{1}{m}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Pr[\text{all }X_{i}\leq\alpha]\geq1-\frac{1}{m}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Markov's Inequality
+\end_layout
+
+\begin_layout Definition
+Markov's Inequality: If 
+\begin_inset Formula $X\geq0$
+\end_inset
+
+, then:
+\end_layout
+
+\begin_layout Definition
+\begin_inset Formula 
+\[
+\Pr[X\geq\alpha]\leq\frac{\mathbb{E}[X]}{\alpha}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+This bound is pretty weak, but can be useful.
+ For example, say we play a casino game where 
+\begin_inset Formula $x$
+\end_inset
+
+ is measured in integer dollars and:
+\end_layout
+
+\begin_layout Definition
+\begin_inset Formula 
+\[
+\mathbb{E}[X_{t+1}|X_{t}=x]=0.9x
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+How soon, starting from 
+\begin_inset Formula $n$
+\end_inset
+
+ dollars, until we are broke (
+\begin_inset Formula $X_{t}=0$
+\end_inset
+
+) with high probability? First, we know that:
+\end_layout
+
+\begin_layout Definition
+\begin_inset Formula 
+\[
+\mathbb{E}[X_{t}]=0.9^{t}n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+We set a convenient value of 
+\begin_inset Formula $t$
+\end_inset
+
+ to get a nice expectation and plug it in to Markov:
+\end_layout
+
+\begin_layout Definition
+\begin_inset Formula 
+\[
+t=2\log_{\frac{1}{0.9}}n\implies\mathbb{E}[X_{t}]=\frac{1}{n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+\begin_inset Formula 
+\[
+\Pr[X_{t}\neq0]=\Pr[X_{t}\geq1]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+\begin_inset Formula 
+\[
+\leq\frac{\frac{1}{n}}{1}\text{ by Markov's inequality}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+\begin_inset Formula 
+\[
+=\frac{1}{n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+Then, we know that at that 
+\begin_inset Formula $t$
+\end_inset
+
+, we are broke with high probability:
+\end_layout
+
+\begin_layout Definition
+\begin_inset Formula 
+\[
+\Pr[X_{t}=0]=1-\frac{1}{n}\text{ when }t=2\log_{\frac{1}{0.9}}n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+There is an extended version of Markov's Inequality called Chebyshev bounds,
+ which give better bounds when we can calculate 
+\begin_inset Formula $Var(X)$
+\end_inset
+
+, and in particular if 
+\begin_inset Formula $Var(X)\text{ is }\mathcal{O}(\mathbb{E}[X])$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Chernoff Bounds 
+\end_layout
+
+\begin_layout Standard
+Assume 
+\begin_inset Formula $X_{1},\dots,X_{n}$
+\end_inset
+
+ are 
+\bar under
+independent
+\bar default
+ indicator random variables, and 
+\begin_inset Formula $X=\sum_{i}X_{i}$
+\end_inset
+
+ with 
+\begin_inset Formula $\delta>0$
+\end_inset
+
+.
+ Then, Chernoff bounds state:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Pr[X>(1+\delta)\mu]<\frac{\exp(\delta)}{(1+\delta)^{(1+\delta)}}^{\mu}\text{ }\forall\delta\geq\mathbb{E}[X]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Pr[X<(1+\delta)\mu]<\exp(-\frac{1}{2}\mu\delta^{2})\text{ }\forall\delta\leq\mathbb{E}[X]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Assume 
+\begin_inset Formula $X_{1},\dots,X_{n}$
+\end_inset
+
+ are 
+\bar under
+independent
+\bar default
+ indicator random variables such that 
+\begin_inset Formula $X_{i}\in[a_{i},b_{i}]$
+\end_inset
+
+ 
+\bar under
+always
+\bar default
+, and 
+\begin_inset Formula $X=\sum_{i}X_{i}$
+\end_inset
+
+ with 
+\begin_inset Formula $\mu=\mathbb{E}[X]$
+\end_inset
+
+.
+ Then, Hoeffding bounds state:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Pr[|X-\mu|\geq\Delta]\leq2\exp(\frac{-2\Delta^{2}}{\sum_{i}(b_{i}-a_{i})^{2}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Tail Bounds on Balls and Bins
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $n$
+\end_inset
+
+ balls and 
+\begin_inset Formula $m$
+\end_inset
+
+ bins, distribute the balls across the bins to minimize the maximum number
+ of balls in any bin.
+ This is a trivial problem if we just evenly distribute the balls, but we
+ are interested in the randomized approach as a simple example for usage
+ of Chernoff bounds.
+ Let 
+\begin_inset Formula $N_{i}$
+\end_inset
+
+ be the random variable representing the number of balls in bin 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ Define indicator random variables:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+B_{ij}=\begin{cases}
+1 & \text{if ball \ensuremath{j} lands in bin \ensuremath{i}}\\
+0 & \text{o.w.}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+N_{i}=\sum_{j}B_{ij}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[N_{i}]=\sum_{j}\mathbb{E}[B_{ij}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\frac{n}{m}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

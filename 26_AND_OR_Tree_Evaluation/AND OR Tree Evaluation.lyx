@@ -1,0 +1,619 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AND/OR Tree Evaluation
+\end_layout
+
+\begin_layout Section
+AND/OR Trees
+\end_layout
+
+\begin_layout Standard
+In a 
+\series bold
+game tree
+\series default
+, a node is either a min or a max, alternating per level.
+ The values of the leaves are given explicitly.
+ The value of a min node is the minimum of the values of its children, and
+ vice versa for max nodes.
+ In the special case where each leaf is either a 0 or a 1, the game tree
+ can be represented as an AND/OR tree, where ANDs correspond to mins and
+ ORs correspond to maxes.
+\end_layout
+
+\begin_layout Standard
+Our goal is to evaluate the root of the tree while querying as few leaves
+ as possible.
+ Deterministically, we can be forced to query all leaves to get the value
+ of a subtree.
+ So, we'd like to randomize.
+\end_layout
+
+\begin_layout Standard
+Good case for AND evaluation: 0,0
+\end_layout
+
+\begin_layout Standard
+Medium case for AND evaluation: 0,1 or 1,0
+\end_layout
+
+\begin_layout Standard
+Bad case for AND evaluation: 1,1
+\end_layout
+
+\begin_layout Standard
+Good case for OR evaluation: 1,1
+\end_layout
+
+\begin_layout Standard
+Medium case for OR evaluation: 0,1 or 1,0
+\end_layout
+
+\begin_layout Standard
+Bad case for OR evaluation: 0,0
+\end_layout
+
+\begin_layout Standard
+Note that the bad case for the AND is the good case for the OR, and vice
+ versa.
+ Thus, when randomizing, it is impossible for us to keep running into the
+ worst-case scenario, and we'll use this fact in our analysis.
+\end_layout
+
+\begin_layout Section
+Snir's Algorithm
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* Pick either subtree uniformly at random
+\end_layout
+
+\begin_layout Algorithm (num)
+* Evaluate that subtree recursively
+\end_layout
+
+\begin_layout Algorithm (num)
+if the value of the current node is now determined by the above cases
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Return the value
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+else
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Evaluate the other subtree
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endif
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Snir's Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Snir's algorithm is essentially a randomized DFS that will give us better
+ results in our analysis.
+ Let 
+\begin_inset Formula $X_{\text{AND/OR}}^{0/1}(h)$
+\end_inset
+
+ be the cost of evaluating a tree of height 
+\begin_inset Formula $h$
+\end_inset
+
+ whose root is AND/OR and evaluates to 0/1.
+ We have the following system of equations by the above cases:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X_{\text{AND}}^{0}(h)]\leq2\mathbb{E}[X_{\text{OR}}^{1}(h-1)]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X_{\text{AND}}^{0}(h)]\leq\frac{1}{2}(\mathbb{E}[X_{\text{OR}}^{0}(h-1)]+\frac{1}{2}\mathbb{E}[X_{\text{OR}}^{1}(h-1)+X_{\text{OR}}^{0}(h-1)])
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X_{\text{OR}}^{0}(h)]\leq2\mathbb{E}[X_{\text{AND}}^{0}(h-1)]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X_{\text{OR}}^{1}(h)]\leq\frac{1}{2}(\mathbb{E}[X_{\text{AND}}^{1}(h-1)]+\frac{1}{2}\mathbb{E}[X_{\text{AND}}^{1}(h-1)+X_{\text{AND}}^{0}(h-1)])
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To make the analysis a little simpler, we'll define 
+\begin_inset Formula $Y_{\text{AND/OR}}(h)$
+\end_inset
+
+ to be the maximum cost for evaluating an AND/OR node of height 
+\begin_inset Formula $h$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y_{\text{AND}}(h)=\max(\mathbb{E}[X_{\text{AND}}^{0}(h)],\mathbb{E}[X_{\text{AND}}^{1}(h)])
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y_{\text{OR}}(h)=\max(\mathbb{E}[X_{\text{OR}}^{0}(h)],\mathbb{E}[X_{\text{OR}}^{1}(h)])
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To get values for these new variables, we'll express the cost of each node
+ in terms of the cost of the same type of node two levels down in the tree.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X_{\text{OR}}^{0}(h)]\leq\mathbb{E}[X_{\text{OR}}^{0}(h-2)]+(\mathbb{E}[X_{\text{OR}}^{1}(h-2)]+\mathbb{E}[X_{\text{OR}}^{0}(h-2)])
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\leq3Y_{\text{OR}}(h-2)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\mathbb{E}[X_{\text{OR}}^{1}(h)]\leq\mathbb{E}[X_{\text{OR}}^{1}(h-2)]+(\mathbb{E}[X_{\text{OR}}^{1}(h-2)]+(\frac{1}{2}\mathbb{E}[X_{\text{OR}}^{0}(h-2)]+\frac{1}{4}\mathbb{E}[X_{\text{OR}}^{1}(h-2)]))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\leq\frac{11}{4}Y_{\text{OR}}(h-2)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y_{\text{OR}}(h)\leq3Y_{\text{OR}}(h-2)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Analogously:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y_{\text{AND}}(h)\leq3Y_{\text{AND}}(h-2)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By induction on 
+\begin_inset Formula $h$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y_{\text{OR}}(h)\leq3^{\frac{h}{2}},Y_{\text{AND}}(h)\leq3^{\frac{h}{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If the tree has 
+\begin_inset Formula $n$
+\end_inset
+
+ leaves, then 
+\begin_inset Formula $h=\log(n)$
+\end_inset
+
+, so the number of evaluated leaves 
+\begin_inset Formula $L$
+\end_inset
+
+ results in expectation as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[L]\leq3^{\frac{\log(n)}{2}}=n^{\frac{\log(3)}{2}}\leq n^{0.793}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+A Lower Bound on Randomized AND/OR Tree Evaluation Algorithms
+\end_layout
+
+\begin_layout Standard
+Now that we have an upper bound on the number of leaves we need to check,
+ we can use Yao's Principle to obtain a lower bound on all randomized AND/OR
+ tree evaluation algorithms.
+ We want to design an input distribution (i.e., the truth values of the leaves)
+ such that each possible deterministic algorithm needs to query a relatively
+ large amount of leaves.
+ 
+\end_layout
+
+\begin_layout Standard
+The simplest distribution would be to make every leaf 1 with probability
+ 
+\begin_inset Formula $p$
+\end_inset
+
+.
+ But, we'd like 
+\begin_inset Formula $p$
+\end_inset
+
+ to be such that, at all layers from the bottom, the nodes are true with
+ probability 
+\begin_inset Formula $p$
+\end_inset
+
+.
+ So, 
+\begin_inset Formula $\frac{1}{2}$
+\end_inset
+
+ doesn't work.
+\end_layout
+
+\begin_layout Standard
+Note that an AND/OR tree of even height and (without loss of generality)
+ an AND at the root is equivalent to a NOR tree.
+ We know that each NOR node is true with probability 
+\begin_inset Formula $(1-p)^{2}$
+\end_inset
+
+, which we want equal to 
+\begin_inset Formula $p$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+(1-p)^{2}=p
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p^{2}-3p+1=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p=\frac{3-\sqrt{5}}{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now, we need the best deterministic algorithm versus this input.
+ This algorithm is DFS: at any node, recursively evaluate its left subtree,
+ and if needed, evaluate the right subtree.
+ The proof of optimality requires some care so we'll skip it here.
+ Let 
+\begin_inset Formula $T(h)$
+\end_inset
+
+ be the expected number of steps to evaluate a tree of height 
+\begin_inset Formula $h$
+\end_inset
+
+.
+ Then, using this algorithm:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+T(h)=T(h-1)+(1-p)T(h-1)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=(2-p)T(h-1)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By induction,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=(2-p)^{h}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=n^{\log(\frac{1+\sqrt{5}}{2})}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=n^{\log\phi}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\approx n^{0.694}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So by Yao's Principle, every randomized algorithm must evaluate 
+\begin_inset Formula $\geq n^{0.694}$
+\end_inset
+
+ leaves in expectation.
+ Snir's Algorithm is optimal; this lower bound is not.
+ To improve it, we have to correlate the leaf distributions top-down to
+ ensure that no OR node ever has two children evaluate to 1 and no AND node
+ ever has two children evaluate to 0.
+ The resulting correlations make it more difficult to prove that DFS is
+ the optimal deterministic algorithm, but in the end we'd get the desired
+ bound of 
+\begin_inset Formula $n^{0.793}$
+\end_inset
+
+.
+\end_layout
+
+\end_body
+\end_document

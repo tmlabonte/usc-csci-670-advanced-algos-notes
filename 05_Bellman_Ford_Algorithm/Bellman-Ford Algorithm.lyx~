@@ -1,0 +1,869 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Bellman-Ford Algorithm
+\end_layout
+
+\begin_layout Section
+Shortest Paths with Dynamic Programming
+\end_layout
+
+\begin_layout Standard
+Now that we know how to use dynamic programming, we can revisit the idea
+ of finding a shortest path when negative edges exist in our graph.
+ For a shortest 
+\begin_inset Formula $s\rightarrow t$
+\end_inset
+
+ path to exist in such a graph, there must not be a negative cycle reachable
+ from 
+\begin_inset Formula $s$
+\end_inset
+
+ and 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ To decompose our large problem into solvable subproblems, we observe that
+ the optimum 
+\begin_inset Formula $s\rightarrow t$
+\end_inset
+
+ path goes from 
+\begin_inset Formula $s\rightarrow$
+\end_inset
+
+ neighbor of 
+\begin_inset Formula $t$
+\end_inset
+
+ optimally, then takes a last hop to 
+\begin_inset Formula $t$
+\end_inset
+
+, minimizing the sum of the two costs.
+\end_layout
+
+\begin_layout Standard
+As a first try, we set 
+\begin_inset Formula $OPT(v)=$
+\end_inset
+
+ minimum cost path from 
+\begin_inset Formula $v\rightarrow t$
+\end_inset
+
+.
+ Equivalently:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+OPT(v)=\min_{u:v\rightarrow u}(OPT(u)+C_{v,u})\text{ with }OPT(t)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+But that makes the task computationally impossible, because in order to
+ calculate 
+\begin_inset Formula $OPT(v)$
+\end_inset
+
+ we need to know 
+\begin_inset Formula $OPT(u)$
+\end_inset
+
+ and vice versa.
+ So, we introduce a second variable and reparametrize.
+ Let 
+\begin_inset Formula $k$
+\end_inset
+
+ be the number of hops in a path; then 
+\begin_inset Formula $OPT(v,k)=$
+\end_inset
+
+ minimum cost path from 
+\begin_inset Formula $v\rightarrow t$
+\end_inset
+
+ with total hops 
+\begin_inset Formula $\leq k$
+\end_inset
+
+.
+ For each 
+\begin_inset Formula $k$
+\end_inset
+
+-step, one can choose to stay at the current node, or move to an unvisited
+ one.
+ Equivalently:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+OPT(v,k)=\min(OPT(v,k-1),\min_{u:v\rightarrow u}(OPT(u,k-1)+C_{v,u}))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+OPT(t,0)=0\text{ and }OPT(v,0)=\infty\text{ for all }v\neq t
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Naive Attempts at Bellman-Ford
+\end_layout
+
+\begin_layout Subsection
+Naive Attempt 1
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $a[v,0]=\infty\text{ for all }v\neq t$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $a[t,0]=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+for 
+\begin_inset Formula $k=1\text{ to }n$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+for all 
+\begin_inset Formula $v$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $a[v,k]=\min(a[v,k-1],\min_{u:v\rightarrow u}(a[u,k-1]+C_{v,u}))$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\begin_layout Algorithm (num)
+* return 
+\begin_inset Formula $a[s,n]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Naive Bellman-Ford 1
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We know that this algorithm must run for 
+\begin_inset Formula $n$
+\end_inset
+
+ iterations, because the shortest path will never contain a cycle (assuming
+ no negative cycles, which we will account for later).
+ Thus, 
+\begin_inset Formula $a[s,n]$
+\end_inset
+
+ contains the length of the shortest 
+\begin_inset Formula $s\rightarrow t$
+\end_inset
+
+ path.
+ This algorithm runs in 
+\begin_inset Formula $\Theta(mn)$
+\end_inset
+
+ time and 
+\begin_inset Formula $\Theta(n^{2})$
+\end_inset
+
+ space.
+\end_layout
+
+\begin_layout Subsection
+Naive Attempt 2
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $a[v]=\infty,\text{next}(v)=\perp\text{ for all }v\neq t$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $a[t]=0,\text{ next}(t)=\perp$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+for all 
+\begin_inset Formula $n$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+for all 
+\begin_inset Formula $v$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $a[v]=\min(a[v],\min_{u:v\rightarrow u}(a[u]+C_{v,u}))$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* next
+\begin_inset Formula $(v)=$
+\end_inset
+
+corresponding pointer
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\begin_layout Algorithm (num)
+* return 
+\begin_inset Formula $a[s]$
+\end_inset
+
+, next
+\begin_inset Formula $(s)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Naive Bellman-Ford 2
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In order to reconstruct the shortest path, we adjust the algorithm to contain
+ a next pointer for each node.
+ The next pointer also increase memory efficiency by storing only two path
+ value vectors – the nodes we updated last round, and the current nodes
+ (instead of all nodes, because we can access their necessary information
+ through the pointers).
+\end_layout
+
+\begin_layout Claim
+At termination of Algorithm 2, 
+\begin_inset Formula $a[v]=OPT(v)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula $a[v]\leq OPT(v,k)\leq OPT(v)$
+\end_inset
+
+ after 
+\begin_inset Formula $k$
+\end_inset
+
+ iterations, because each update can only make 
+\begin_inset Formula $a[v]$
+\end_inset
+
+ smaller.
+ Because the next pointers always describe a 
+\begin_inset Formula $v\rightarrow t$
+\end_inset
+
+ path of cost 
+\begin_inset Formula $a[v]$
+\end_inset
+
+, we have 
+\begin_inset Formula $a[v]\geq OPT(v).$
+\end_inset
+
+ Combining these two inequalities shows that 
+\begin_inset Formula $a[v]=OPT(v)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+This more efficient version of Bellman-Ford runs in 
+\begin_inset Formula $\mathcal{O}(mn)$
+\end_inset
+
+ time and 
+\begin_inset Formula $\Theta(n\log n)$
+\end_inset
+
+ space, but still cannot handle negative cycles.
+\end_layout
+
+\begin_layout Section
+Negative Cycles
+\end_layout
+
+\begin_layout Subsection
+Finding Negative Cycles
+\end_layout
+
+\begin_layout Standard
+Given a weighted digraph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+, find a negative cycle if it exists.
+\end_layout
+
+\begin_layout Standard
+We add a node 
+\begin_inset Formula $t$
+\end_inset
+
+ with edges of cost 0 from all 
+\begin_inset Formula $v$
+\end_inset
+
+ and run Bellman-Ford.
+ If the shortest path cost is updated in iteration 
+\begin_inset Formula $n$
+\end_inset
+
+ (where it would be adding the 0 cost edges to 
+\begin_inset Formula $t$
+\end_inset
+
+ and thus not updating), there must be a cycle.
+ To locate the cycle, we follow the next pointers of the node that updated.
+\end_layout
+
+\begin_layout Claim
+If the next pointers 
+\bar under
+ever
+\bar default
+ contain a cycle, it is a negative cycle.
+\end_layout
+
+\begin_layout Proof
+When the node that updated, 
+\begin_inset Formula $u$
+\end_inset
+
+, last updated its next pointer, 
+\begin_inset Formula $a[u]=a[\text{next}(u)]+C_{u,\text{next}(u)}$
+\end_inset
+
+.
+ But 
+\begin_inset Formula $a[\text{next}(u)]$
+\end_inset
+
+ might later have decreased, so we have 
+\begin_inset Formula $a[u]\geq a[\text{next}(u)]+C_{u,\text{next}(u)}$
+\end_inset
+
+.
+ Right before updating a neighboring node 
+\begin_inset Formula $v$
+\end_inset
+
+, we had 
+\begin_inset Formula $a[v]>a[\text{next}(v)]+C_{v,\text{next}(v)}$
+\end_inset
+
+.
+ We add these inequalities around the cycle 
+\begin_inset Formula $\Delta$
+\end_inset
+
+: 
+\begin_inset Formula $\sum_{u\in\Delta}a[u]>\sum_{u\in\Delta}a[u]+\sum_{u\in\Delta}C_{u,\text{next}(u)}$
+\end_inset
+
+.
+ Then, by canceling, we have 
+\begin_inset Formula $0>\sum_{u\in cycle}C_{u,\text{next}(u)}$
+\end_inset
+
+, which means the cycle must be negative.
+\end_layout
+
+\begin_layout Subsection
+Efficient Termination After Negative Cycle Detection
+\end_layout
+
+\begin_layout Standard
+Our goal now is to improve Bellman-Ford so that it terminates as soon as
+ a negative cycle is detected.
+\end_layout
+
+\begin_layout Standard
+The naive approach is to look for cycles after each update, but the cost
+ is 
+\begin_inset Formula $\Theta(n)$
+\end_inset
+
+ for the BFS on the next pointer graph.
+ This brings the total runtime to 
+\begin_inset Formula $\Theta(n^{2}m)$
+\end_inset
+
+, which is too high.
+\end_layout
+
+\begin_layout Standard
+Until a cycle appears in the Bellman-Ford graph, we know that it is an 
+\series bold
+indirected arborescence
+\series default
+ into 
+\begin_inset Formula $t$
+\end_inset
+
+ (a tree where all edges point to 
+\begin_inset Formula $t$
+\end_inset
+
+).
+ Thus, setting next
+\begin_inset Formula $(v)=u$
+\end_inset
+
+ would create a cycle if and only if 
+\begin_inset Formula $u$
+\end_inset
+
+ is in the subtree of the indirected arborescence rooted at 
+\begin_inset Formula $v$
+\end_inset
+
+.
+ In addition to storing the outgoing next pointer, we'll also store previous
+ pointers to all 
+\begin_inset Formula $u$
+\end_inset
+
+ such that next
+\begin_inset Formula $(u)=v$
+\end_inset
+
+.
+ Then we can test if 
+\begin_inset Formula $u$
+\end_inset
+
+ is in the subtree rooted at 
+\begin_inset Formula $v$
+\end_inset
+
+ by performing BFS throughout the previous pointers.
+ However, this is still 
+\begin_inset Formula $\Theta(n^{2}m)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Observation: When no cycle is found after the previous pointer BFS, all
+ 
+\begin_inset Formula $a[u]$
+\end_inset
+
+ values in the subtree rooted at 
+\begin_inset Formula $v$
+\end_inset
+
+ are outdated.
+ So, there is no point in using them until 
+\begin_inset Formula $u$
+\end_inset
+
+ is updated again in the next iteration of Bellman-Ford.
+ We can delete all outgoing next
+\begin_inset Formula $(u)$
+\end_inset
+
+ pointers for all 
+\begin_inset Formula $u\in\text{subtree}$
+\end_inset
+
+ and mark them as inactive until 
+\begin_inset Formula $u$
+\end_inset
+
+ is updated.
+ This way, each next pointer is used only once in BFS, and the cost can
+ be amortized against the creation of the subsequent next pointer.
+ 
+\end_layout
+
+\begin_layout Standard
+By using amortized analysis, we determine that the runtime of this final
+ version of Bellman-Ford is 
+\begin_inset Formula $\Theta(mn)$
+\end_inset
+
+ and faster in practice.
+\end_layout
+
+\begin_layout Section
+Bellman-Ford Algorithm
+\end_layout
+
+\begin_layout Subsection
+Bellman-Ford Algorithm
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $a[v]=\infty,\text{next}(v)=\perp\text{ for all }v\neq t$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $a[t]=0,\text{ next}(t)=\perp$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+for 
+\begin_inset Formula $1\text{ to }n-1$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+for all 
+\begin_inset Formula $v$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $a[v]=\min(a[v],\min_{u:v\rightarrow u}(a[u]+C_{v,u}))$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* next
+\begin_inset Formula $(v)=$
+\end_inset
+
+corresponding pointer
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\begin_layout Algorithm (num)
+for all 
+\begin_inset Formula $v$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+if 
+\begin_inset Formula $\min(a[v],\min_{u:v\rightarrow u}(a[u]+C_{v,u}))\neq a[v]$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* return error: negative cycle detected
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endif
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\begin_layout Algorithm (num)
+* return 
+\begin_inset Formula $a[s]$
+\end_inset
+
+, next
+\begin_inset Formula $(s)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Bellman-Ford Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Applications
+\end_layout
+
+\begin_layout Standard
+In computer networks, each node monitors its outgoing edges and updates
+ their costs if necessary.
+ Thus, nodes can run Bellman-Ford to find the shortest path between points
+ in the network.
+ These are called Distance Vector Protocols.
+ However, the system can be gamed by nodes which announce very short, possibly
+ fake paths, causing everyone to reroute through them.
+ This approach also doesn't deal well with nodes going down or distances
+ increasing; more mature Link State Protocols are normally used instead.
+\end_layout
+
+\begin_layout Standard
+Many dynamic programming problems can be solved with Bellman-Ford on a suitably
+ defined graph (e.g., weighted interval, knapsack, etc).
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,1349 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Randomized Algorithms
+\end_layout
+
+\begin_layout Section
+Preliminaries
+\end_layout
+
+\begin_layout Subsection
+Definitions of Probability
+\end_layout
+
+\begin_layout Definition
+A 
+\series bold
+probability space 
+\begin_inset Formula $(\Omega,p)$
+\end_inset
+
+ 
+\series default
+is a finite set 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ with 
+\begin_inset Formula $p(\omega)\geq0\text{ }\forall\omega\in\Omega$
+\end_inset
+
+ and 
+\begin_inset Formula $\sum_{\omega\in\Omega}p(\omega)=1$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+An 
+\series bold
+event 
+\series default
+
+\begin_inset Formula $\mathcal{E}\subseteq\Omega$
+\end_inset
+
+ has 
+\begin_inset Formula $\Pr[\mathcal{E}]=\sum_{\omega\in\mathcal{E}}p(\omega)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+A 
+\series bold
+random variable 
+\series default
+is a function
+\series bold
+ 
+\begin_inset Formula $X:\Omega\rightarrow\mathbb{R}$
+\end_inset
+
+
+\series default
+, and an 
+\series bold
+indicator random variable
+\series default
+ is a function
+\series bold
+ 
+\series default
+
+\begin_inset Formula $X:\Omega\rightarrow\{0,1\}$
+\end_inset
+
+.
+ An indicator random variable 
+\begin_inset Formula $X_{\mathcal{E}}$
+\end_inset
+
+ of 
+\begin_inset Formula $\mathcal{E}$
+\end_inset
+
+ has:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X_{\mathcal{E}}(\omega)=\begin{cases}
+1 & \omega\in\mathcal{E}\\
+0 & \text{o.w.}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+The 
+\series bold
+expectation
+\series default
+ of 
+\begin_inset Formula $X$
+\end_inset
+
+ is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X]=\sum_{i}i\Pr[X=i]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{\omega\in\Omega}X(\omega)p(\omega)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proposition
+Expectation is 
+\bar under
+always
+\bar default
+ linear:
+\end_layout
+
+\begin_layout Proposition
+\begin_inset Formula 
+\[
+\mathbb{E}[\alpha X+\beta Y]=\alpha\mathbb{E}[X]+\beta\mathbb{E}[Y]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+Events 
+\begin_inset Formula $\mathcal{E}_{1},\dots,\mathcal{E}_{n}$
+\end_inset
+
+ are 
+\series bold
+independent 
+\series default
+iff for all sets 
+\begin_inset Formula $S\subseteq\{1,\dots,n\}$
+\end_inset
+
+, 
+\begin_inset Formula $\Pr[\bigwedge_{i\in S_{i}}\mathcal{E}_{i}]=\prod_{i\in S}\Pr[\mathcal{E}_{i}]$
+\end_inset
+
+.
+ The events are 
+\series bold
+pairwise independent
+\series default
+ if this holds for all 
+\begin_inset Formula $S$
+\end_inset
+
+ with 
+\begin_inset Formula $|S|=2$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proposition
+The 
+\series bold
+union bound
+\series default
+ is as follows: for any events 
+\begin_inset Formula $\mathcal{E}_{1},\dots,\mathcal{E}_{n}$
+\end_inset
+
+, 
+\begin_inset Formula $\Pr[\bigcup_{i}\mathcal{E}_{i}]\leq\sum_{i}\Pr[\mathcal{E}_{i}]$
+\end_inset
+
+.
+ This bound is tight when the 
+\begin_inset Formula $\mathcal{E}_{i}$
+\end_inset
+
+ are mutually exclusive.
+\end_layout
+
+\begin_layout Subsection
+Definitions of Randomized Algorithms
+\end_layout
+
+\begin_layout Definition
+A 
+\series bold
+randomized algorithm 
+\series default
+is an algorithm which gets to generate randomness to make decisions.
+ 
+\end_layout
+
+\begin_layout Standard
+Randomized algorithms are often faster or simpler than their deterministic
+ counterparts.
+ Note that the input is still deterministic/worst case; in the contrasting
+ probabalistic analysis, the input is randomized and the algorithm is determinis
+tic.
+\end_layout
+
+\begin_layout Definition
+A 
+\series bold
+Monte Carlo algorithm
+\series default
+ is a randomized algorithm with guaranteed runtime and random correctness.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+A 
+\series bold
+Las Vegas
+\series default
+ algorithm is a randomized algorithm with guaranteed correctness and random
+ runtime.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Definition
+
+\series bold
+RP
+\series default
+ (randomized polynomial time) is the complexity class containing problems
+ for which there exists a randomized polytime algorithm 
+\begin_inset Formula $A$
+\end_inset
+
+ such that:
+\end_layout
+
+\begin_layout Enumerate
+If 
+\begin_inset Formula $x\notin X$
+\end_inset
+
+, 
+\series bold
+
+\begin_inset Formula $A$
+\end_inset
+
+ 
+\series default
+always returns 
+\begin_inset Quotes eld
+\end_inset
+
+No
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+If 
+\begin_inset Formula $x\in X$
+\end_inset
+
+, 
+\begin_inset Formula $A$
+\end_inset
+
+ returns 
+\begin_inset Quotes eld
+\end_inset
+
+Yes
+\begin_inset Quotes erd
+\end_inset
+
+ with probability 
+\begin_inset Formula $p\geq\frac{1}{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+It is clear that 
+\series bold
+P 
+\begin_inset Formula $\subseteq$
+\end_inset
+
+ RP 
+\begin_inset Formula $\subseteq$
+\end_inset
+
+ NP
+\series default
+, but it is an open question whether 
+\series bold
+P 
+\begin_inset Formula $=$
+\end_inset
+
+ RP
+\series default
+ or 
+\series bold
+RP 
+\begin_inset Formula $=$
+\end_inset
+
+ NP
+\series default
+.
+\end_layout
+
+\begin_layout Section
+Randomized Approximation Algorithm for 3SAT
+\end_layout
+
+\begin_layout Subsection
+The Airplane Seat Problem
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $n$
+\end_inset
+
+ people and 
+\begin_inset Formula $n$
+\end_inset
+
+ assigned seats on an airplane, generate a uniformly random matching between
+ people and seats.
+ Let 
+\begin_inset Formula $X$
+\end_inset
+
+ be the random variable representing the number of people who randomly select
+ their assigned seat.
+ What is 
+\begin_inset Formula $\mathbb{E}[X]$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+Define indicator random variables: 
+\begin_inset Formula 
+\[
+X_{i}=\begin{cases}
+1 & \text{if person }i\text{ got their seat}\\
+0 & \text{o.w.}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X=\sum_{i}X_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So by expectation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X]=\sum_{i}\mathbb{E}[X_{i}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i}\Pr[i]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i}\frac{1}{n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Johnson's Algorithm
+\end_layout
+
+\begin_layout Standard
+Find a 3SAT assignment approximately maximizing the number of satisfied
+ clauses.
+ We can't do the opposite (approximately minimize the amount of violated
+ clauses) because it is 
+\series bold
+NP
+\series default
+-hard to distinguish between 0 and 1 violated clauses; if we have 0, we
+ have solved an 
+\series bold
+NP
+\series default
+-hard problem.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+for all variables 
+\begin_inset Formula $X_{i}$
+\end_inset
+
+ in the 3SAT formula
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Let 
+\begin_inset Formula $X_{i}=\begin{cases}
+\text{true} & \text{with probability }\frac{1}{2}\\
+\text{false} & \text{o.w.}
+\end{cases}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Johnson's Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $Y$
+\end_inset
+
+ be the random variable representing the number of satisfied clauses.
+ Define indicator random variables:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y_{c}=\begin{cases}
+1 & \text{if \ensuremath{c} is true}\\
+0 & \text{o.w.}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y=\sum_{c}Y_{c}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So by expectation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[Y]=\sum_{c}\mathbb{E}[Y_{c}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{c}\Pr[c]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{c}(1-\Pr[\neg c])
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By independence:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{c}(1-\frac{1}{2}^{3})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{c}\frac{7}{8}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\frac{7}{8}m
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We know that OPT satisfies at most 
+\begin_inset Formula $m$
+\end_inset
+
+ clauses, so this is a 
+\begin_inset Formula $\frac{7}{8}$
+\end_inset
+
+-approximation in expectation.
+ Interestingly, this also proves that for every 3SAT formula, there exists
+ an assignment satisfying 
+\begin_inset Formula $\frac{7}{8}$
+\end_inset
+
+ of all clauses by the 
+\series bold
+probabilistic method
+\series default
+.
+\end_layout
+
+\begin_layout Definition
+The probabilistic method is a way to prove the existence of an object with
+ some property by sampling it randomly from a carefully designed distribution,
+ then show that the randomly drawn object has a probability 
+\begin_inset Formula $p\geq0$
+\end_inset
+
+ of having the desired property (i.e., expander graphs, 3SAT formulae).
+\end_layout
+
+\begin_layout Theorem
+(Hastad): Unless 
+\series bold
+P=NP
+\series default
+, there is no polytime 
+\begin_inset Formula $\frac{7}{8}+\mathcal{E}$
+\end_inset
+
+-approximation for 3SAT for any 
+\begin_inset Formula $\mathcal{E}\geq0$
+\end_inset
+
+ by the PCP theorem.
+\end_layout
+
+\begin_layout Section
+Randomized Linear Time Algorithm for Median Finding
+\end_layout
+
+\begin_layout Subsection
+The Geometric Distribution
+\end_layout
+
+\begin_layout Standard
+Imagine we flip a coin with probability 
+\begin_inset Formula $p$
+\end_inset
+
+ to land on heads until it comes up heads.
+ Let 
+\begin_inset Formula $X$
+\end_inset
+
+ be the random variable representing the number of flips until we get a
+ heads.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X\sim\mathcal{G}(p)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X]=\frac{1}{p}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+The Coupon Collector Problem
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $n$
+\end_inset
+
+ items, each round we get a copy of a uniformly random item.
+ How many rounds will it take until we have at least one copy of every item?
+ Let 
+\begin_inset Formula $X$
+\end_inset
+
+ be the random variable representing the number of steps until we have at
+ least one copy of each item.
+ Define phase 
+\begin_inset Formula $i$
+\end_inset
+
+ to last from the first time we have 
+\begin_inset Formula $i-1$
+\end_inset
+
+ distinct items until the first time we have 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ Then, let 
+\begin_inset Formula $X_{i}$
+\end_inset
+
+ be the random variable representing the number of steps in phase 
+\begin_inset Formula $i$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X=\sum_{i=1}^{n}X_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X]=\sum_{i=1}^{n}\mathbb{E}[X_{i}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X_{i}\sim\mathcal{G}(\frac{n-i+1}{n})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X_{i}]=\frac{n}{n-i+1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X]=\sum_{i=1}^{n}\frac{n}{n-i+1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=n\sum_{i=1}^{n}\frac{1}{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=nH(n)\text{ where }H(n)\text{ is the \ensuremath{n^{th}} harmonic number}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\Theta(n\log n)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Median Finding
+\end_layout
+
+\begin_layout Standard
+Given a set 
+\begin_inset Formula $S$
+\end_inset
+
+ of 
+\begin_inset Formula $n$
+\end_inset
+
+ unsorted numbers, find the number in position 
+\begin_inset Formula $\lfloor\frac{n+1}{2}\rfloor$
+\end_inset
+
+ or 
+\begin_inset Formula $\lceil\frac{n+1}{2}\rceil$
+\end_inset
+
+ in the sorted order.
+ Sorting the entire list gives 
+\begin_inset Formula $\mathcal{O}(n\log n)$
+\end_inset
+
+, but we want 
+\begin_inset Formula $\mathcal{O}(n)$
+\end_inset
+
+.
+ The initial algorithm idea is similar to Quicksort: we choose a pivot,
+ divide the set into 
+\begin_inset Formula $S^{-}$
+\end_inset
+
+ and 
+\begin_inset Formula $S^{+}$
+\end_inset
+
+, and recurse in the correct partition.
+ We can generalize this problem to select the element 
+\begin_inset Formula $(S,k)$
+\end_inset
+
+ which is the 
+\begin_inset Formula $k^{th}$
+\end_inset
+
+ smallest element of 
+\begin_inset Formula $S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+if 
+\begin_inset Formula $|S|=1$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Return 
+\begin_inset Formula $S_{0}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endif
+\end_layout
+
+\begin_layout Algorithm (num)
+* Choose a pivot 
+\begin_inset Formula $p$
+\end_inset
+
+ uniformly at random.
+\end_layout
+
+\begin_layout Algorithm (num)
+* Let 
+\begin_inset Formula $S^{-}=\{i\in S|i<p\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+* Let 
+\begin_inset Formula $S^{+}=\{i\in S|i\geq p\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+if 
+\begin_inset Formula $k=1+|S^{-}|$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Return 
+\begin_inset Formula $S_{0}^{+}$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+elseif 
+\begin_inset Formula $k<1+|S^{-}|$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Return 
+\begin_inset Formula $(S^{-},k)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+else
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Return 
+\begin_inset Formula $(S^{+},k)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endif
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Element Selection Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We are interested in the expectation of the runtime of this algorithm 
+\begin_inset Formula $\mathbb{E}[T(n)]$
+\end_inset
+
+.
+ Note that 
+\begin_inset Formula $T(n)=\Theta(n)+T(n')$
+\end_inset
+
+ where 
+\begin_inset Formula $n'=|S^{-}|$
+\end_inset
+
+ or 
+\begin_inset Formula $|S^{+}|$
+\end_inset
+
+, whichever we recurse on.
+\end_layout
+
+\begin_layout Standard
+With probability 
+\begin_inset Formula $\frac{1}{2}$
+\end_inset
+
+, 
+\begin_inset Formula $p$
+\end_inset
+
+ is in the middle half of 
+\begin_inset Formula $S$
+\end_inset
+
+ (call this a good pivot).
+ Thus, each partition will be at most 
+\begin_inset Formula $\frac{3}{4}$
+\end_inset
+
+ the size of 
+\begin_inset Formula $S$
+\end_inset
+
+.
+ In other words, 
+\begin_inset Formula $n'\leq\frac{3}{4}n$
+\end_inset
+
+ with probability 
+\begin_inset Formula $\frac{1}{2}$
+\end_inset
+
+.
+ As a consequence of this fact, we know that our algorithm will terminate
+ after 
+\begin_inset Formula $\log_{\frac{4}{3}}n$
+\end_inset
+
+ rounds of good pivots.
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $X$
+\end_inset
+
+ be the random variable representing the total number of steps of the algorithm.
+ Define phase 
+\begin_inset Formula $i$
+\end_inset
+
+ to last from the first time 
+\begin_inset Formula $|S|\le\frac{n}{\frac{4}{3}^{i-1}}$
+\end_inset
+
+ until the first time 
+\begin_inset Formula $|S|\leq\frac{n}{\frac{4}{3}^{i}}$
+\end_inset
+
+.
+ Then, let 
+\begin_inset Formula $X_{i}$
+\end_inset
+
+ be the random variable representing the number of steps in phase 
+\begin_inset Formula $i$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Combining all facts above, we have:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X\leq\sum_{i=1}^{\log_{\frac{4}{3}}n}\Theta(n*\frac{3}{4}^{i-1})X_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By expectation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X]=\sum_{i=1}^{\log_{\frac{4}{3}}n}\Theta(n*\frac{3}{4}^{i-1})\mathbb{E}[X_{i}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+X_{i}\leq\mathcal{G}(\frac{1}{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X_{i}]\leq2
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathbb{E}[X]\leq2\Theta(n)\sum_{i=1}^{\infty}\frac{3}{4}^{i-1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=8\Theta(n)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\Theta(n)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

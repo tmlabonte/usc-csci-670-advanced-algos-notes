@@ -1,0 +1,1807 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Fibonacci Heaps
+\end_layout
+
+\begin_layout Section
+Basic Heaps
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $n$
+\end_inset
+
+ be the total number of nodes and 
+\begin_inset Formula $m$
+\end_inset
+
+ the total number of edges in a graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+ which is represented by a heap 
+\begin_inset Formula $h$
+\end_inset
+
+.
+ Heaps are an implementation for priority queues which satisfy the following
+ properties:
+\end_layout
+
+\begin_layout Enumerate
+Must be a complete binary tree (giving us useful 
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+ properties)
+\end_layout
+
+\begin_layout Enumerate
+Must satisfy the Heap Property: for every node 
+\begin_inset Formula $v$
+\end_inset
+
+ with children 
+\begin_inset Formula $c$
+\end_inset
+
+, priority
+\begin_inset Formula $(v)\leq$
+\end_inset
+
+ priority
+\begin_inset Formula $(c)$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Causes the element of least priority to be the root of the tree
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+Basics heaps are pretty good, but the algorithm can be improved.
+ A heap must support the following operations, with the noted standard and
+ desired runtimes.
+ Heaps can also be used to implement Prim's and Dijkstra's Algorithms, and
+ the efficiency of the heap affects the runtime of the algorithm.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Operation
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Standard runtime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Desired runtime
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+insert
+\begin_inset Formula $(h,v)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(1)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+findMin
+\begin_inset Formula $(h)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(1)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+removeMin
+\begin_inset Formula $(h)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+decrementPriority
+\begin_inset Formula $(h,v)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(1)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Prim's or Dijkstra's Algorithm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(m\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(m+n\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Binomial Heaps
+\end_layout
+
+\begin_layout Subsection
+Binomial Trees
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top" width="0pt">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Binomial Tree Number
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Graphic Representation
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $B_{0}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[every tree node/.style={draw,circle},     level distance=1.25cm
+,sibling distance=.5cm,      edge from parent path={(
+\backslash
+tikzparentnode) -- (
+\backslash
+tikzchildnode)}] 
+\backslash
+Tree        [.{ }  ]        
+\backslash
+end{tikzpicture}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $B_{1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[every tree node/.style={draw,circle},     level distance=1.25cm
+,sibling distance=.5cm,      edge from parent path={(
+\backslash
+tikzparentnode) -- (
+\backslash
+tikzchildnode)}] 
+\backslash
+Tree        [.{ }          [.{ }  ]]        
+\backslash
+end{tikzpicture}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $B_{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[every tree node/.style={draw,circle},     level distance=1.25cm
+,sibling distance=.5cm,      edge from parent path={(
+\backslash
+tikzparentnode) -- (
+\backslash
+tikzchildnode)}] 
+\backslash
+Tree                  [.{ }          [.{ }  [.{ } ]          ] [.{ } ]     
+    ]        [.{ }  [.{ } ]        ]         [.{ } ]      ]      [.{ }     
+   [.{ }  [.{ } ]        ] [.{ } ]       ]                      
+\backslash
+end{tikzpicture}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $B_{3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[every tree node/.style={draw,circle},     level distance=1.25cm
+,sibling distance=.5cm,      edge from parent path={(
+\backslash
+tikzparentnode) -- (
+\backslash
+tikzchildnode)}] 
+\backslash
+Tree        [.{ }          [.{ }          [.{ }  [.{ } ]          ] [.{ } ] 
+        ]        [.{ }  [.{ } ]        ]         [.{ } ]      ]      [.{ } 
+       [.{ }  [.{ } ]        ] [.{ } ]       ]       [.{ }          [.{ }  ]
+      ]      [.{ }  ]        
+\backslash
+end{tikzpicture}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $B_{k+1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[every tree node/.style={draw,circle},     level distance=1.25cm
+,sibling distance=.5cm,      edge from parent path={(
+\backslash
+tikzparentnode) -- (
+\backslash
+tikzchildnode)}] 
+\backslash
+Tree        [.{ } [.B0 ][.B1 ][.B2 ][....
+ ][.Bk ]]        
+\backslash
+end{tikzpicture}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $B_{k+1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[every tree node/.style={draw,circle},     level distance=1.25cm
+,sibling distance=.5cm,      edge from parent path={(
+\backslash
+tikzparentnode) -- (
+\backslash
+tikzchildnode)}] 
+\backslash
+Tree        [[.Bk ][.Bk ]]        
+\backslash
+end{tikzpicture}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It is evident that 
+\begin_inset Formula $\vert B_{k}\vert=2^{k}$
+\end_inset
+
+ nodes.
+ We define the rank of a binomial tree as equal to the degree of the root;
+ thus 
+\begin_inset Formula $rank(B_{k})=k$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Binomial Heaps
+\end_layout
+
+\begin_layout Standard
+Binomial heaps are similar to log-structured merge trees in that we will
+ combine multiple smaller data structures across various sizes, and merge
+ them together when they get too large.
+ A 
+\series bold
+binomial heap
+\series default
+ is a forest of binomial trees, all satisfying the heap property, with at
+ most one tree per rank.
+ With 
+\begin_inset Formula $n$
+\end_inset
+
+ total elements, restricting the number of trees per rank to one forces
+ the heap to contain 
+\begin_inset Formula $\leq\log n$
+\end_inset
+
+ trees.
+ Thus, we can find the minimum priority element in 
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+ time.
+ To preserve this property when adding new nodes, we define the following
+ operations:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top" width="40page%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Operation
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Worst-case runtime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+meld
+\begin_inset Formula $(h,h')$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Combines two binomial heaps into a single heap.
+ While there exists a rank 
+\begin_inset Formula $k$
+\end_inset
+
+ such that we have more than one rank 
+\begin_inset Formula $k$
+\end_inset
+
+ tree, merge two rank 
+\begin_inset Formula $k$
+\end_inset
+
+ trees into one 
+\begin_inset Formula $B_{k+1}$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+insert
+\begin_inset Formula $(h,x)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Create a 
+\begin_inset Formula $B_{0}$
+\end_inset
+
+ with value 
+\begin_inset Formula $x$
+\end_inset
+
+, then run meld.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+findMin
+\begin_inset Formula $(h)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Check all the roots in the binomial heap and return the root with lowest
+ value.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+removeMin
+\begin_inset Formula $(h)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Run findMin and remove the resultant root of rank 
+\begin_inset Formula $k$
+\end_inset
+
+, decomposing it into a new binomial heap of trees 
+\begin_inset Formula $B_{0},B_{1},\dots,B_{k-1}$
+\end_inset
+
+.
+ Then run meld with the original heap.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+However, the binomial heap does not provide us with any advantages over
+ our basic heap...unless we utilize amortized analysis.
+ We must recognize that the worst-case runtime of these operations will
+ occur very infrequently, as half the time when inserting there will be
+ no existing 
+\series bold
+
+\begin_inset Formula $B_{0}$
+\end_inset
+
+
+\series default
+, a quarter of the time there will be no existing 
+\begin_inset Formula $B_{1}$
+\end_inset
+
+, etc.
+\end_layout
+
+\begin_layout Subsection
+Amortized Analysis
+\end_layout
+
+\begin_layout Standard
+In order to perform amortized analysis on binomial heaps, we must first
+ make a few changes to its structure:
+\end_layout
+
+\begin_layout Enumerate
+Allow multiple trees of same rank
+\end_layout
+
+\begin_layout Enumerate
+Insert just adds a 
+\begin_inset Formula $B_{0}$
+\end_inset
+
+ and does not run meld
+\end_layout
+
+\begin_layout Enumerate
+Meld is called at the beginning of findMin
+\end_layout
+
+\begin_layout Standard
+Now it is trivial that insert runs in 
+\begin_inset Formula $\Theta(1)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+Meld runs in amortized 
+\begin_inset Formula $\Theta(1)$
+\end_inset
+
+ in a modified binomial heap.
+\end_layout
+
+\begin_layout Proof
+By credit scheme.
+\end_layout
+
+\begin_layout Proof
+Let the 
+\series bold
+meld credit invariant
+\series default
+ be that each binomial tree always has a meld credit.
+\end_layout
+
+\begin_layout Proof
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top" width="40page%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Operation
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Credit Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+insert
+\begin_inset Formula $(h,x)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Create a 
+\begin_inset Formula $B_{0}$
+\end_inset
+
+ with value 
+\begin_inset Formula $x$
+\end_inset
+
+, then give that tree a meld credit.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+removeMin
+\begin_inset Formula $(h)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Already does 
+\begin_inset Formula $\log n$
+\end_inset
+
+ work to find the correct root, so do another 
+\begin_inset Formula $\log n$
+\end_inset
+
+ to give each tree a meld credit.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+meld
+\begin_inset Formula $(h,h')$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2 
+\begin_inset Formula $B_{k}$
+\end_inset
+
+ merge, so spend 1 of their meld credits for the work done during merging
+ and pass the remaining onto the 
+\begin_inset Formula $B_{k+1}$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+Thus, the extra work done during the insert and removeMin operations pay
+ off during meld, keeping it amortized 
+\begin_inset Formula $\Theta(1)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Any sequence of 
+\begin_inset Formula $a$
+\end_inset
+
+ inserts and 
+\begin_inset Formula $b$
+\end_inset
+
+ removeMins, starting from an empty heap, is 
+\begin_inset Formula $\mathcal{O}(a+b\log n)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Fibonacci Heaps
+\end_layout
+
+\begin_layout Subsection
+DecrementPriority
+\end_layout
+
+\begin_layout Standard
+We have the insert runtime that we want, but we still haven't implemented
+ all our desired operations yet.
+ In order to develop a decrementPriority function, we will have to use a
+ Fibonacci heap.
+\end_layout
+
+\begin_layout Standard
+We introduce a function decrementPriority
+\begin_inset Formula $(h,x,\delta)$
+\end_inset
+
+ which decreases the cost of 
+\begin_inset Formula $x$
+\end_inset
+
+ in 
+\begin_inset Formula $h$
+\end_inset
+
+ by 
+\begin_inset Formula $\delta$
+\end_inset
+
+.
+ Using an array or hashtable, we can look up 
+\begin_inset Formula $x$
+\end_inset
+
+ in 
+\begin_inset Formula $\Theta(1)$
+\end_inset
+
+.
+ However, swapping 
+\begin_inset Formula $x$
+\end_inset
+
+ with its parents takes 
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+ like in a basic heap.
+ We want decrementPriority to run in amortized 
+\begin_inset Formula $\Theta(1)$
+\end_inset
+
+, so we will instead delink 
+\begin_inset Formula $x$
+\end_inset
+
+ and all its children from 
+\begin_inset Formula $h$
+\end_inset
+
+, creating a new tree.
+ We will also spend a unit of extra time to give that tree a credit.
+\end_layout
+
+\begin_layout Standard
+To prevent trees from becoming too flat, as soon as the second child of
+ a node 
+\begin_inset Formula $v$
+\end_inset
+
+ is delinked, 
+\begin_inset Formula $v$
+\end_inset
+
+ itself (along with remaining children) is also delinked and forms a new
+ tree (which may trigger further delinkage at the parents of 
+\begin_inset Formula $v$
+\end_inset
+
+, etc).
+ We introduce a new type of credit: the delinking credit.
+ When delinking 
+\begin_inset Formula $x$
+\end_inset
+
+, give a delinking credit to its parent 
+\begin_inset Formula $v$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $v$
+\end_inset
+
+ loses a second child, thus getting delinked itself, the delinking credit
+ pays for it.
+ Also, we give 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+ a meld credit, so the meld credit invariant holds.
+ Thus decrementPriority is constant work plus three credits.
+\end_layout
+
+\begin_layout Standard
+Let the 
+\series bold
+delinking credit invariant 
+\series default
+be that each node that has lost a child has both a meld and cutting credit.
+ This proves that decrementPriority is amortized 
+\begin_inset Formula $\Theta(1)$
+\end_inset
+
+ like we wanted.
+\end_layout
+
+\begin_layout Subsection
+FindMin
+\end_layout
+
+\begin_layout Standard
+Now we have the decrementPriority runtime we want, but we have to prove
+ that findMin is still 
+\begin_inset Formula $\Theta(\log n).$
+\end_inset
+
+ To do this, we'll show that the number of nodes in a tree grows exponentially
+ in its rank 
+\begin_inset Formula $k$
+\end_inset
+
+ similar to binomial heaps (wherein 
+\begin_inset Formula $\vert B_{k}\vert=2^{k}$
+\end_inset
+
+).
+ This forces there to be at most 
+\begin_inset Formula $\log n$
+\end_inset
+
+ trees, letting findMin run in 
+\begin_inset Formula $\Theta(\log n).$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let the 
+\begin_inset Formula $k^{th}$
+\end_inset
+
+ 
+\series bold
+Fibonacci tree
+\series default
+ 
+\begin_inset Formula $F_{k}$
+\end_inset
+
+ equal 
+\begin_inset Formula $B_{k}$
+\end_inset
+
+ with the smallest number of nodes possible after the delinkages of decrementPri
+ority.
+ To create 
+\begin_inset Formula $F_{k}$
+\end_inset
+
+, we start with 
+\series bold
+
+\begin_inset Formula $B_{k}$
+\end_inset
+
+ 
+\series default
+and remove its 
+\begin_inset Formula $B_{k-1}$
+\end_inset
+
+ subtree, then recursively transform the rest of its subtrees into their
+ respective 
+\begin_inset Formula $F_{k}$
+\end_inset
+
+.
+ Then, a 
+\series bold
+Fibonacci heap
+\series default
+ is a forest of Fibonacci trees.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fibonacci Tree Number
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Graphic Representation
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $F_{0}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[every tree node/.style={draw,circle},     level distance=1.25cm
+,sibling distance=.5cm,      edge from parent path={(
+\backslash
+tikzparentnode) -- (
+\backslash
+tikzchildnode)}] 
+\backslash
+Tree        [.{ }  ]        
+\backslash
+end{tikzpicture}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $F_{1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[every tree node/.style={draw,circle},     level distance=1.25cm
+,sibling distance=.5cm,      edge from parent path={(
+\backslash
+tikzparentnode) -- (
+\backslash
+tikzchildnode)}] 
+\backslash
+Tree        [.{ }  ]        
+\backslash
+end{tikzpicture}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $F_{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[every tree node/.style={draw,circle},     level distance=1.25cm
+,sibling distance=.5cm,      edge from parent path={(
+\backslash
+tikzparentnode) -- (
+\backslash
+tikzchildnode)}] 
+\backslash
+Tree        [.{ } [.{ } ]]        
+\backslash
+end{tikzpicture}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $F_{3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[every tree node/.style={draw,circle},     level distance=1.25cm
+,sibling distance=.5cm,      edge from parent path={(
+\backslash
+tikzparentnode) -- (
+\backslash
+tikzchildnode)}] 
+\backslash
+Tree        [.{ } [.{ } ][.{ } ]]        
+\backslash
+end{tikzpicture}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $F_{4}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}[every tree node/.style={draw,circle},     level distance=1.25cm
+,sibling distance=.5cm,      edge from parent path={(
+\backslash
+tikzparentnode) -- (
+\backslash
+tikzchildnode)}] 
+\backslash
+Tree        [.{ } [.{ } ][.{ } ][.{ } [.{ } ]]]        
+\backslash
+end{tikzpicture}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vert F_{k+2}\vert=1+\sum_{i=0}^{k}\vert F_{i}\vert
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=1+F_{0}+F_{1}+\dots+F_{k}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+F_{k+3}=1+F_{0}+F_{1}+\dots+F_{k}+F_{k+1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+F_{k+3}-F_{k+2}=F_{k+1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus 
+\begin_inset Formula $F_{k+3}=F_{k+2}+F_{k+1}$
+\end_inset
+
+, and since 
+\begin_inset Formula $\vert F_{0}\vert=\vert F_{1}\vert=1$
+\end_inset
+
+, this is the definition of Fibonacci numbers.
+ Because of that, we can say 
+\begin_inset Formula $\vert F_{k}\vert\geq\phi^{k-2}$
+\end_inset
+
+ where 
+\begin_inset Formula $\phi\approx1.618$
+\end_inset
+
+ is the golden ratio.
+\end_layout
+
+\begin_layout Standard
+This proves that Fibonacci trees grow exponentially in their rank.
+ There are at most 
+\begin_inset Formula $\log_{\phi}n$
+\end_inset
+
+ different ranks, so findMin must take 
+\begin_inset Formula $\Theta(\log n)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Section
+Matroids
+\end_layout
+
+\begin_layout Standard
+A 
+\series bold
+matroid
+\series default
+ is an abstract set-theoretical construct which generalizes the scenarios
+ in which greedy algorithms work.
+ A matroid is a set system 
+\begin_inset Formula $(E,\mathcal{I})$
+\end_inset
+
+ such that 
+\begin_inset Formula $\mathcal{I}\subseteq2^{E}$
+\end_inset
+
+, with the following properties:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\emptyset\in\mathcal{I}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $S\in\mathcal{I},S'\in S,$
+\end_inset
+
+then 
+\begin_inset Formula $S'\in\mathcal{I}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $S,S'\in\mathcal{I},\vert S\vert<\vert S'\vert,$
+\end_inset
+
+ then there exists an 
+\begin_inset Formula $e\in S'\setminus S$
+\end_inset
+
+ such that 
+\begin_inset Formula $S\cup\{e\}\in\mathcal{I}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The last of these is called the 
+\series bold
+exchange property
+\series default
+, and is the most important for the correctness of greedy algorithms.
+\end_layout
+
+\end_body
+\end_document

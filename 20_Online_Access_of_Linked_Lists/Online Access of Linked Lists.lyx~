@@ -1,0 +1,352 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Online Access of Linked Lists
+\end_layout
+
+\begin_layout Section
+Online Access of Linked Lists (Sleator and Tarjan 1985)
+\end_layout
+
+\begin_layout Subsection
+Preliminaries
+\end_layout
+
+\begin_layout Standard
+One important application of online algorithms is in self-adjusting data
+ structures like splay trees and cache.
+ Given a linked list of 
+\begin_inset Formula $n$
+\end_inset
+
+ items, we receive a sequence 
+\begin_inset Formula $\sigma(1),\dots,\sigma(m)$
+\end_inset
+
+ of accesses to items with 
+\begin_inset Formula $m$
+\end_inset
+
+ a priori unknown.
+ If 
+\begin_inset Formula $\sigma(t)$
+\end_inset
+
+ is in position 
+\begin_inset Formula $i$
+\end_inset
+
+ in the linked list, we pay 
+\begin_inset Formula $i$
+\end_inset
+
+ for finding it because we must linear search to it.
+ Subsequently, we can move 
+\begin_inset Formula $t$
+\end_inset
+
+ forward in the list for free if we wish, and we can also swap any two adjacent
+ elements (other than 
+\begin_inset Formula $t$
+\end_inset
+
+) at a cost of one per swap.
+ Our goal is to approximately minimize total cost.
+\end_layout
+
+\begin_layout Standard
+Some reasonable heuristics include:
+\end_layout
+
+\begin_layout Itemize
+FC (frequency count): Keep the elements sorted by the number of accesses
+ so far.
+\end_layout
+
+\begin_layout Itemize
+Static ordering: A possibly optimal static ordering with hindsight allowed.
+\end_layout
+
+\begin_layout Itemize
+MTF (move to front): When 
+\begin_inset Formula $t$
+\end_inset
+
+ is accessed, move it all the way to the front.
+\end_layout
+
+\begin_layout Itemize
+TRANS (transposition): Move 
+\begin_inset Formula $t$
+\end_inset
+
+ one element forward when accessed.
+\end_layout
+
+\begin_layout Itemize
+Spectrum between MTF and TRANS (move 
+\begin_inset Formula $t$
+\end_inset
+
+ two elements forward, move 
+\begin_inset Formula $t$
+\end_inset
+
+ half the distance to the front, etc).
+\end_layout
+
+\begin_layout Standard
+Of these heuristics, only one has nice guarantees.
+\end_layout
+
+\begin_layout Subsection
+Initial Bounds
+\end_layout
+
+\begin_layout Standard
+For all algorithms on a sequence length 
+\begin_inset Formula $k$
+\end_inset
+
+, we know that their cost must be 
+\begin_inset Formula $\leq kn$
+\end_inset
+
+ – the upper bound occurs when the last element in the linked list appears
+ in every request.
+ Furthermore we know that the cost of OPT is 
+\begin_inset Formula $\geq k$
+\end_inset
+
+, because it could possibly request the first element every time.
+ So the upper bound on the competitive ratio is 
+\begin_inset Formula $n$
+\end_inset
+
+, but we really want the algorithm to be constant competitive.
+ We'll study several heuristics to see that they are 
+\begin_inset Formula $n$
+\end_inset
+
+ or 
+\begin_inset Formula $\frac{n}{2}$
+\end_inset
+
+ competitive.
+\end_layout
+
+\begin_layout Standard
+For FC, we could receive an input which accesses the first element 
+\begin_inset Formula $t$
+\end_inset
+
+ times, the second 
+\begin_inset Formula $t-1$
+\end_inset
+
+, and so on, accessing the last element 
+\begin_inset Formula $t-(n-1)$
+\end_inset
+
+ times.
+ Then, the cost is 
+\begin_inset Formula $\geq\frac{n}{2}*n*(t-(n-1))\approx\frac{n^{2}t-n^{3}}{2}$
+\end_inset
+
+.
+ In this case, OPT would have cost 
+\begin_inset Formula $n^{2}-tn$
+\end_inset
+
+.
+ Thus the competitive ratio would be:
+\begin_inset Formula 
+\[
+\lim_{t\rightarrow\infty}\frac{n^{2}t-n^{3}}{2(n^{2}+tn)}=\frac{n}{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Static is exactly the same.
+ For TRANS, we could receive an input which alternates accessing element
+ 
+\begin_inset Formula $n$
+\end_inset
+
+ and element 
+\begin_inset Formula $n-1$
+\end_inset
+
+.
+ They would just infinitely switch places, so there would be a cost 
+\begin_inset Formula $n$
+\end_inset
+
+ for each iteration, while OPT would have a cost of 1 per iteration.
+ Thus, we can have arbitrarily long sequences with ratio 
+\begin_inset Formula $\Theta(n)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+By process of elimination, MTF must be the heuristic to give good guarantees.
+ We'll prove that it is 2-competitive.
+\end_layout
+
+\begin_layout Section
+MTF Competitive Analysis
+\end_layout
+
+\begin_layout Theorem
+MTF is 2-competitive for any sequence 
+\begin_inset Formula $\sigma$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\forall\sigma,c_{MTF}(\sigma)\leq2*c_{OPT}(\sigma)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+This proof would be easy if we could show that in each step 
+\begin_inset Formula $i$
+\end_inset
+
+, 
+\begin_inset Formula $c_{MTF}(i)\leq2*c_{OPT}(i)$
+\end_inset
+
+.
+ However, this cannot work because it is possible for OPT to invest cost
+ in early steps to make later items cheaper by moving certain items around.
+ Thus, we at least will need amortized analysis.
+\end_layout
+
+\begin_layout Proof
+Define a 
+\series bold
+potential function
+\series default
+ 
+\begin_inset Formula $\Phi(i)$
+\end_inset
+
+ that measures how similar the MTF list and OPT list are at any step 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ Notice that 
+\begin_inset Formula $\Phi(i)=0$
+\end_inset
+
+ means that the lists are identical.
+ Then, let 
+\begin_inset Formula $c'_{MTF}(i)=c_{MTF}(i)+\Phi(i+1)-\Phi(i)$
+\end_inset
+
+.
+ In other words, we get bonus points for making the MTF list more similar
+ to the OPT list, and extra costs for making them different.
+\end_layout
+
+\end_body
+\end_document

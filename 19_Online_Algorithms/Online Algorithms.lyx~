@@ -1,0 +1,703 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Online Algorithms
+\end_layout
+
+\begin_layout Section
+Intro to Online Algorithms
+\end_layout
+
+\begin_layout Standard
+An 
+\series bold
+online algorithm
+\series default
+ is used when irrevocable decisions must be made with only partial knowledge
+ of the input (often because the rest of the input hasn't arrived yet).
+ With approximation algorithms, the algorithm outputs suboptimal solutions
+ because there are not enough resources to solve the problem optimally (usually
+ time because the problem is 
+\series bold
+NP
+\series default
+-hard).
+ In contrast, online algorithms output suboptimal solutions because it doesn't
+ know what inputs may occur in the future.
+\end_layout
+
+\begin_layout Subsection
+Areas of Interest
+\end_layout
+
+\begin_layout Itemize
+Profit-maximizing job selection: jobs arrive over time with value unknown
+\end_layout
+
+\begin_layout Itemize
+Data structure management and caching: requests for items arrive over time
+ with future requests unknown
+\end_layout
+
+\begin_layout Itemize
+Machine scheduling: jobs arrive over time with future durations unknown
+\end_layout
+
+\begin_layout Itemize
+Routing of network traffic: packets/cars arrive over time with future network
+ conditions unknown
+\end_layout
+
+\begin_layout Itemize
+Multi-robot routing: tasks arrive over time with future task locations unknown
+\end_layout
+
+\begin_layout Subsection
+Competitive Analysis
+\end_layout
+
+\begin_layout Standard
+Let OPT be the optimum solution for the whole input with full hindsight.
+ Then, the analogy to the approximation ratio of approximation algorithms
+ is the 
+\series bold
+competitive ratio
+\series default
+.
+\end_layout
+
+\begin_layout Definition
+Competitive ratio: An online algorithm 
+\begin_inset Formula $A$
+\end_inset
+
+ is 
+\begin_inset Formula $c$
+\end_inset
+
+-competitive is there is some 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ such that 
+\begin_inset Formula $\text{cost}(A)\leq c*\text{cost}(\text{OPT})+\alpha$
+\end_inset
+
+.
+ 
+\begin_inset Formula $A$
+\end_inset
+
+ is 
+\series bold
+strictly
+\series default
+ 
+\begin_inset Formula $c$
+\end_inset
+
+-competitive if this condition holds with 
+\begin_inset Formula $\alpha\leq0$
+\end_inset
+
+.
+ The competitive ratio of 
+\begin_inset Formula $A$
+\end_inset
+
+ is the infimum of 
+\begin_inset Formula $c$
+\end_inset
+
+ such that 
+\begin_inset Formula $A$
+\end_inset
+
+ is 
+\begin_inset Formula $c$
+\end_inset
+
+-competitive.
+\end_layout
+
+\begin_layout Definition
+Online algorithm instances usur dely have multiple parameters where one
+ or more of them grows with time (like the number of jobs or requests) while
+ the others stay constant.
+ We would like 
+\begin_inset Formula $c$
+\end_inset
+
+ to not depend on the growing parameter – either 
+\begin_inset Formula $c$
+\end_inset
+
+ is constant or depends on a constant parameter.
+\end_layout
+
+\begin_layout Section
+The Surfboard Rental Problem
+\end_layout
+
+\begin_layout Standard
+Imagine that you've just moved to Los Angeles from the frozen wasteland
+ of Ithaca, NY and are excited to start surfing.
+ However, all is not well – it's shark attack season, and each day you go
+ surfing, a great white shark eats you with probability 
+\begin_inset Formula $p$
+\end_inset
+
+.
+ Because 
+\begin_inset Formula $p$
+\end_inset
+
+ can be nonzero, you don't know how many days 
+\begin_inset Formula $d$
+\end_inset
+
+ you'll be surfing until you get eaten.
+ If surfboards can be rented at cost 
+\begin_inset Formula $R$
+\end_inset
+
+ or purchased at cost 
+\begin_inset Formula $P>R$
+\end_inset
+
+ (and once purchased, it can be used forever for free), when is the optimal
+ time to purchase a surfboard?
+\end_layout
+
+\begin_layout Standard
+The offline algorithm here is trivial because we would know 
+\begin_inset Formula $d$
+\end_inset
+
+.
+ Thus, if 
+\begin_inset Formula $dR>P$
+\end_inset
+
+ we purchase a surfboard on day one; otherwise, we rent every day.
+ If we call the offline algorithm 
+\begin_inset Formula $A$
+\end_inset
+
+, it's clear that 
+\begin_inset Formula $\text{cost}(A)=\min(dR,P)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The online algorithm is more subtle, but rather elegant.
+ Notice that each possible online algorithm here is fully characterized
+ by the purchase time 
+\begin_inset Formula $t\in\{\mathbb{N}\cup\infty\}$
+\end_inset
+
+.
+ If we call the online algorithm which purchases at time 
+\begin_inset Formula $t$
+\end_inset
+
+ 
+\begin_inset Formula $B_{t}$
+\end_inset
+
+, it's clear that 
+\begin_inset Formula $\text{cost}(B_{t})=R(t-1)+P$
+\end_inset
+
+ if 
+\begin_inset Formula $t\leq d+1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For 
+\begin_inset Formula $t=\infty$
+\end_inset
+
+, the competitive ratio is 
+\begin_inset Formula $\infty$
+\end_inset
+
+; otherwise, the worst-case scenario is that we buy the surfboard on the
+ day we get eaten, so 
+\begin_inset Formula $d=t$
+\end_inset
+
+.
+ Then, we can rephrase 
+\begin_inset Formula $\text{cost}(B_{t})=R(d-1)+P$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\text{cost}(B_{t})}{\text{cost}(A)}=\frac{R(d-1)+P}{\min(dR,P)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\max(\frac{R(d-1)+P}{dR},\frac{R(d-1)+P}{P})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\max(1+\frac{P-R}{dR},1+\frac{R(d-1)}{P})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=1+\max(\frac{P-R}{dR},\frac{R(d-1)}{P})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Because 
+\begin_inset Formula $d=t$
+\end_inset
+
+ and we get to choose 
+\begin_inset Formula $t$
+\end_inset
+
+, we effectively get to choose 
+\begin_inset Formula $d$
+\end_inset
+
+.
+ Notice that the first term in the max decreases with 
+\begin_inset Formula $d$
+\end_inset
+
+, while the second term increases with 
+\begin_inset Formula $d$
+\end_inset
+
+.
+ So, to minimize the maximum, we set them equal.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{P-R}{dR}=\frac{R(d-1)}{P}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+dR(dR-R)=P(P-R)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+These are of the same form, so:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+dR=P
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+d=\frac{P}{R}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore, we should purchase the surfboard on the day when the cumulative
+ rental cost reaches the purchase cost.
+ For example, if it costs $20 to rent and $200 to purchase, we rent for
+ 10 days and purchase on the 11th day.
+ Then, to determine 
+\begin_inset Formula $c$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\text{cost}(B_{t})}{\text{cost}(A)}=1+\frac{P-R}{dR}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=1+\frac{P-R}{P}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=2-\frac{R}{P}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus 
+\begin_inset Formula $c=2$
+\end_inset
+
+ and 
+\begin_inset Formula $\alpha=-\frac{R}{P}$
+\end_inset
+
+, so 
+\begin_inset Formula $B_{t}$
+\end_inset
+
+ is better than 2-competitive.
+\end_layout
+
+\begin_layout Remark
+For a deterministic algorithm, we can analyze as though the adversary observes
+ the algorithm in action – in fact, it can predict the full behavior, and
+ design the entire input ahead of time.
+ So if the shark was really smart and could do these calculations, he could
+ choose to eat us on the day we buy our surfboard.
+ The solution to this is randomization – it lowers the predictablity of
+ the algorithm, and can allow better competitive ratios.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+Competitive worst-case analysis is only one way of analyzing online algorithms.
+ One could also make statistical assumptions about the input: for example,
+ if we knew the distribution of shark attack probabilities, we could design
+ an algorithm which takes advantage of that information.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+There are several variations of the surfboard rental problem (sometimes
+ called the ski rental problem).
+ For example, the Bahncard problem reflects the German metro system, where
+ one may purchase a membership card for a fee 
+\begin_inset Formula $F$
+\end_inset
+
+ and receive an 
+\begin_inset Formula $N\%$
+\end_inset
+
+ discount on all metro rides for a year.
+ However, all these variations can be reduced to the basic rental problem.
+\end_layout
+
+\begin_layout Section
+The Porta-Potty Problem
+\end_layout
+
+\begin_layout Subsection
+The Basic Porta-Potty Problem
+\end_layout
+
+\begin_layout Standard
+Imagine you're at Coachella and you really, really need to pee.
+ There are 100 porta-potties at the concert, with varying levels of cleanliness
+ 
+\begin_inset Formula $c_{i}$
+\end_inset
+
+.
+ The 
+\begin_inset Formula $c_{i}$
+\end_inset
+
+ can be chosen by an adversary, but the order in which the porta-potties
+ appear is uniformly random.
+ We want to maximize our probability of picking the cleanest porta-potty
+ (or equivalently, picking the porta-potty which gives us the highest expected
+ value of cleanliness), but we can only check porta-potty cleanliness one
+ at a time, and our decision is irrevocable.
+\end_layout
+
+\begin_layout Standard
+To succeed with probability 
+\begin_inset Formula $\frac{1}{4}$
+\end_inset
+
+, we without exception reject the first half of the input, but remember
+ the cleanest porta-potty we saw.
+ This effectively calibrates our algorithm.
+ Then, while checking the second half, we choose the first porta-potty with
+ higher cleanliness than the one we remember.
+\end_layout
+
+\begin_layout Standard
+Failure 
+\begin_inset Formula $(\frac{1}{2}):$
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+The cleanest porta-potty is in the first half we checked.
+\end_layout
+
+\begin_layout Standard
+Failure 
+\begin_inset Formula $(\frac{1}{4}):$
+\end_inset
+
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+Both the second-cleanest and the cleanest porta-potties are in the second
+ half we checked.
+\end_layout
+
+\begin_layout Standard
+Success 
+\begin_inset Formula $(\frac{1}{4})$
+\end_inset
+
+: 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+The second-cleanest porta-potty is in the first half we checked, and the
+ cleanest porta-potty is in the second half.
+\end_layout
+
+\begin_layout Standard
+To succeed with a probability 
+\begin_inset Formula $\frac{1}{e}$
+\end_inset
+
+, we reject the first 
+\begin_inset Formula $\frac{1}{e}$
+\end_inset
+
+ of the input and follow the algorithm for the remainder.
+ This problem is also called the 
+\begin_inset Quotes eld
+\end_inset
+
+secretary model
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Generalization: The Matroid Porta-Potty Problem
+\end_layout
+
+\begin_layout Standard
+Given a matroid on 
+\begin_inset Formula $n$
+\end_inset
+
+ elements, we may include any independent set of elements.
+ Values are adversarially assigned to elements and revealed in uniformly
+ random order.
+ When we see an element, we may irrevocably choose to include it.
+ It is an open question whether there is a constant-competitive algorithm
+ to solve this problem.
+\end_layout
+
+\end_body
+\end_document

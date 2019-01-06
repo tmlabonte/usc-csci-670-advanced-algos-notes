@@ -1,0 +1,662 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Dynamic Programming
+\end_layout
+
+\begin_layout Section
+Dynamic Programming
+\end_layout
+
+\begin_layout Standard
+Sometimes, problems can be easily solved with recursion, but that results
+ in an excess of repeated work.
+ In order to eliminate wasted computation, one can utilize 
+\series bold
+memoization
+\series default
+: storing sub-solutions during recursion problems and accessing them as
+ necessary.
+ If one computes a memoization backwards (i.e., using an iterative bottom-up
+ approach rather than a recursive top-down approach) it is called 
+\series bold
+dynamic programming
+\series default
+, and is an elegant and simple solution to many complex problems.
+\end_layout
+
+\begin_layout Standard
+Dynamic programming can only solve problems in which the optimum is recursive
+ – that is, the optimum of layer 
+\begin_inset Formula $i$
+\end_inset
+
+ is dependent upon the optimum of layer 
+\begin_inset Formula $i+1$
+\end_inset
+
+.
+ A common example is: 
+\begin_inset Formula 
+\[
+OPT(i,j)=max(OPT(i+1,j),OPT(i+1,j+1))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Weighted Interval Scheduling
+\end_layout
+
+\begin_layout Standard
+Imagine you have to choose between going to several parties on the same
+ night, where each one has a variable amount of fun involved.
+ In other words, given a set of intervals 
+\begin_inset Formula $I$
+\end_inset
+
+ with values 
+\begin_inset Formula $v_{i}\geq0$
+\end_inset
+
+, find a subset of pairwise disjoint intervals of maximum total value.
+ This problem is trivial if all 
+\begin_inset Formula $v_{i}=1$
+\end_inset
+
+, because then greedy algorithms would apply; however, we must be more clever
+ to solve the general case.
+\end_layout
+
+\begin_layout Standard
+For any interval 
+\begin_inset Formula $i$
+\end_inset
+
+, 
+\begin_inset Formula $OPT$
+\end_inset
+
+ either includes it or excludes it.
+ Either way, 
+\begin_inset Formula $OPT$
+\end_inset
+
+ includes the optimum subset of remaining intervals (excluding those that
+ overlap with 
+\begin_inset Formula $i$
+\end_inset
+
+ if it was included).
+ However, this resultant set of intervals can be very complex, so we must
+ instead branch over a carefully chosen interval – the one that starts last.
+\end_layout
+
+\begin_layout Standard
+Assume the intervals 
+\begin_inset Formula $i=(l,r)$
+\end_inset
+
+ are sorted by 
+\begin_inset Formula $r$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $j$
+\end_inset
+
+ be the last interval in this order.
+ We know that if 
+\begin_inset Formula $j$
+\end_inset
+
+ is excluded, 
+\begin_inset Formula $OPT(j)=OPT(j-1)$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $j$
+\end_inset
+
+ is included, then let 
+\begin_inset Formula $p(j)$
+\end_inset
+
+ be the longest interval such that 
+\begin_inset Formula $r_{p(j)}<l_{j}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $OPT(j)=v_{j}+OPT(p(j))$
+\end_inset
+
+.
+ In other words:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+OPT(j)=max(OPT(j-1),v_{j}+OPT(p(j))\text{ with }OPT(0)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Knapsack Problem
+\end_layout
+
+\begin_layout Standard
+Imagine you are robbing a jewelry store, and each item of jewelry has a
+ different value, but some are heavier than others.
+ How much total value of jewelry can you steal such that you can still carry
+ them all during your getaway? In other words: given 
+\begin_inset Formula $n$
+\end_inset
+
+ items with integer weights 
+\begin_inset Formula $w_{i}\geq0$
+\end_inset
+
+ and values 
+\begin_inset Formula $v_{i}\geq0$
+\end_inset
+
+, and a total weight bound 
+\begin_inset Formula $W$
+\end_inset
+
+, select a set 
+\begin_inset Formula $S$
+\end_inset
+
+ of items with 
+\begin_inset Formula $\sum_{i\in S}w_{i}\leq W$
+\end_inset
+
+ that maximizes 
+\begin_inset Formula $\sum_{i\in S}v_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+As a first thought, we might say that 
+\begin_inset Formula $OPT(i)$
+\end_inset
+
+ is the optimal solution for items 
+\begin_inset Formula $1\rightarrow i-1$
+\end_inset
+
+, then we decide whether to add 
+\begin_inset Formula $i$
+\end_inset
+
+ to the knapsack.
+ However, this doesn't address our variable weight bound 
+\series bold
+
+\begin_inset Formula $b$
+\end_inset
+
+
+\series default
+.
+ In dynamic programming problems, it often helps to introduce new parameters
+ insofar as it simplifies the final solution.
+ Thus we say that if 
+\begin_inset Formula $w_{i}\leq b$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+OPT(i,b)=max(OPT(i-1,b),v_{i}+OPT(i-1,b-w_{i}))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And if 
+\begin_inset Formula $w_{i}>b$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+OPT(i,b)=OPT(i-1,b)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In algorithm form, we have:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+for 
+\begin_inset Formula $b\leq W$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $a[0][b]=0$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\begin_layout Algorithm (num)
+for 
+\begin_inset Formula $i\leq n$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+for 
+\begin_inset Formula $b\leq W$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+if 
+\begin_inset Formula $w_{i}>b$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $a[i][b]=a[i-1][b]$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+else
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* 
+\begin_inset Formula $a[i][b]=max(a[i-1][b],v_{i}+a[i-1][b-w_{i}])$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endif
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm (num)
+endfor
+\end_layout
+
+\begin_layout Algorithm (num)
+* return 
+\begin_inset Formula $a[n][W]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Knapsack Problem
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The runtime of this algorithm is evidently 
+\begin_inset Formula $\Theta(nW)$
+\end_inset
+
+, which looks polynomial at first, but is actually 
+\series bold
+pseudo-polynomial
+\series default
+ (i.e., it would be polynomial if the input was written down in unary).
+ The runtime depends on the amount of bits needed to store the input data.
+ However, this can be approximated in true polynomial time by reducing the
+ 
+\begin_inset Formula $w$
+\end_inset
+
+-space by rounding the weights to restrict them to a more manageable range.
+\end_layout
+
+\begin_layout Section
+Related Problems
+\end_layout
+
+\begin_layout Subsection
+Subset Sum
+\end_layout
+
+\begin_layout Standard
+Given numbers 
+\begin_inset Formula $a_{1},\dots,a_{n}$
+\end_inset
+
+ and a maximum weight 
+\begin_inset Formula $W$
+\end_inset
+
+, is there a subset 
+\begin_inset Formula $S$
+\end_inset
+
+ such that 
+\begin_inset Formula $\sum_{i\in S}a_{i}=W$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+Reduction to knapsack: set 
+\begin_inset Formula $w_{i}=v_{i}=a_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Partition
+\end_layout
+
+\begin_layout Standard
+Given numbers 
+\begin_inset Formula $a_{1},\dots,a_{n}$
+\end_inset
+
+, is there a subset 
+\begin_inset Formula $S$
+\end_inset
+
+ with 
+\begin_inset Formula $\sum_{i\in S}a_{i}=\sum_{i\notin S}a_{i}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+Reduction to subset sum: 
+\begin_inset Formula $W=\frac{1}{2}\sum_{i}a_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Independent Set
+\end_layout
+
+\begin_layout Standard
+Given an undirected graph 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+, find the maximum size subset 
+\begin_inset Formula $S\in V$
+\end_inset
+
+ such that no two 
+\begin_inset Formula $v\in S$
+\end_inset
+
+ share an edge.
+ This problem is often used to solve pairwise constraint problems, and is
+ NP-hard but solvable in linear time for trees.
+ Greedy algorithms don't work here, so we must use dynamic programming.
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $Y$
+\end_inset
+
+ signify that 
+\begin_inset Formula $v$
+\end_inset
+
+ is included in 
+\begin_inset Formula $OPT$
+\end_inset
+
+, and let 
+\begin_inset Formula $N$
+\end_inset
+
+ signify that 
+\begin_inset Formula $v$
+\end_inset
+
+ is not included in 
+\begin_inset Formula $OPT$
+\end_inset
+
+.
+ Then, 
+\begin_inset Formula $OPT(v,Y/N)$
+\end_inset
+
+ is the maximum number of nodes in an independent set rooted at 
+\begin_inset Formula $v$
+\end_inset
+
+.
+ We solve the problem with the follwing recurrance relation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+OPT(\emptyset,Y/N)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+OPT(v,Y)=1+\sum_{children}OPT(v_{i},N)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+OPT(v,N)=\sum_{children}max(OPT(v_{i},Y),OPT(v_{i},N))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In other words, if we include 
+\begin_inset Formula $v$
+\end_inset
+
+, the maximum number of nodes is increased by one, but we cannot include
+ 
+\begin_inset Formula $v$
+\end_inset
+
+'s children.
+ If 
+\begin_inset Formula $v$
+\end_inset
+
+ is excluded, the maximum does not change, and we can choose whether to
+ include each of its children.
+\end_layout
+
+\end_body
+\end_document

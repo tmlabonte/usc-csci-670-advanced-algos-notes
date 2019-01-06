@@ -1,0 +1,909 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Linear Programming
+\end_layout
+
+\begin_layout Section
+Intro to Linear Programming
+\end_layout
+
+\begin_layout Subsection
+The Linear Programming Problem
+\end_layout
+
+\begin_layout Standard
+LINEAR PROGRAMMING (LP): Given a matrix 
+\begin_inset Formula $A\in\mathbb{R}^{n\times m}$
+\end_inset
+
+ and a vector 
+\begin_inset Formula $\vec{b}\in\mathbb{R}^{n}$
+\end_inset
+
+, find 
+\begin_inset Formula $\vec{x}\in\mathbb{R}^{m}$
+\end_inset
+
+ with 
+\begin_inset Formula $A\cdot\vec{x}\leq\vec{b}$
+\end_inset
+
+ (keep in mind that the 
+\begin_inset Formula $\leq$
+\end_inset
+
+ operation for vectors is coordinate-wise).
+ Visually:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{11}x_{1}+a_{12}x_{2}+\dots+a_{1m}x_{m}\leq b_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{21}x_{1}+a_{22}x_{2}+\dots+a_{2m}x_{m}\leq b_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vdots
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{n1}x_{1}+a_{n2}x_{2}+\dots+a_{nm}x_{m}\leq b_{n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+While we define LP as having 
+\begin_inset Formula $\leq$
+\end_inset
+
+ constraints, notice that it allows for 
+\begin_inset Formula $\geq$
+\end_inset
+
+ and 
+\begin_inset Formula $=$
+\end_inset
+
+ constraints as well.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vec{a}\cdot\vec{x}\le b\iff(-\vec{a})\cdot\vec{x}\geq-b
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vec{a}\cdot\vec{x}\leq b,\vec{a}\cdot\vec{x}\geq b\iff\vec{a}\cdot\vec{x}=b
+\]
+
+\end_inset
+
+Thus, our LP algorithm will be at least as powerful as Gaussian elimination,
+ which can solve systems of just equality constraints.
+\end_layout
+
+\begin_layout Subsection
+Canonical Forms
+\end_layout
+
+\begin_layout Standard
+We can introduce an optimization constraint (maximizing or minimizing some
+ linear function 
+\begin_inset Formula $\vec{c}\cdot\vec{x}$
+\end_inset
+
+) which doesn't make the problem very much harder, and is much more useful
+ to us.
+ The two canonical LP forms are:
+\end_layout
+
+\begin_layout Standard
+(1).
+ Maximize 
+\begin_inset Formula $\vec{c}\cdot\vec{x}$
+\end_inset
+
+ subject to 
+\begin_inset Formula $A\cdot\vec{x}\leq\vec{b}$
+\end_inset
+
+ with 
+\begin_inset Formula $\vec{x}\geq0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+(2).
+ Minimize 
+\begin_inset Formula $\vec{c}\cdot\vec{x}$
+\end_inset
+
+ subject to 
+\begin_inset Formula $A\cdot\vec{x}\geq\vec{b}$
+\end_inset
+
+ with 
+\begin_inset Formula $\vec{x}\geq0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Computational Complexity
+\end_layout
+
+\begin_layout Theorem
+If there is a solution 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ to an LP, then there is one with a number of bits polynomial in 
+\begin_inset Formula $m,n,$
+\end_inset
+
+ and the number of bits in 
+\begin_inset Formula $\vec{c},\vec{b},$
+\end_inset
+
+and 
+\begin_inset Formula $A$
+\end_inset
+
+.
+ (Difficult proof studied in CS 675).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Theorem
+LP 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+NP
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+Certificate: A proposed 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Certifier: An algorithm which ensures 
+\begin_inset Formula $A\cdot\vec{x}$
+\end_inset
+
+ satisfies the inequality and 
+\begin_inset Formula $\vec{x}\geq0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Notice that it is possible for 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ to have exponentially many bits (and thus our certificate would not be
+ polynomially sized), but by Theorem 1, there will always be an 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ with polynomially many bits.
+\end_layout
+
+\begin_layout Theorem
+LP 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+co-NP
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+Proof by Duality (covered later this class).
+\end_layout
+
+\begin_layout Theorem
+LP 
+\begin_inset Formula $\in$
+\end_inset
+
+ 
+\series bold
+P
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+This is a difficult theorem due to Khachiyan and Karmarker in the 1980s;
+ the proof is covered in CS 675.
+\end_layout
+
+\begin_layout Subsection
+The Diet Problem
+\end_layout
+
+\begin_layout Standard
+The diet problem is the canonical example for LPs.
+ Let there be three important nutrients denoted protein, carbs, and vitamins
+ with requirements 
+\begin_inset Formula $r_{p},r_{c},r_{v}$
+\end_inset
+
+.
+ Furthermore, we have three key foods denoted chocolate, nachos, and ramen
+ with prices 
+\begin_inset Formula $\vec{p}=<p_{c},p_{n},p_{r}>$
+\end_inset
+
+.
+ We have a matrix 
+\begin_inset Formula $U_{c/n/r,p/c/v}$
+\end_inset
+
+ denoting the units of nutrients per unit of food, and our goal is to find
+ the minimum cost way to satisfy our dietary needs.
+ Let 
+\begin_inset Formula $\vec{x}=<x_{c},x_{n},x_{r}>$
+\end_inset
+
+ be the amount of each food we buy, then we have an LP:
+\end_layout
+
+\begin_layout Standard
+Minimize 
+\begin_inset Formula $\vec{p}\cdot\vec{x}$
+\end_inset
+
+ subject to 
+\begin_inset Formula $U\cdot\vec{x}\geq\vec{r}$
+\end_inset
+
+ with 
+\begin_inset Formula $\vec{x}\geq0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Oracles and You (or, how to solve an LP while blindfolded)
+\end_layout
+
+\begin_layout Standard
+It is possible to solve an LP with exponentially or even infinitely many
+ constraints in polynomial time.
+ That is, we can solve an LP 
+\emph on
+without looking at all the constraints
+\emph default
+.
+ Sound too good to be true? Well, it is: but not if we have oracles.
+\end_layout
+
+\begin_layout Standard
+An 
+\series bold
+oracle
+\series default
+ is a polynomial time function which gives us specific information about
+ our LP, which we can then use to solve an LP in polynomial time.
+ Khachiyan and Karmarkar discovered we need two oracles for this to be possible:
+\end_layout
+
+\begin_layout Standard
+(1).
+ Membership oracle: Given a vector 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+, decides in polynomial time if 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ violates any constraint.
+\end_layout
+
+\begin_layout Standard
+(2).
+ Separation oracle: Given a vector 
+\begin_inset Formula $\vec{x}$
+\end_inset
+
+ that violates at least one constraint, returns in polynomial time an arbitrary
+ violated constraint.
+\end_layout
+
+\begin_layout Theorem
+If we have a membership oracle and a separation oracle, we can solve any
+ LP in polynomial time.
+\end_layout
+
+\begin_layout Section
+Max-Flow LPs
+\end_layout
+
+\begin_layout Subsection
+Max-Flow LP
+\end_layout
+
+\begin_layout Standard
+Max-flow can be cleverly represented as a linear program.
+ If we have a flow 
+\begin_inset Formula $f_{e}$
+\end_inset
+
+ on each edge 
+\begin_inset Formula $e$
+\end_inset
+
+, then our LP is:
+\end_layout
+
+\begin_layout Standard
+Maximize
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{e\text{ out of }s}f_{e}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+subject to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+f_{e}\leq c_{e} & \forall e\\
+\sum_{e\text{ into }v}f_{e}=\sum_{e\text{ out of }v}f_{e} & \forall v\neq s,t\\
+f_{e}\geq0 & \forall e
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Multi-Commodity Flow
+\end_layout
+
+\begin_layout Standard
+MULTI-COMMODITY FLOW: Given source-sink pairs 
+\begin_inset Formula $(s_{i},t_{i})$
+\end_inset
+
+ with demands 
+\begin_inset Formula $d_{i}$
+\end_inset
+
+, edge capacities 
+\begin_inset Formula $c_{e}$
+\end_inset
+
+, is it possible to send 
+\begin_inset Formula $d_{i}$
+\end_inset
+
+ units of flow from each 
+\begin_inset Formula $s_{i}$
+\end_inset
+
+ to its corresponding 
+\begin_inset Formula $t_{i}$
+\end_inset
+
+ without violating any capacity constraints with the joint flows?
+\end_layout
+
+\begin_layout Standard
+Linear programming is, as far as anyone knows, the only way to solve multi-commo
+dity flow.
+ Let 
+\begin_inset Formula $f_{e,i}$
+\end_inset
+
+ represent the amount of flow of commodity 
+\begin_inset Formula $i$
+\end_inset
+
+ on each edge 
+\begin_inset Formula $e$
+\end_inset
+
+.
+ Then, the LP is:
+\end_layout
+
+\begin_layout Standard
+Satisfy the constraints:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+\sum_{e\text{ into }t_{i}}f_{e,i}\geq d_{i} & \forall i\\
+\sum_{e\text{ into }v}f_{e,i}=\sum_{e\text{ out of }v}f_{e,i} & \forall i,v\neq s_{i},t_{i}\\
+\sum_{i}f_{e,i}\leq c_{e} & \forall e,i\\
+f_{e,i}\geq0 & \forall e,i
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Dualism
+\end_layout
+
+\begin_layout Subsection
+Lower Bounds on LP Solutions
+\end_layout
+
+\begin_layout Standard
+Suppose we want to minimize 
+\begin_inset Formula $\vec{c}\cdot\vec{x}$
+\end_inset
+
+ subject to 
+\begin_inset Formula $A\vec{x}\geq\vec{b}$
+\end_inset
+
+ with 
+\begin_inset Formula $\vec{x}\geq0$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+For any 
+\begin_inset Formula $\{\alpha_{1},\alpha_{2},\dots,\alpha_{n}\}$
+\end_inset
+
+, if 
+\begin_inset Formula $\sum\alpha_{i}a_{ij}\leq c_{j}\text{ }\forall j$
+\end_inset
+
+, then 
+\begin_inset Formula $\sum\alpha_{i}\cdot b_{i}$
+\end_inset
+
+ is a lower bound on the optimal solution of the LP.
+ To get the best lower bound, we maximize 
+\begin_inset Formula $\sum_{i}a_{i}\cdot b_{i}$
+\end_inset
+
+ subject to 
+\begin_inset Formula $\sum\alpha_{i}\cdot a_{ij}\leq c_{j}\text{ }\forall j$
+\end_inset
+
+ and 
+\begin_inset Formula $\alpha_{i}\geq0\text{ }\forall i$
+\end_inset
+
+.
+ In other words, we have the LP:
+\end_layout
+
+\begin_layout Standard
+Maximize 
+\begin_inset Formula $\vec{b}\cdot\vec{\alpha}$
+\end_inset
+
+ subject to 
+\begin_inset Formula $A^{T}\cdot\vec{\alpha}\leq0$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{\alpha}\geq0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Dualism Theorem
+\end_layout
+
+\begin_layout Theorem
+Let 
+\begin_inset Formula $M$
+\end_inset
+
+ be the LP: maximize 
+\begin_inset Formula $\vec{c}\cdot\vec{x}$
+\end_inset
+
+ subject to 
+\begin_inset Formula $A\vec{x}\geq\vec{b}$
+\end_inset
+
+ with 
+\begin_inset Formula $\vec{x}\geq0$
+\end_inset
+
+, and 
+\begin_inset Formula $N$
+\end_inset
+
+ be the LP: minimize 
+\begin_inset Formula $\vec{b}\cdot\vec{y}$
+\end_inset
+
+ subject to 
+\begin_inset Formula $A^{T}\cdot\vec{y}\leq0$
+\end_inset
+
+ and 
+\begin_inset Formula $\vec{y}\geq0$
+\end_inset
+
+.
+ Then, M and N are called 
+\series bold
+Duals
+\series default
+ of each other.
+\end_layout
+
+\begin_layout Standard
+We have (1) Weak Duality and (2) Strong Duality.
+\end_layout
+
+\begin_layout Standard
+(1).
+ If 
+\begin_inset Formula $\vec{x},\vec{y}$
+\end_inset
+
+ are 
+\bar under
+any
+\bar default
+ solutions of 
+\begin_inset Formula $M$
+\end_inset
+
+ and 
+\begin_inset Formula $N$
+\end_inset
+
+, then 
+\begin_inset Formula $\vec{c}\cdot\vec{x}\leq\vec{b}\cdot\vec{y}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+(2).
+ If 
+\begin_inset Formula $\vec{x},\vec{y}$
+\end_inset
+
+ are 
+\bar under
+optimal
+\bar default
+ solutions of 
+\begin_inset Formula $M$
+\end_inset
+
+ and 
+\begin_inset Formula $N$
+\end_inset
+
+, then 
+\begin_inset Formula $\vec{c}\cdot\vec{x}=\vec{b}\cdot\vec{y}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Of (1); (2) is much more difficult and is covered in CS 675.
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\vec{c}\cdot\vec{x}\leq(A^{T}\vec{y})\cdot\vec{x}\text{ because }\vec{c}\leq A^{T}\text{ and }\vec{x}\geq0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+=\vec{y}^{T}(A\cdot\vec{x})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+\begin_inset Formula 
+\[
+\leq\vec{y}^{T}\vec{b}\text{ because }A\vec{x}\leq\vec{b}\text{ and }\vec{y}\geq0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Path Decomposition Linear Program
+\end_layout
+
+\begin_layout Standard
+Since max-flow is an LP, it follows that the path decomposition form is
+ also an LP.
+ If we have a flow 
+\begin_inset Formula $f_{p}$
+\end_inset
+
+ on each path 
+\begin_inset Formula $p$
+\end_inset
+
+, then our LP is:
+\end_layout
+
+\begin_layout Standard
+Maximize
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{p}f_{p}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+subject to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+\sum_{p\ni e}f_{p}\leq c_{e} & \forall e\\
+f_{p}\geq0 & \forall p
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Logically (yet elegantly) the Dual of the max-flow LP is the min-cut LP.
+ Let 
+\begin_inset Formula $x_{e}$
+\end_inset
+
+ be the inclusion variable for each edge 
+\begin_inset Formula $e$
+\end_inset
+
+.
+ Then, the min-cut LP is:
+\end_layout
+
+\begin_layout Standard
+Minimize
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{e}c_{e}x_{e}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+subject to
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\begin{cases}
+\sum_{e\in p}x_{e}\geq1 & \forall p\\
+x_{e} & \forall e
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Notice that this LP may have exponential size, but it is polynomial time
+ solvable if we use Dijkstra's Algorithm as an oracle; it will check if
+ the shortest path satisfies the first constraint in polynomial time.
+\end_layout
+
+\end_body
+\end_document

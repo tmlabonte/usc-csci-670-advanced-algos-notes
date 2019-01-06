@@ -1,0 +1,734 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Approximation Algorithms
+\end_layout
+
+\begin_layout Section
+Intro to Approximation Algorithms
+\end_layout
+
+\begin_layout Standard
+Given an optimization problem and not enough resources (time, space, etc.)
+ to solve it optimally, approximation algorithms come in handy.
+ They are especially useful and interesting when the problem is 
+\series bold
+NP
+\series default
+-hard.
+ The problem must be an optimization version rather than a decision version
+ because it's not clear what it means to approximate a yes or no answer.
+\end_layout
+
+\begin_layout Standard
+Formally, we define inputs 
+\begin_inset Formula $I$
+\end_inset
+
+, solutions 
+\begin_inset Formula $S$
+\end_inset
+
+, a solution cost or reward (depending on minimization or maximization)
+ 
+\begin_inset Formula $C(S)$
+\end_inset
+
+.
+ We also have an algorithm 
+\begin_inset Formula $A$
+\end_inset
+
+ which outputs 
+\begin_inset Formula $A(I)$
+\end_inset
+
+ with 
+\begin_inset Formula $OPT(I)$
+\end_inset
+
+ an optimal solution for input 
+\begin_inset Formula $I$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\bar under
+Cost minimization
+\bar default
+: 
+\begin_inset Formula $A$
+\end_inset
+
+ is an 
+\begin_inset Formula $\alpha$
+\end_inset
+
+-approximation if for all inputs 
+\begin_inset Formula $I$
+\end_inset
+
+, 
+\begin_inset Formula $C(A(I))\leq\alpha C(OPT(I))$
+\end_inset
+
+ with 
+\begin_inset Formula $\alpha\geq1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\bar under
+Reward maximization:
+\bar default
+ 
+\begin_inset Formula $A$
+\end_inset
+
+ is an 
+\begin_inset Formula $\alpha$
+\end_inset
+
+-approximation if for all inputs 
+\begin_inset Formula $I$
+\end_inset
+
+, 
+\begin_inset Formula $C(A(I))\geq\alpha C(OPT(I))$
+\end_inset
+
+ with 
+\begin_inset Formula $\alpha\le1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Unless otherwise specified, we only care about polytime approximation algorithms.
+\end_layout
+
+\begin_layout Standard
+Note: usually 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is multiplicative because additive 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is unit-dependent, but in rare cases additive 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is appropriate (e.g., graph colorings).
+\end_layout
+
+\begin_layout Standard
+The biggest problem in the analysis is that we don't know the value of 
+\begin_inset Formula $OPT(I)$
+\end_inset
+
+ – if we did, we would know the optimal solution.
+ To overcome this, we find relatively easy to compute upper or lower bounds
+ (for maximization and minimization respectively) on 
+\begin_inset Formula $OPT(I)$
+\end_inset
+
+, then prove that we are within an 
+\begin_inset Formula $\alpha$
+\end_inset
+
+-factor of those bounds, so we must be within an 
+\begin_inset Formula $\alpha$
+\end_inset
+
+-factor of 
+\begin_inset Formula $OPT(I)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Vertex Cover Approximation
+\end_layout
+
+\begin_layout Standard
+VERTEX COVER: Given 
+\begin_inset Formula $\mathcal{G}=(V,E)$
+\end_inset
+
+, find the smallest 
+\begin_inset Formula $S\subseteq V$
+\end_inset
+
+ such that 
+\begin_inset Formula $e\in E$
+\end_inset
+
+ contains 
+\begin_inset Formula $\geq1$
+\end_inset
+
+ 
+\begin_inset Formula $v\in S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For any matching 
+\begin_inset Formula $M$
+\end_inset
+
+, we have 
+\begin_inset Formula $|M|\leq OPT$
+\end_inset
+
+ because each 
+\begin_inset Formula $v\in OPT$
+\end_inset
+
+ can cover at most one 
+\begin_inset Formula $e\in M$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $M$
+\end_inset
+
+ is any maximal matching and 
+\begin_inset Formula $S$
+\end_inset
+
+ is the set of all endpoints of 
+\begin_inset Formula $e\in M$
+\end_inset
+
+, then 
+\begin_inset Formula $S$
+\end_inset
+
+ is a vertex cover of 
+\begin_inset Formula $\mathcal{G}$
+\end_inset
+
+.
+ Because each 
+\begin_inset Formula $e\notin M$
+\end_inset
+
+ must have 
+\begin_inset Formula $\geq1$
+\end_inset
+
+ vertex in common with some 
+\begin_inset Formula $e'\in M$
+\end_inset
+
+, that vertex must be in 
+\begin_inset Formula $S$
+\end_inset
+
+.
+ Thus:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+|S|\leq2|M|\leq2|OPT|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So this is a 2-approximation.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+while there is an uncovered edge 
+\begin_inset Formula $e=(u,v)\in E$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Add both 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+ to 
+\begin_inset Formula $S$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Vertex Cover Approximation Algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The approximation hardness of VERTEX COVER is 
+\begin_inset Formula $\frac{7}{6}$
+\end_inset
+
+.
+ In other words, there exists no 
+\begin_inset Formula $\alpha$
+\end_inset
+
+-approximation for this problem with 
+\begin_inset Formula $\alpha<\frac{7}{6}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Traveling Salesman Approximation
+\end_layout
+
+\begin_layout Standard
+UNDIRECTED TRAVELING SALESMAN (TSP): Given 
+\begin_inset Formula $n$
+\end_inset
+
+ cities with 
+\bar under
+metric
+\bar default
+ distances 
+\begin_inset Formula $d_{i,j}$
+\end_inset
+
+, find the optimal tour 
+\begin_inset Formula $T^{*}$
+\end_inset
+
+ which includes all 
+\begin_inset Formula $n$
+\end_inset
+
+ cities and minimizes 
+\begin_inset Formula $\sum_{e=(u,v)\in T^{*}}d_{u,v}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We know that 
+\begin_inset Formula $C(MST)\leq C(OPT)$
+\end_inset
+
+ because 
+\begin_inset Formula $OPT$
+\end_inset
+
+ with one edge removed is a spanning tree.
+ To get a TSP tour 
+\begin_inset Formula $T$
+\end_inset
+
+ from a spanning tree, we do a DFS traversal and shortcut repeat visits.
+ Each edge is traversed twice before shortcuts, so:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+C(T)\leq2C(MST)\leq2C(OPT)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So this is a 2-approximation.
+\end_layout
+
+\begin_layout Standard
+There also exists an easy 1.5-approximation called Christofide's Algorithm,
+ and an even better guarantee has been recently obtained if 
+\begin_inset Formula $d_{i,j}$
+\end_inset
+
+ is the shortest path distance in an unweighted graph with all edges 1.
+ It is open for general metrics if there exists an 
+\begin_inset Formula $\alpha$
+\end_inset
+
+-approximation with 
+\begin_inset Formula $\alpha\leq1.5$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Steiner Tree Approximation
+\end_layout
+
+\begin_layout Standard
+UNDIRECTED STEINER TREE: Given 
+\begin_inset Formula $\mathcal{G}=(V,E)$
+\end_inset
+
+, 
+\begin_inset Formula $V=T\cup X$
+\end_inset
+
+, find the subset 
+\begin_inset Formula $V'\subseteq V$
+\end_inset
+
+ containing all nodes in 
+\begin_inset Formula $T$
+\end_inset
+
+ such that the spanning tree on 
+\begin_inset Formula $V'$
+\end_inset
+
+ minimizes total metric cost.
+ In other words, the nodes in 
+\begin_inset Formula $T$
+\end_inset
+
+ must be included, and the nodes in 
+\begin_inset Formula $X$
+\end_inset
+
+ may be included if it makes the tree cheaper).
+\end_layout
+
+\begin_layout Standard
+The approximation algorithm for this problem is simply to return 
+\begin_inset Formula $MST(T)$
+\end_inset
+
+.
+ Consider an optimal subset 
+\begin_inset Formula $V'$
+\end_inset
+
+ – then, the solution is the 
+\begin_inset Formula $MST$
+\end_inset
+
+ of 
+\begin_inset Formula $V'$
+\end_inset
+
+.
+ The TSP tour 
+\begin_inset Formula $R$
+\end_inset
+
+ of that MST has 
+\begin_inset Formula $C(R)\leq2OPT$
+\end_inset
+
+.
+ Each node (in particular, each node from 
+\begin_inset Formula $X$
+\end_inset
+
+) has degree 
+\begin_inset Formula $\leq2$
+\end_inset
+
+.
+ Thus, we can remove all 
+\begin_inset Formula $x\in X$
+\end_inset
+
+ from 
+\begin_inset Formula $R$
+\end_inset
+
+ without cost increase.
+ So, the optimal 
+\begin_inset Formula $C(R)$
+\end_inset
+
+ on 
+\begin_inset Formula $T\leq2MST(V')$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+C(MST(T))\leq C(OPT)-C(R\text{ on }T)\leq2C(MST(V'))=2C(OPT)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So this is a 2-approximation.
+\end_layout
+
+\begin_layout Section
+Maximum Cut Approximation
+\end_layout
+
+\begin_layout Standard
+MAXIMUM CUT: Given 
+\begin_inset Formula $\mathcal{G}=(V,E)$
+\end_inset
+
+, find the partition 
+\begin_inset Formula $V=S\cup\bar{S}$
+\end_inset
+
+ that maximizes the number of edges between 
+\begin_inset Formula $S$
+\end_inset
+
+ and 
+\begin_inset Formula $\bar{S}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Algorithm (num)
+* Start with an arbitrary 
+\begin_inset Formula $S$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm (num)
+while there is a node 
+\begin_inset Formula $v$
+\end_inset
+
+ such that moving 
+\begin_inset Formula $v$
+\end_inset
+
+ from 
+\begin_inset Formula $S$
+\end_inset
+
+ to 
+\begin_inset Formula $\bar{S}$
+\end_inset
+
+ or vice versa increases the number of edges across the cut
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm (num)
+* Move 
+\begin_inset Formula $v$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Local Search Approximation for Maximum Cut
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+At termination, each node 
+\begin_inset Formula $v$
+\end_inset
+
+ has at least as many edges to the other side as it does within its side
+ (or else we would have moved it).
+ So, 
+\begin_inset Formula $\geq\frac{1}{2}$
+\end_inset
+
+ of each 
+\begin_inset Formula $v$
+\end_inset
+
+'s edges are cut, which means that 
+\begin_inset Formula $\ge\frac{1}{2}$
+\end_inset
+
+ of all edges are cut.
+ Since 
+\begin_inset Formula $|OPT|\leq|V|$
+\end_inset
+
+, this is a 
+\begin_inset Formula $\frac{1}{2}$
+\end_inset
+
+-approximation.
+\end_layout
+
+\begin_layout Standard
+The approximation hardness of MAXIMUM CUT is 0.878 based on a technique called
+ semi-definite programming (SDP) rounding.
+\end_layout
+
+\end_body
+\end_document
